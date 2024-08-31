@@ -16,6 +16,10 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+
+    protected $table = 'grid_admins';
+
     protected $fillable = [
         'name',
         'email',
