@@ -57,7 +57,7 @@
     </section>
 
     <!-- Add loader element -->
-    <div id="loader" class="hidden fixed inset-0 bg-gray-800 bg-opacity-[25] flex items-center justify-center">
+    <div id="loader" class="hidden fixed inset-0 bg-gray-800 bg-opacity-25 flex items-center justify-center">
         <div class="loader"></div>
     </div>
 

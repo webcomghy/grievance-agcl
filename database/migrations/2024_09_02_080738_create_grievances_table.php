@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
             $table->string('email');
-            $table->string('description');
+            $table->longText('description');
             $table->string('status');
             $table->timestamps();
             $table->softDeletes();
