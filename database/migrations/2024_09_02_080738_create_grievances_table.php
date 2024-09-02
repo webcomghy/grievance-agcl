@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('ca_number');
             $table->string('category');
             $table->string('name');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('phone');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->longText('description');
             $table->string('status');
             $table->timestamps();
