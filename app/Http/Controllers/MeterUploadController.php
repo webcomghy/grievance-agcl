@@ -13,7 +13,7 @@ class MeterUploadController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $data = MeterUpload::all();
+            $data = MeterUpload::query();
             return datatables()->of($data)->make(true);
         }
  
