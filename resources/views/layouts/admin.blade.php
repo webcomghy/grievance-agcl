@@ -72,6 +72,11 @@
                         class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
                         <i class="fas fa-file-upload mr-2 sidebar-icon"></i><span class="menu-text">Meter Uploads</span>
                     </a>
+                    
+                    <a href="{{ route('grievances.index') }}"
+                        class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                        <i class="fas fa-list mr-2 sidebar-icon"></i><span class="menu-text">Grievances</span>
+                    </a>
 
             </nav>
         </aside>

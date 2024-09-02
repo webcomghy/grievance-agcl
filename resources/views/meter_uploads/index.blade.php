@@ -1,8 +1,8 @@
 @extends('layouts.admin')
-
+@section('title', 'Meter Uploads')
 @section('content')
 <div class="container mx-auto">
-    <h2 class="text-2xl font-bold mb-4">Meter Uploads</h2>
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Meter Uploads</h2>
     <table class="min-w-full bg-white border border-gray-200" id="meter_uploads_table">
         <thead>
             <tr>
@@ -64,7 +64,7 @@
                     var imageUrl = 'https://assamgas.co.in/' + data;
                     return '<img src="' + imageUrl + '" class="w-12 h-12 object-cover cursor-pointer" onclick="showImageModal(\'' + imageUrl + '\')">';
                 }},
-                { data: null, name: 'location', render: function(data, type, full, meta) {
+                { data: null, name: 'location', orderable: false, searchable: false, render: function(data, type, full, meta) {
                     var latitude = full.latitude;
                     var longitude = full.longitude;
                     return '<span class="cursor-pointer" title="Lat: ' + latitude + ', Lon: ' + longitude + '" onclick="showLocationModal(' + latitude + ', ' + longitude + ')">View Location</span>';
@@ -75,6 +75,7 @@
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ]
         });
+
     });
 
     function showImageModal(imageUrl) {
