@@ -57,12 +57,15 @@
             </div>
             <nav class="mt-4">
                 {{-- @can('view dashboard') --}}
-                    <a href="#"
-                        class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                        <i class="fas fa-home mr-2 sidebar-icon"></i><span class="menu-text">Dashboard</span>
-                    </a>
+                <a href="{{ route('dashboard') }}"
+                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                    <i class="fas fa-home mr-2 sidebar-icon"></i><span class="menu-text">Dashboard</span>
+                </a>
                 {{-- @endcan --}}
-
+                <a href="{{ route('meter_uploads.index') }}"
+                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                    <i class="fas fa-file-upload mr-2 sidebar-icon"></i><span class="menu-text">Meter Uploads</span>
+                </a>
             </nav>
         </aside>
 
