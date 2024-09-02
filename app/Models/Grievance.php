@@ -34,4 +34,11 @@ class Grievance extends Model
         'Gas Leakage',
         'Others',
     ];
+
+    public static $statuses = [
+        'Pending',
+        'Forwarded',
+        'Resolved',
+        'Rejected',
+    ];
 }
