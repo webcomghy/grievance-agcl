@@ -69,6 +69,10 @@
                     var longitude = full.longitude;
                     return '<span class="cursor-pointer" title="Lat: ' + latitude + ', Lon: ' + longitude + '" onclick="showLocationModal(' + latitude + ', ' + longitude + ')">View Location</span>';
                 }},
+            ],
+            dom: 'lBfrtip', // 'l' for length changing input control, 'B' for buttons, 'f' for filtering input, 'r' for processing display element, 't' for the table, 'i' for table information summary, 'p' for pagination control
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
             ]
         });
     });

@@ -19,6 +19,12 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+
     <style>
         .sidebar-transition {
             transition: width 0.3s ease-in-out;
@@ -57,15 +63,16 @@
             </div>
             <nav class="mt-4">
                 {{-- @can('view dashboard') --}}
-                <a href="{{ route('dashboard') }}"
-                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                    <i class="fas fa-home mr-2 sidebar-icon"></i><span class="menu-text">Dashboard</span>
-                </a>
+                    <a href="{{ route('dashboard') }}"
+                        class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                        <i class="fas fa-home mr-2 sidebar-icon"></i><span class="menu-text">Dashboard</span>
+                    </a>
                 {{-- @endcan --}}
-                <a href="{{ route('meter_uploads.index') }}"
-                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                    <i class="fas fa-file-upload mr-2 sidebar-icon"></i><span class="menu-text">Meter Uploads</span>
-                </a>
+                    <a href="{{ route('meter_uploads.index') }}"
+                        class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                        <i class="fas fa-file-upload mr-2 sidebar-icon"></i><span class="menu-text">Meter Uploads</span>
+                    </a>
+
             </nav>
         </aside>
 
