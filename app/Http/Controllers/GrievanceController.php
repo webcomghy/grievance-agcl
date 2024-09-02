@@ -12,8 +12,11 @@ class GrievanceController extends Controller
      */
     public function index()
     {
-       
-        dd('index');
+        if (request()->ajax()) {
+            $data = Grievance::query();
+            return datatables()->of($data)->make(true);
+        }
+        return view('grievance.index');
     }
 
     /**
