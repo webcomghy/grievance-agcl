@@ -3,6 +3,11 @@
 @section('title', 'Grievance Details')
 
 @section('action_buttons')
+    <span class="text-gray-600 mr-4">
+        <i class="far fa-clock"></i>
+        {{ $grievance->created_at->diffForHumans() }} has passed since the submission
+    </span>
+    
     <button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
         <i class="fas fa-forward"></i>
     </button>
