@@ -91,7 +91,8 @@
                     <button
                         class="ml-2 bg-blue-400 text-white px-4 py-1 rounded hover:bg-blue-500 focus:outline-none transition duration-200">Search</button>
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center space-x-2">
+                    @yield('action_buttons')
                     <div class="flex items-center mr-4">
                         <span id="currentTime" class="text-gray-600"></span>
                     </div>
@@ -143,12 +144,10 @@
             sidebar.classList.toggle('w-16');
             sidebar.classList.toggle('sidebar-collapsed');
 
-            // Hide or show the top navigation bar
+            // Change the toggle button icon
             if (sidebar.classList.contains('sidebar-collapsed')) {
-                topNav.classList.add('hidden'); // Hide top navigation
                 toggleBtn.innerHTML = '<i class="fas fa-chevron-right"></i>'; // Change icon to expand
             } else {
-                topNav.classList.remove('hidden'); // Show top navigation
                 toggleBtn.innerHTML = '<i class="fas fa-chevron-left"></i>'; // Change icon to collapse
             }
         });

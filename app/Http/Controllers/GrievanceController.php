@@ -14,7 +14,9 @@ class GrievanceController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $grievances = Grievance::query();
+            $grievances = Grievance::query()
+                ->orderBy('priority_score', 'desc')
+                ->orderBy('created_at', 'desc');
 
             return datatables()->of($grievances)
                 ->addColumn('actions', function($row){
@@ -152,7 +154,8 @@ class GrievanceController extends Controller
      */
     public function update(Request $request, Grievance $grievance)
     {
-        //
+        dump($request->all());
+        dd($grievance);
     }
 
     /**

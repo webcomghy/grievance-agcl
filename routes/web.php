@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('grievances', [GrievanceController::class, 'index'])->name('grievances.index');
     Route::get('grievances/create', [GrievanceController::class, 'create'])->name('grievances.create');
     Route::get('grievances/{grievance}', [GrievanceController::class, 'show'])->name('grievances.show');
+    Route::put('grievances/{grievance}', [GrievanceController::class, 'update'])->name('grievances.update');
 });
 
 require __DIR__.'/auth.php';
