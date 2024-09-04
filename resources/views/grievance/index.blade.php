@@ -1,12 +1,15 @@
 @extends('layouts.admin')
 @section('title', 'Grievances')
+@section('action_buttons')
+    <a href="{{ route('grievances.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
+        <i class="fas fa-plus"></i>
+    </a>
+@endsection
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-3xl font-bold text-gray-800">Grievances</h2>
-        <a href="{{ route('grievances.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
-            Add Grievance
-        </a>
+        
     </div>
     <div id="priority_filter_container" class="mb-6">
         <label for="priority_filter" class="block text-sm font-medium text-gray-700 mb-2">Filter by Priority:</label>
