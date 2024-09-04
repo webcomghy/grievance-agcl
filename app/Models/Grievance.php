@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Grievance extends Model
 {
@@ -12,7 +13,7 @@ class Grievance extends Model
 
     protected $fillable = [
         'consumer_no',
-        'ca_number',
+        'ca_no',
         'category',
         'name',
         'address',
@@ -20,6 +21,7 @@ class Grievance extends Model
         'email',
         'description',
         'status',
+        'priority_score', // Change 'priority' to 'priority_score'
     ];
     
     public static $categories = [
@@ -35,10 +37,39 @@ class Grievance extends Model
         'Others',
     ];
 
+    public static $categories_priority = [
+        'Bill Related' => 5,
+        'Payment Related' => 6,
+        'Additional Connection' => 3,
+        'Disconnection - Temporary' => 5,
+        'Disconnection - Permanent' => 5,
+        'Name Change' => 3,
+        'Mobile No Change' => 3,
+        'Email Change' => 3,
+        'Gas Leakage' => 9,
+        'Others' => 3,
+    ];
+
     public static $statuses = [
         'Pending',
         'Forwarded',
         'Resolved',
         'Rejected',
     ];
+
+    protected function priority(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value, $attributes) {
+                $score = $attributes['priority_score'] ?? 0;
+                if ($score >= 7) {
+                    return 'High';
+                } elseif ($score >= 4) {
+                    return 'Medium';
+                } else {
+                    return 'Low';
+                }
+            }
+        );
+    }
 }

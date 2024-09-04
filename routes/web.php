@@ -37,6 +37,8 @@ Route::post('grievances', [GrievanceController::class, 'store'])->name('grievanc
 
 Route::middleware('auth')->group(function () {
     Route::get('grievances', [GrievanceController::class, 'index'])->name('grievances.index');
+    Route::get('grievances/create', [GrievanceController::class, 'create'])->name('grievances.create');
+    Route::get('grievances/{grievance}', [GrievanceController::class, 'show'])->name('grievances.show');
 });
 
 require __DIR__.'/auth.php';

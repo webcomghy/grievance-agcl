@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Grievance;
 use Illuminate\Http\Request;
+use Sentiment\Analyzer;
 
 class GrievanceController extends Controller
 {
@@ -13,8 +14,32 @@ class GrievanceController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $data = Grievance::query();
-            return datatables()->of($data)->make(true);
+            $grievances = Grievance::query();
+
+            return datatables()->of($grievances)
+                ->addColumn('actions', function($row){
+                    $btn = '<a href="'.route('grievances.show', $row->id).'" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
+                    return $btn;
+                })
+                ->addColumn('priority', function($row){
+                    return $row->priority;
+                })
+                ->filter(function ($query) {
+                    if (request()->has('priority')) {
+                        $priority = request('priority');
+                        $query->where(function ($q) use ($priority) {
+                            if ($priority == 'High') {
+                                $q->where('priority_score', '>=', 7);
+                            } elseif ($priority == 'Medium') {
+                                $q->whereBetween('priority_score', [4, 6]);
+                            } elseif ($priority == 'Low') {
+                                $q->where('priority_score', '<', 4);
+                            }
+                        });
+                    }
+                }, true)
+                ->rawColumns(['actions'])
+                ->make(true);
         }
         return view('grievance.index');
     }
@@ -26,34 +51,83 @@ class GrievanceController extends Controller
     {
         $categories = Grievance::$categories;
 
-        return view('grievance.form', compact('categories'));
+        // auth user
+
+        $user = auth()->user();
+        
+        if($user == null){
+            return view('grievance.form', compact('categories'));
+        }
+
+        
+        return view('grievance.formgrid', compact('categories'));
     }
 
     public function sendOtp(Request $request)
-{
-    $mobile = $request->input('mobile');
-    // Logic to send OTP to the mobile number
-    // For demonstration, assume OTP is always '1234'
-    return response()->json(['success' => true]);
-}
-
-public function verifyOtp(Request $request)
-{
-    $otp = $request->input('otp');
-    // Replace with actual OTP verification logic
-    if ($otp === '1234') {
+    {
+        $mobile = $request->input('mobile');
+        // Logic to send OTP to the mobile number
+        // For demonstration, assume OTP is always '1234'
         return response()->json(['success' => true]);
-    } else {
-        return response()->json(['success' => false]);
     }
-}
+
+    public function verifyOtp(Request $request)
+    {
+        $otp = $request->input('otp');
+        // Replace with actual OTP verification logic
+        if ($otp === '1234') {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $validatedData = $request->validate([
+            'consumer_no' => 'required_if:ca_no,null',
+            'ca_no' => 'required_if:consumer_no,null',
+            'category' => 'required',
+            'name' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'description' => 'required',
+            'is_grid_admin' => 'required|boolean',
+        ]);
+
+
+        // Perform sentiment analysis
+        $analyzer = new Analyzer();
+        $result = $analyzer->getSentiment($validatedData['description']);
+        
+        // dump($result);
+        // Calculate priority (1-10 scale)
+        $normalizedScore = ($result['compound'] + 1) / 2; // Convert -1 to 1 range to 0 to 1
+        $description_priority = round($normalizedScore * 9) + 1; // Convert to 1-10 scale
+
+        // dump($description_priority);
+
+        $category_priority = Grievance::$categories_priority[$validatedData['category']];
+
+        // priority is 10% description + 90% category
+        $priority = round(($description_priority * 0.1) + ($category_priority * 0.9));
+
+
+
+        // dump($priority);
+        // Add priority to validated data
+        $validatedData['priority_score'] = $priority;
+        $validatedData['status'] = Grievance::$statuses[0];
+
+        // dd($validatedData);
+        // Create the grievance
+        $grievance = Grievance::create($validatedData);
+
+        return redirect()->route('grievances.index')->with('success', 'Grievance created successfully.');
     }
 
     /**
@@ -61,7 +135,8 @@ public function verifyOtp(Request $request)
      */
     public function show(Grievance $grievance)
     {
-        //
+        
+        return view('grievance.show', compact('grievance'));
     }
 
     /**
