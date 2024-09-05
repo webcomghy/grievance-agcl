@@ -157,7 +157,6 @@ class GrievanceController extends Controller
      */
     public function update(Request $request, Grievance $grievance)
     {
-        // dd($request->all());
         $validatedData = $request->validate([
             'status' => 'required|in:' . implode(',', Grievance::$statuses),
             'description' => 'required|string',
