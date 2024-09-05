@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Grievance extends Model
 {
@@ -54,7 +55,7 @@ class Grievance extends Model
         'Pending',
         'Forwarded',
         'Resolved',
-        'Rejected',
+        'Closed',
     ];
 
     protected function priority(): Attribute
@@ -71,5 +72,10 @@ class Grievance extends Model
                 }
             }
         );
+    }
+
+    public function transactions() : HasMany
+    {
+        return $this->hasMany(GrievanceTransaction::class);
     }
 }

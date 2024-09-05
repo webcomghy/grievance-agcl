@@ -25,6 +25,10 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 
+    <!-- Include Leaflet CSS and JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <style>
         .sidebar-transition {
             transition: width 0.3s ease-in-out;
@@ -45,6 +49,15 @@
         #toggleSidebar {
             display: block;
             /* Ensure the toggle button is always displayed */
+        }
+
+        .alert-fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
     </style>
     @yield('styles')
@@ -97,6 +110,34 @@
                         <span id="currentTime" class="text-gray-600"></span>
                     </div>
 
+                    {{-- <div class="relative">
+                        <button onclick="toggleNotificationDropdown()"
+                            class="text-gray-600 hover:text-gray-800 mr-4 relative">
+                            <i class="fas fa-bell"></i>
+                            @if (Auth::user()->unreadNotifications->count())
+                                <span
+                                    class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">{{ Auth::user()->unreadNotifications->count() }}</span>
+                            @endif
+                        </button>
+                        <div id="notificationDropdown"
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10 hidden">
+                            <div class="max-h-60 overflow-y-auto">
+                                @if (Auth::user()->notifications->isEmpty())
+                                    <p class="px-4 py-2 text-gray-500">No new notifications.</p>
+                                @else
+                                    @foreach (Auth::user()->notifications as $notification)
+                                        <a href="{{ $notification->data['url'] ?? '#' }}"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            {{ $notification->data['message'] }}
+                                            <span
+                                                class="text-xs text-gray-500">{{ $notification->created_at->diffForHumans() }}</span>
+                                        </a>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div> --}}
+
                     <div class="relative">
                         <button onclick="toggleDropdown()" class="flex items-center focus:outline-none">
                             <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User"
@@ -122,6 +163,19 @@
 
             <!-- Main Content Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200 p-6">
+                <!-- Alert Messages -->
+                @foreach(['success' => 'green', 'error' => 'red'] as $type => $color)
+                    @if(session($type))
+                        <div id="{{ $type }}Alert" class="bg-{{ $color }}-100 border border-{{ $color }}-400 text-{{ $color }}-700 px-4 py-3 rounded relative mb-4" role="alert">
+                            <strong class="font-bold">{{ ucfirst($type) }}!</strong>
+                            <span class="block sm:inline">{{ session($type) }}</span>
+                            <button onclick="closeAlert('{{ $type }}Alert')" class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                                <svg class="fill-current h-6 w-6 text-{{ $color }}-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                            </button>
+                        </div>
+                    @endif
+                @endforeach
+
                 <div class="bg-white rounded-lg shadow-md p-4">
                     @yield('content')
                 </div>
@@ -183,7 +237,26 @@
                 }
             }
         }
+
+        function closeAlert(alertId) {
+            const alert = document.getElementById(alertId);
+            alert.classList.add('alert-fade-out');
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 500);
+        }
+
+        // Auto-close alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', () => {
+            const alerts = document.querySelectorAll('[role="alert"]');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    closeAlert(alert.id);
+                }, 5000);
+            });
+        });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     @yield('scripts')
 
     <!--Start of Tawk.to Script-->
@@ -199,6 +272,8 @@
     })();
     </script>
     <!--End of Tawk.to Script-->
+
+   
 </body>
 
 </html>

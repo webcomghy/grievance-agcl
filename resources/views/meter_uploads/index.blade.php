@@ -48,9 +48,7 @@
 @endsection
 
 @section('scripts')
-<!-- Include Leaflet CSS and JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 
 <script type="text/javascript">
     $(document).ready(function() {

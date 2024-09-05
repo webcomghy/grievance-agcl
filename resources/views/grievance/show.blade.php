@@ -7,16 +7,26 @@
         <i class="far fa-clock"></i>
         {{ $grievance->created_at->diffForHumans() }} has passed since the submission
     </span>
+
+    @if($grievance->status === 'Pending' || $grievance->status === 'Forwarded')
+        <button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+            <i class="fas fa-forward"></i>
+        </button>
+
+        @if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
+            <button onclick="openCloseModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+                <i class="fas fa-close"></i>
+            </button>
+            <button onclick="openResolveModal()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
+                <i class="fas fa-check"></i>
+            </button>
+        @endif
+    @endif
     
-    <button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-        <i class="fas fa-forward"></i>
+    <button onclick="exportTransactions()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded mr-2">
+        <i class="fas fa-file-excel"></i>
     </button>
-    <button onclick="openCloseModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-        <i class="fas fa-close"></i>
-    </button>
-    <button onclick="openResolveModal()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
-        <i class="fas fa-check"></i>
-    </button>
+    
     <button onclick="printGrievanceCard()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
         <i class="fas fa-print"></i>
     </button>
@@ -66,72 +76,50 @@
             </div>
         </div>
 
-        <!-- Notesheet Timeline (Improved padding) -->
+        <!-- Notesheet Timeline -->
         <div class="w-full lg:w-1/3 bg-white shadow-md rounded-lg overflow-hidden">
             <div class="p-8">
-                <h3 class="text-2xl font-semibold text-gray-800 mb-8">Forwarding Timeline</h3>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-8">Timeline</h3>
                 <div class="flow-root">
-                    <ul role="list" class="-mb-8">
-                        <li>
-                            <div class="relative pb-10">
-                                <span class="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
-                                <div class="relative flex items-start space-x-4">
-                                    <div>
-                                        <span class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center ring-8 ring-white">
-                                            <i class="fas fa-forward text-white text-lg"></i>
-                                        </span>
-                                    </div>
-                                    <div class="min-w-0 flex-1 py-1.5">
-                                        <div class="text-sm font-medium text-gray-900 mb-1">Forwarded to Department 2</div>
-                                        <div class="text-sm text-gray-700 mb-2">
-                                            <p>Additional details about the forwarding can go here.</p>
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            <time datetime="2023-03-15">Mar 15, 2023</time>
-                                        </div>
-                                    </div>
+                    <ul role="list" class="relative">
+                        @foreach($grievance->transactions->sortByDesc('created_at') as $transaction)
+                            <li class="mb-10 ml-6">
+                                <span class="absolute flex items-center justify-center w-8 h-8 rounded-full -left-4 ring-4 ring-white
+                                    @if($transaction->status === 'Forwarded')
+                                        bg-blue-500
+                                    @elseif($transaction->status === 'Resolved')
+                                        bg-green-500
+                                    @elseif($transaction->status === 'Closed')
+                                        bg-red-500
+                                    @else
+                                        bg-gray-500
+                                    @endif
+                                ">
+                                    @if($transaction->status === 'Forwarded')
+                                        <i class="fas fa-forward text-white text-xs"></i>
+                                    @elseif($transaction->status === 'Resolved')
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    @elseif($transaction->status === 'Closed')
+                                        <i class="fas fa-times text-white text-xs"></i>
+                                    @else
+                                        <i class="fas fa-circle text-white text-xs"></i>
+                                    @endif
+                                </span>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">{{ $transaction->status }}</h3>
+                                    <p class="mb-2 text-base font-normal text-gray-500">{{ $transaction->description }}</p>
+                                    <time class="block mb-2 text-sm font-normal leading-none text-gray-400">{{ $transaction->created_at->format('M d, Y') }}</time>
                                 </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="relative pb-10">
-                                <span class="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true"></span>
-                                <div class="relative flex items-start space-x-4">
-                                    <div>
-                                        <span class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center ring-8 ring-white">
-                                            <i class="fas fa-forward text-white text-lg"></i>
-                                        </span>
-                                    </div>
-                                    <div class="min-w-0 flex-1 py-1.5">
-                                        <div class="text-sm font-medium text-gray-900 mb-1">Forwarded to Department 1</div>
-                                        <div class="text-sm text-gray-700 mb-2">
-                                            <p>Additional details about the forwarding can go here.</p>
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            <time datetime="2023-01-13">Jan 13, 2023</time>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="relative">
-                                <div class="relative flex items-start space-x-4">
-                                    <div>
-                                        <span class="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white">
-                                            <i class="fas fa-check text-white text-lg"></i>
-                                        </span>
-                                    </div>
-                                    <div class="min-w-0 flex-1 py-1.5">
-                                        <div class="text-sm font-medium text-gray-900 mb-1">Grievance Received</div>
-                                        <div class="text-sm text-gray-700 mb-2">
-                                            <p>Initial grievance details can be added here.</p>
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            <time datetime="2023-01-10">Jan 10, 2023</time>
-                                        </div>
-                                    </div>
-                                </div>
+                            </li>
+                        @endforeach
+                        <li class="ml-6">
+                            <span class="absolute flex items-center justify-center w-8 h-8 bg-green-500 rounded-full -left-4 ring-4 ring-white">
+                                <i class="fas fa-plus text-white text-xs"></i>
+                            </span>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Grievance Received</h3>
+                                <p class="mb-2 text-base font-normal text-gray-500">Grievance received by the grid admin</p>
+                                <time class="block mb-2 text-sm font-normal leading-none text-gray-400">{{ $grievance->created_at->format('M d, Y') }}</time>
                             </div>
                         </li>
                     </ul>
@@ -167,7 +155,7 @@
                             <div class="mt-2">
                                 <div class="mb-4">
                                     <label for="forward_to" class="block text-sm font-medium text-gray-700">Forward To</label>
-                                    <select id="forward_to" name="forward_to" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <select id="forward_to" name="assigned_to" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                         <option value="">Select Department</option>
                                         <option value="dept1">Department 1</option>
                                         <option value="dept2">Department 2</option>
@@ -291,7 +279,22 @@
             position: absolute;
             left: 0;
             top: 0;
+            width: 100%;
+            max-width: 100%;
         }
+        .lg\:w-2\/3 {
+            width: 100% !important;
+        }
+    }
+
+    .flow-root ul::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 2px;
+        background: #e5e7eb;
     }
 </style>
 
@@ -324,5 +327,37 @@
         window.print();
     }
 </script>
+
+<script>
+    function exportTransactions() {
+        // Prepare data for export
+        var data = [
+            ['Status', 'Description', 'Date']
+        ];
+        
+        // Add initial grievance submission
+        data.push(['Grievance Received', 'Grievance received by the grid admin', '{{ $grievance->created_at->format('M d, Y') }}']);
+        
+        // Add all transactions
+        @foreach($grievance->transactions->sortBy('created_at') as $transaction)
+            data.push([
+                '{{ $transaction->status }}',
+                '{{ $transaction->description }}',
+                '{{ $transaction->created_at->format('M d, Y') }}'
+            ]);
+        @endforeach
+
+        // Create workbook and worksheet
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.aoa_to_sheet(data);
+
+        // Add worksheet to workbook
+        XLSX.utils.book_append_sheet(wb, ws, "Transactions");
+
+        // Generate Excel file
+        XLSX.writeFile(wb, "grievance_{{ $grievance->id }}_transactions.xlsx");
+    }
+</script>
+
 
 @endsection

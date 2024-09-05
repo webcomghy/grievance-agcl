@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('grievance_id')->constrained('grievances');
             $table->string('status');
             $table->text('description')->nullable();
-            $table->foreignId('assigned_to')->constrained('users');
-            $table->foreignId('created_by')->constrained('users');
+            $table->unsignedBigInteger('assigned_to');
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
             $table->softDeletes();
         });

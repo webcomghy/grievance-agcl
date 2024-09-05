@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Grievance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Sentiment\Analyzer;
 
 class GrievanceController extends Controller
@@ -15,15 +16,17 @@ class GrievanceController extends Controller
     {
         if (request()->ajax()) {
             $grievances = Grievance::query()
+                ->select('id', 'consumer_no', 'ca_no', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
+                ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
                 ->orderBy('priority_score', 'desc')
                 ->orderBy('created_at', 'desc');
 
             return datatables()->of($grievances)
-                ->addColumn('actions', function($row){
-                    $btn = '<a href="'.route('grievances.show', $row->id).'" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
+                ->addColumn('actions', function ($row) {
+                    $btn = '<a href="' . route('grievances.show', $row->id) . '" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
                     return $btn;
                 })
-                ->addColumn('priority', function($row){
+                ->addColumn('priority', function ($row) {
                     return $row->priority;
                 })
                 ->filter(function ($query) {
@@ -56,12 +59,12 @@ class GrievanceController extends Controller
         // auth user
 
         $user = auth()->user();
-        
-        if($user == null){
+
+        if ($user == null) {
             return view('grievance.form', compact('categories'));
         }
 
-        
+
         return view('grievance.formgrid', compact('categories'));
     }
 
@@ -105,7 +108,7 @@ class GrievanceController extends Controller
         // Perform sentiment analysis
         $analyzer = new Analyzer();
         $result = $analyzer->getSentiment($validatedData['description']);
-        
+
         // dump($result);
         // Calculate priority (1-10 scale)
         $normalizedScore = ($result['compound'] + 1) / 2; // Convert -1 to 1 range to 0 to 1
@@ -137,7 +140,7 @@ class GrievanceController extends Controller
      */
     public function show(Grievance $grievance)
     {
-        
+        $grievance->load('transactions');
         return view('grievance.show', compact('grievance'));
     }
 
@@ -154,8 +157,41 @@ class GrievanceController extends Controller
      */
     public function update(Request $request, Grievance $grievance)
     {
-        dump($request->all());
-        dd($grievance);
+        // dd($request->all());
+        $validatedData = $request->validate([
+            'status' => 'required|in:' . implode(',', Grievance::$statuses),
+            'description' => 'required|string',
+        ]);
+
+        DB::beginTransaction();
+        try {
+
+            $grievance->update([
+                'status' => $validatedData['status'],
+            ]);
+
+            // Create a new transaction for this update
+            $grievance->transactions()->create([
+                'status' => $validatedData['status'],
+                'description' => $validatedData['description'],
+                'assigned_to' => $request->assigned_to ?? 0,
+                'created_by' => auth()->id(),
+            ]);
+
+            // If the grievance is resolved and closed, update the priority score
+            if ($validatedData['status'] === 'Resolved' || $grievance->status === 'Closed') {
+                $grievance->update(['priority_score' => 0]);
+            }
+
+            DB::commit();
+            return redirect()->route('grievances.show', $grievance)
+                ->with('success', 'Grievance updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('grievances.show', $grievance)
+                ->with('error', 'Failed to update grievance: ');
+        }
+        
     }
 
     /**

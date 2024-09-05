@@ -68,7 +68,7 @@
                             'Pending': 'bg-yellow-100 text-yellow-800',
                             'Forwarded': 'bg-blue-100 text-blue-800',
                             'Resolved': 'bg-green-100 text-green-800',
-                            'Rejected': 'bg-red-100 text-red-800'
+                            'Closed': 'bg-red-100 text-red-800'
                         };
                         return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ' + 
                                (statusClasses[data] || 'bg-gray-100 text-gray-800') + '">' + data + '</span>';
