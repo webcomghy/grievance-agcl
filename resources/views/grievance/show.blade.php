@@ -332,9 +332,10 @@
     function exportTransactions() {
         // Prepare data for export
         var data = [
+            ['Transactions'],
             ['Status', 'Description', 'Date']
         ];
-        
+
         // Add initial grievance submission
         data.push(['Grievance Received', 'Grievance received by the grid admin', '{{ $grievance->created_at->format('M d, Y') }}']);
         
@@ -351,11 +352,30 @@
         var wb = XLSX.utils.book_new();
         var ws = XLSX.utils.aoa_to_sheet(data);
 
+        // Set column widths
+        ws['!cols'] = [
+            {wch: 15}, // Status
+            {wch: 50}, // Description
+            {wch: 15}  // Date
+        ];
+
+        // Apply bold formatting to the header rows
+        var range = XLSX.utils.decode_range(ws['!ref']);
+        for (var R = range.s.r; R <= 1; ++R) { // Apply to first two rows
+            for (var C = range.s.c; C <= range.e.c; ++C) {
+                var address = XLSX.utils.encode_cell({r: R, c: C});
+                if (!ws[address]) continue;
+                ws[address].s = { font: { bold: true } };
+            }
+        }
+
         // Add worksheet to workbook
         XLSX.utils.book_append_sheet(wb, ws, "Transactions");
 
-        // Generate Excel file
-        XLSX.writeFile(wb, "grievance_{{ $grievance->id }}_transactions.xlsx");
+        // Generate Excel file with cell styles
+        XLSX.writeFile(wb, "grievance_{{ $grievance->id }}_transactions.xlsx", {
+            cellStyles: true
+        });
     }
 </script>
 
