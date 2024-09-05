@@ -64,7 +64,6 @@ class GrievanceController extends Controller
             return view('grievance.form', compact('categories'));
         }
 
-
         return view('grievance.formgrid', compact('categories'));
     }
 
@@ -104,31 +103,23 @@ class GrievanceController extends Controller
             'is_grid_admin' => 'required|boolean',
         ]);
 
-
         // Perform sentiment analysis
         $analyzer = new Analyzer();
         $result = $analyzer->getSentiment($validatedData['description']);
 
-        // dump($result);
         // Calculate priority (1-10 scale)
         $normalizedScore = ($result['compound'] + 1) / 2; // Convert -1 to 1 range to 0 to 1
         $description_priority = round($normalizedScore * 9) + 1; // Convert to 1-10 scale
-
-        // dump($description_priority);
 
         $category_priority = Grievance::$categories_priority[$validatedData['category']];
 
         // priority is 10% description + 90% category
         $priority = round(($description_priority * 0.1) + ($category_priority * 0.9));
 
-
-
-        // dump($priority);
         // Add priority to validated data
         $validatedData['priority_score'] = $priority;
         $validatedData['status'] = Grievance::$statuses[0];
 
-        // dd($validatedData);
         // Create the grievance
         $grievance = Grievance::create($validatedData);
 
