@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\ConsumerAuthController;
 use App\Http\Controllers\GrievanceController;
 use App\Http\Controllers\MeterUploadController;
 use App\Http\Controllers\ProfileController;
@@ -29,11 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('meter_uploads/{meterUpload}', [MeterUploadController::class, 'destroy'])->name('meter_uploads.destroy');
 });
 
-
-Route::get('grievance/form', [GrievanceController::class, 'create'])->name('grievance.form');
-Route::post('send-otp', [GrievanceController::class, 'sendOtp'])->name('send.otp');
-Route::post('verify-otp', [GrievanceController::class, 'verifyOtp'])->name('verify.otp');
-Route::post('grievances', [GrievanceController::class, 'store'])->name('grievances.store');
+Route::middleware('auth:consumer')->group(function () {
+    Route::get('grievance/form', [GrievanceController::class, 'create'])->name('grievance.form');
+    Route::post('grievances', [GrievanceController::class, 'store'])->name('grievances.store');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('grievances', [GrievanceController::class, 'index'])->name('grievances.index');
@@ -43,3 +43,14 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('consumer/login', [ConsumerAuthController::class, 'showLoginForm'])->name('consumer.login.form');
+Route::post('consumer/login', [ConsumerAuthController::class, 'login'])->name('consumer.login');
+
+Route::middleware('auth:consumer')->group(function () {
+    Route::get('/consumer/dashboard', function () {
+        return view('consumer.dashboard');
+    })->name('consumer.dashboard');
+
+    Route::post('/consumer/logout', [ConsumerAuthController::class, 'logout'])->name('consumer.logout');
+});

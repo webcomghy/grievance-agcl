@@ -44,4 +44,8 @@
             </x-primary-button>
         </div>
     </form>
+
+    <div class="mt-4 text-center">
+        <p>Are you a consumer? <a href="{{ route('consumer.login.form') }}" class="text-blue-600 hover:underline">Login here</a></p>
+    </div>
 </x-guest-layout>

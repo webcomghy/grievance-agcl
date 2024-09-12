@@ -58,33 +58,16 @@ class GrievanceController extends Controller
 
         // auth user
 
-        $user = auth()->user();
-
-        if ($user == null) {
-            return view('grievance.form', compact('categories'));
+        
+        if (auth()->guard('consumer')->check()) {
+            // dd(auth()->guard('consumer')->user());
+            return view('consumer.form', compact('categories'));
         }
 
-        return view('grievance.formgrid', compact('categories'));
+        return view('grievance.form', compact('categories'));
     }
 
-    public function sendOtp(Request $request)
-    {
-        $mobile = $request->input('mobile');
-        // Logic to send OTP to the mobile number
-        // For demonstration, assume OTP is always '1234'
-        return response()->json(['success' => true]);
-    }
 
-    public function verifyOtp(Request $request)
-    {
-        $otp = $request->input('otp');
-        // Replace with actual OTP verification logic
-        if ($otp === '1234') {
-            return response()->json(['success' => true]);
-        } else {
-            return response()->json(['success' => false]);
-        }
-    }
 
     /**
      * Store a newly created resource in storage.

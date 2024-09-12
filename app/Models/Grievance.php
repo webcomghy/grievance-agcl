@@ -22,7 +22,7 @@ class Grievance extends Model
         'email',
         'description',
         'status',
-        'priority_score', // Change 'priority' to 'priority_score'
+        'priority_score', 
     ];
     
     public static $categories = [

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->longText('description');
             $table->boolean('is_grid_admin')->default(false);
             $table->string('status');
-            $table->integer('priority_score'); // Add this line
+            $table->integer('priority_score'); 
             $table->timestamps();
             $table->softDeletes();
         });
