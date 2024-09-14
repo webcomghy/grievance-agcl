@@ -23,7 +23,7 @@
 @endsection
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">Roles and Permissions Management</h2>
+    <h2 class="text-3xl font-bold mb-4">Roles and Permissions Management</h2>
 
     <div class="mb-4">
         <ul class="flex border-b">
