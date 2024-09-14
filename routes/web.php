@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ConsumerAuthController;
 use App\Http\Controllers\GrievanceController;
 use App\Http\Controllers\MeterUploadController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RolePermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,7 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
     Route::get('meter_uploads', [MeterUploadController::class, 'index'])->name('meter_uploads.index');
     Route::get('meter_uploads/create', [MeterUploadController::class, 'create'])->name('meter_uploads.create');
     Route::post('meter_uploads', [MeterUploadController::class, 'store'])->name('meter_uploads.store');
@@ -35,7 +36,7 @@ Route::middleware('auth:consumer')->group(function () {
     Route::post('grievances', [GrievanceController::class, 'store'])->name('grievances.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth','can:view_grivances')->group(function () {
     Route::get('grievances', [GrievanceController::class, 'index'])->name('grievances.index');
     Route::get('grievances/create', [GrievanceController::class, 'create'])->name('grievances.create');
     Route::get('grievances/{grievance}', [GrievanceController::class, 'show'])->name('grievances.show');
@@ -54,3 +55,15 @@ Route::middleware('auth:consumer')->group(function () {
 
     Route::post('/consumer/logout', [ConsumerAuthController::class, 'logout'])->name('consumer.logout');
 });
+
+Route::middleware(['auth', 'can:manage_roles_and_permissions'])->group(function () {
+    Route::get('/roles-permissions', [RolePermissionController::class, 'index'])->name('roles-permissions.index');
+    Route::post('/roles', [RolePermissionController::class, 'createRole'])->name('roles.create');
+    Route::post('/permissions', [RolePermissionController::class, 'createPermission'])->name('permissions.create');
+    Route::post('/roles/assign', [RolePermissionController::class, 'assignRole'])->name('roles.assign');
+    Route::post('/permissions/assign', [RolePermissionController::class, 'assignPermission'])->name('permissions.assign');
+    Route::get('/users-with-roles', [RolePermissionController::class, 'getUsersWithRoles'])->name('users.with.roles');
+    Route::post('/roles/remove', [RolePermissionController::class, 'removeRole'])->name('roles.remove');
+    Route::get('/roles/permissions', [RolePermissionController::class, 'getRolePermissions'])->name('roles.permissions');
+ });
+
