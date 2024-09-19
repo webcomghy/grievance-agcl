@@ -48,8 +48,8 @@
                 </ul>
                 <form action="{{ route('roles.create') }}" method="POST" class="mb-4">
                     @csrf
-                    <input type="text" name="name" placeholder="New Role Name" class="border p-2 mr-2">
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Create Role</button>
+                    <input type="text" name="name" placeholder="New Role Name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <button type="submit" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Create Role</button>
                 </form>
             </div>
 
@@ -63,8 +63,8 @@
                 </ul>
                 <form action="{{ route('permissions.create') }}" method="POST" class="mb-4">
                     @csrf
-                    <input type="text" name="name" placeholder="New Permission Name" class="border p-2 mr-2">
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Create Permission</button>
+                    <input type="text" name="name" placeholder="New Permission Name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <button type="submit" class="mt-2 bg-green-500 text-white px-4 py-2 rounded">Create Permission</button>
                 </form>
             </div>
 
@@ -73,17 +73,17 @@
                 <h3 class="text-xl font-semibold mb-2">Assign Role to User(s)</h3>
                 <form action="{{ route('roles.assign') }}" method="POST">
                     @csrf
-                    <select name="user_ids[]" id="userSelect" class="border p-2 mr-2 w-full mb-2" multiple>
+                    <select name="user_ids[]" id="userSelect" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" multiple>
                         @foreach($users as $user)
                             <option value="{{ $user->id }}">{{ $user->username }}</option>
                         @endforeach
                     </select>
-                    <select name="roles[]" id="roleAssignSelect" class="border p-2 mr-2 w-full mb-2" multiple>
+                    <select name="roles[]" id="roleAssignSelect" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" multiple>
                         @foreach($roles as $role)
                             <option value="{{ $role->name }}">{{ $role->name }}</option>
                         @endforeach
                     </select>
-                    <button type="submit" class="bg-purple-500 text-white px-4 py-2 rounded w-full">Assign Role(s) to User(s)</button>
+                    <button type="submit" class="mt-2 bg-purple-500 text-white px-4 py-2 rounded w-full">Assign Role(s) to User(s)</button>
                 </form>
             </div>
 
@@ -92,17 +92,17 @@
                 <h3 class="text-xl font-semibold mb-2">Assign Permission to Role</h3>
                 <form action="{{ route('permissions.assign') }}" method="POST">
                     @csrf
-                    <select name="role" id="roleSelect" class="border p-2 mr-2 w-full mb-2">
+                    <select name="role" id="roleSelect" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         @foreach($roles as $role)
                             <option value="{{ $role->name }}">{{ $role->name }}</option>
                         @endforeach
                     </select>
-                    <select name="permissions[]" id="permissionSelect" class="border p-2 mr-2 w-full mb-2" multiple>
+                    <select name="permissions[]" id="permissionSelect" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" multiple>
                         @foreach($permissions as $permission)
                             <option value="{{ $permission->name }}">{{ $permission->name }}</option>
                         @endforeach
                     </select>
-                    <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded w-full">Assign Permission(s)</button>
+                    <button type="submit" class="mt-2 bg-yellow-500 text-white px-4 py-2 rounded w-full">Assign Permission(s)</button>
                 </form>
                 <div id="permissionLoader" class="hidden">
                     <div class="loader"></div>

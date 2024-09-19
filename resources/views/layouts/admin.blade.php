@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     {{-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> --}}
     <title>@yield('title', 'Grievance Redressal System')</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
@@ -109,13 +109,12 @@
             <!-- Top Navigation -->
             <header id="topNav" class="bg-white shadow-md rounded-b-lg flex items-center justify-between p-4">
                 <div class="flex items-center">
-                    <input type="text" placeholder="Search..."
-                        class="border rounded px-2 py-1 focus:outline-none focus:ring focus:border-blue-200">
-                    <button
-                        class="ml-2 bg-blue-400 text-white px-4 py-1 rounded hover:bg-blue-500 focus:outline-none transition duration-200">Search</button>
+                    <button onclick="window.history.back()" class="mr-4 bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 focus:outline-none">
+                        Back
+                    </button>
                 </div>
                 <div class="flex items-center space-x-2">
-                    @yield('action_buttons')
+                    @yield('action_buttons')                   
                     <div class="flex items-center mr-4">
                         <span id="currentTime" class="text-gray-600"></span>
                     </div>
@@ -286,7 +285,7 @@
     @yield('scripts')
 
     <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
+    {{-- <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
@@ -296,7 +295,7 @@
     s1.setAttribute('crossorigin','*');
     s0.parentNode.insertBefore(s1,s0);
     })();
-    </script>
+    </script> --}}
     <!--End of Tawk.to Script-->
 
    

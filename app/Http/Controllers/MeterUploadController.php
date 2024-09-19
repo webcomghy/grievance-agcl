@@ -10,6 +10,7 @@ class MeterUploadController extends Controller
     /**
      * Display a listing of the resource.
      */
+    
     public function index()
     {
         if (request()->ajax()) {
@@ -20,51 +21,33 @@ class MeterUploadController extends Controller
         return view('meter_uploads.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+
+    public function setMonthAndDate(){
+        // list of month numbers name value pair
+        $months = [
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
+            6 => 'June',
+            7 => 'July',
+            8 => 'August',
+            9 => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December',
+        ];
+
+        $years = range(2022, 2030);
+        
+
+        return view('meter_uploads.set_month_and_date', compact('months', 'years'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(MeterUpload $meterUpload)
-    {
-        //
-    }
+    public function storeMonthDates(Request $request){
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(MeterUpload $meterUpload)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, MeterUpload $meterUpload)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(MeterUpload $meterUpload)
-    {
-        //
+        dd($request->all());
     }
 }

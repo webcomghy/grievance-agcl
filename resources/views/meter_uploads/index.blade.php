@@ -1,5 +1,12 @@
 @extends('layouts.admin')
 @section('title', 'Meter Uploads')
+@section('action_buttons')
+    @can('set_date_for_upload')
+        <a href="{{ route('meter_uploads.set_dates') }}" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out"> 
+            <i class="fas fa-calendar"></i>
+        </a>
+    @endcan
+@endsection
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">

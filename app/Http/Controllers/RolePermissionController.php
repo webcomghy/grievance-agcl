@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class RolePermissionController extends Controller
 {
@@ -33,7 +34,7 @@ class RolePermissionController extends Controller
 
     public function assignRole(Request $request)
     {
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'user_ids' => 'required|array',
             
             'roles' => 'required|array',
@@ -106,4 +107,6 @@ class RolePermissionController extends Controller
         $role = Role::findByName($request->role);
         return response()->json($role->permissions->pluck('name'));
     }
+
+   
 }

@@ -15,6 +15,7 @@ class GrievanceTransaction extends Model
         'status',
         'description',
         'assigned_to',
+        'employee_id',
         'created_by',
     ];
 

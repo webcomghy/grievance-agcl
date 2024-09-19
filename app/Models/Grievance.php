@@ -23,6 +23,11 @@ class Grievance extends Model
         'description',
         'status',
         'priority_score', 
+        'longitude',
+        'latitude',
+        'grid_user',
+        'is_grid_admin',
+        'ticket_number',
     ];
     
     public static $categories = [
@@ -54,6 +59,7 @@ class Grievance extends Model
     public static $statuses = [
         'Pending',
         'Forwarded',
+        'Assigned',
         'Resolved',
         'Closed',
     ];

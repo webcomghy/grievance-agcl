@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Grievance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Sentiment\Analyzer;
 
@@ -74,9 +75,10 @@ class GrievanceController extends Controller
      */
     public function store(Request $request)
     {
+       
         $validatedData = $request->validate([
-            'consumer_no' => 'required_if:ca_no,null',
-            'ca_no' => 'required_if:consumer_no,null',
+            'consumer_no' => 'nullable|exclude_if:category,Others,Gas Leakage|required_if:ca_no,null|',
+            'ca_no' => 'nullable|exclude_if:category,Others,Gas Leakage|required_if:consumer_no,null',
             'category' => 'required',
             'name' => 'required',
             'address' => 'required',
@@ -84,29 +86,42 @@ class GrievanceController extends Controller
             'email' => 'required|email',
             'description' => 'required',
             'is_grid_admin' => 'required|boolean',
+            'longitude' => 'required_if:is_grid_admin,0',
+            'latitude' => 'required_if:is_grid_admin,0',
         ]);
 
-        // Perform sentiment analysis
-        $analyzer = new Analyzer();
-        $result = $analyzer->getSentiment($validatedData['description']);
+        if($validatedData['is_grid_admin'] == 1) {
+            $user = Auth::user()->username;
+            $validatedData['grid_user'] = $user;
+        }
+        
+        DB::beginTransaction();
+        try {
+            // Use only category priority
+            $category_priority = Grievance::$categories_priority[$validatedData['category']];
 
-        // Calculate priority (1-10 scale)
-        $normalizedScore = ($result['compound'] + 1) / 2; // Convert -1 to 1 range to 0 to 1
-        $description_priority = round($normalizedScore * 9) + 1; // Convert to 1-10 scale
+            // Set priority directly from category
+            $validatedData['priority_score'] = $category_priority;
+            $validatedData['status'] = Grievance::$statuses[0];
+           
+            // Create the grievance
+            $grievance = Grievance::create($validatedData);
 
-        $category_priority = Grievance::$categories_priority[$validatedData['category']];
+            $grievance_id = $grievance->id;
+            $grievance_id = str_pad($grievance_id, 8, '0', STR_PAD_LEFT);
+            $ticket_number = 'TKT-' . $grievance_id . '-' . date('Ymd') . '-' . date('His');
 
-        // priority is 10% description + 90% category
-        $priority = round(($description_priority * 0.1) + ($category_priority * 0.9));
+            $grievance->update(['ticket_number' => $ticket_number]);
+            // dd("ok");
+        } catch (\Throwable $th) {
+            DB::rollBack();
+           
+            return redirect()->back()->with('error', 'Something went wrong. Please try again.');
+        }
+        
+        DB::commit();
 
-        // Add priority to validated data
-        $validatedData['priority_score'] = $priority;
-        $validatedData['status'] = Grievance::$statuses[0];
-
-        // Create the grievance
-        $grievance = Grievance::create($validatedData);
-
-        return redirect()->route('grievances.index')->with('success', 'Grievance created successfully.');
+        return redirect()->back()->with('success', 'Grievance created successfully. Your ticket number is: ' . $ticket_number);
     }
 
     /**
@@ -131,6 +146,7 @@ class GrievanceController extends Controller
      */
     public function update(Request $request, Grievance $grievance)
     {
+        // dd($request->all());
         $validatedData = $request->validate([
             'status' => 'required|in:' . implode(',', Grievance::$statuses),
             'description' => 'required|string',
@@ -148,6 +164,7 @@ class GrievanceController extends Controller
                 'status' => $validatedData['status'],
                 'description' => $validatedData['description'],
                 'assigned_to' => $request->assigned_to ?? 0,
+                'employee_id' => $request->employee_id ?? 0,
                 'created_by' => auth()->id(),
             ]);
 

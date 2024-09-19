@@ -23,15 +23,11 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
     Route::get('meter_uploads', [MeterUploadController::class, 'index'])->name('meter_uploads.index');
-    Route::get('meter_uploads/create', [MeterUploadController::class, 'create'])->name('meter_uploads.create');
-    Route::post('meter_uploads', [MeterUploadController::class, 'store'])->name('meter_uploads.store');
-    Route::get('meter_uploads/{meterUpload}', [MeterUploadController::class, 'show'])->name('meter_uploads.show');
-    Route::get('meter_uploads/{meterUpload}/edit', [MeterUploadController::class, 'edit'])->name('meter_uploads.edit');
-    Route::put('meter_uploads/{meterUpload}', [MeterUploadController::class, 'update'])->name('meter_uploads.update');
-    Route::delete('meter_uploads/{meterUpload}', [MeterUploadController::class, 'destroy'])->name('meter_uploads.destroy');
+    Route::get('meter_uploads/set_dates/', [MeterUploadController::class, 'setMonthAndDate'])->name('meter_uploads.set_dates');
+    Route::post('meter_uploads/set_dates/', [MeterUploadController::class, 'storeMonthDates'])->name('meter_uploads.set_month_and_date');
 });
 
-Route::middleware('auth:consumer')->group(function () {
+Route::middleware('auth:web,consumer')->group(function () {
     Route::get('grievance/form', [GrievanceController::class, 'create'])->name('grievance.form');
     Route::post('grievances', [GrievanceController::class, 'store'])->name('grievances.store');
 });
