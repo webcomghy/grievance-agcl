@@ -27,6 +27,7 @@
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Consumer No</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CA No</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket No</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
@@ -57,6 +58,7 @@
                 { data: 'id', name: 'id' },
                 { data: 'consumer_no', name: 'consumer_no' },
                 { data: 'ca_no', name: 'ca_no' },
+                { data: 'ticket_number', name: 'ticket_number' },
                 { data: 'category', name: 'category' },
                 { data: 'name', name: 'name' },
                 { data: 'phone', name: 'phone' },

@@ -17,10 +17,12 @@ class GrievanceController extends Controller
     {
         if (request()->ajax()) {
             $grievances = Grievance::query()
-                ->select('id', 'consumer_no', 'ca_no', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
+                ->select('id', 'consumer_no', 'ca_no', 'ticket_number','category', 'name', 'phone', 'priority_score', 'status', 'created_at')
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
                 ->orderBy('priority_score', 'desc')
                 ->orderBy('created_at', 'desc');
+
+           
 
             return datatables()->of($grievances)
                 ->addColumn('actions', function ($row) {
