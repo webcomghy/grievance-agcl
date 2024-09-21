@@ -5,7 +5,11 @@
 @section('action_buttons')
     <span class="text-gray-600 mr-4">
         <i class="far fa-clock"></i>
-        {{ $grievance->created_at->diffForHumans() }} has passed since the submission
+        @if(isset($grievance->transactions->last()->assigned_to))
+            {{ $grievance->transactions->last()->created_at->diffForHumans() }} has passed since {{ $grievance->transactions->last()->status }}
+        @else
+            {{ $grievance->created_at->diffForHumans() }} has passed since the submission
+        @endif
     </span>
 
     @if($grievance->status === 'Pending' || $grievance->status === 'Forwarded' || $grievance->status === 'Assigned')
