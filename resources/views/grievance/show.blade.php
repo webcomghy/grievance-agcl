@@ -8,21 +8,45 @@
         {{ $grievance->created_at->diffForHumans() }} has passed since the submission
     </span>
 
-    @if($grievance->status === 'Pending' || $grievance->status === 'Forwarded')
-        <button onclick="openAsignModal()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mr-2">
-            <i class="fas fa-user-plus"></i>
-        </button>
-        <button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-            <i class="fas fa-forward"></i>
-        </button>
-
-        @if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
-            <button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
-                <i class="fas fa-close"></i>
-            </button>
-            <button onclick="openResolveModal()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
-                <i class="fas fa-check"></i>
-            </button>
+    @if($grievance->status === 'Pending' || $grievance->status === 'Forwarded' || $grievance->status === 'Assigned')
+        @if(isset($grievance->transactions->last()->assigned_to))
+            @if($grievance->transactions->last()->assigned_to == auth()->user()->id)
+                @if($grievance->status !== 'Assigned')
+                    <button onclick="openAsignModal()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mr-2">
+                        <i class="fas fa-user-plus"></i>
+                    </button>
+                    <button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                @endif
+            @endif
+            @if($grievance->transactions->last()->assigned_to == auth()->user()->id || auth()->user()->hasRole('admin'))
+                @if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
+                    <button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
+                        <i class="fas fa-close"></i>
+                    </button>
+                    <button onclick="openResolveModal()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
+                        <i class="fas fa-check"></i>
+                    </button>
+                @endif
+            @endif
+        @elseif (auth()->user()->hasRole('admin'))
+            @if($grievance->status !== 'Assigned')
+                <button onclick="openAsignModal()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mr-2">
+                    <i class="fas fa-user-plus"></i>
+                </button>
+                <button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+                    <i class="fas fa-forward"></i>
+                </button>
+            @endif
+            @if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
+                <button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
+                    <i class="fas fa-close"></i>
+                </button>
+                <button onclick="openResolveModal()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
+                    <i class="fas fa-check"></i>
+                </button>
+            @endif
         @endif
     @endif
     
@@ -37,7 +61,7 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Grievance Details</h1>
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Grievance Details for {{ $grievance->ticket_number }}</h1>
 
     <div class="flex flex-col lg:flex-row gap-6">
         <div id="grievanceCard" class="bg-white shadow-md rounded-lg overflow-hidden lg:w-2/3">
@@ -45,6 +69,7 @@
                 <h2 class="text-2xl font-semibold text-gray-800 mb-4">{{ $grievance->category }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
+                        {{-- <p><strong>Ticket No:</strong> {{ $grievance->ticket_number }}</p> --}}
                         <p><strong>Consumer No:</strong> {{ $grievance->consumer_no }}</p>
                         <p><strong>CA No:</strong> {{ $grievance->ca_no }}</p>
                         <p><strong>Name:</strong> {{ $grievance->name }}</p>
@@ -93,15 +118,15 @@
 </div>
 
 <!-- Asign Modal -->
-@include('grievance.partials.asign-modal')
+@include('grievance.partials.modals.asign-modal')
 <!-- Forward Modal -->
-@include('grievance.partials.forward-modal')
+@include('grievance.partials.modals.forward-modal')
 
 <!-- Close Modal -->
-@include('grievance.partials.close-modal')
+@include('grievance.partials.modals.close-modal')
 
 <!-- Resolve     Modal -->
-@include('grievance.partials.resolve-modal')
+@include('grievance.partials.modals.resolve-modal')
 
 
 <style>
@@ -218,7 +243,7 @@
         XLSX.utils.book_append_sheet(wb, ws, "Transactions");
 
         // Generate Excel file with cell styles
-        XLSX.writeFile(wb, "grievance_{{ $grievance->id }}_transactions.xlsx", {
+        XLSX.writeFile(wb, "{{ $grievance->ticket_number }}_transactions.xlsx", {
             cellStyles: true
         });
     }

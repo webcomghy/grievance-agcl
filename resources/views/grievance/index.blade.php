@@ -25,9 +25,9 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket No</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Consumer No</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CA No</th>
-                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket No</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
@@ -49,16 +49,18 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '{{ route('grievances.index') }}',
+                url: '{{ request()->is('outbox') ? route('grievances.outbox') : (request()->is('inbox') ? route('grievances.inbox') : route('grievances.index')) }}',
                 data: function (d) {
                     d.priority = $('#priority_filter').val();
                 }
             },
             columns: [
-                { data: 'id', name: 'id' },
+                { data: null, name: 'id', orderable: false, searchable: false, render: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1; // Calculate serial number
+                }},
+                { data: 'ticket_number', name: 'ticket_number' },
                 { data: 'consumer_no', name: 'consumer_no' },
                 { data: 'ca_no', name: 'ca_no' },
-                { data: 'ticket_number', name: 'ticket_number' },
                 { data: 'category', name: 'category' },
                 { data: 'name', name: 'name' },
                 { data: 'phone', name: 'phone' },

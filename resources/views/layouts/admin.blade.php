@@ -93,8 +93,22 @@
                             <i class="fas fa-list mr-2 sidebar-icon"></i><span class="menu-text">Grievances</span>
                         </a>
                     @endcan
-                    
 
+                        <a href="{{ route('grievances.create') }}"
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                            <i class="fas fa-plus mr-2 sidebar-icon"></i><span class="menu-text">Create Grievance</span>
+                        </a>
+
+                        <a href="{{ route('grievances.inbox') }}"
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                            <i class="fas fa-inbox mr-2 sidebar-icon"></i><span class="menu-text">Inbox</span>
+                        </a>
+
+                        <a href="{{ route('grievances.outbox') }}"
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                            <i class="fas fa-paper-plane mr-2 sidebar-icon"></i><span class="menu-text">Outbox</span>
+                        </a>
+                    
                     @can('manage_roles_and_permissions')
                         <a href="{{ route('roles-permissions.index') }}"
                             class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">

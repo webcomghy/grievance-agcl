@@ -17,10 +17,9 @@
                                 <div class="mb-4">
                                     <label for="forward_to" class="block text-sm font-medium text-gray-700">Forward To</label>
                                     <select id="forward_to" name="assigned_to" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                        <option value="">Select Department</option>
-                                        <option value="dept1">Department 1</option>
-                                        <option value="dept2">Department 2</option>
-                                        <option value="dept3">Department 3</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->username }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-4">

@@ -30,13 +30,16 @@ Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
 Route::middleware('auth:web,consumer')->group(function () {
     Route::get('grievance/form', [GrievanceController::class, 'create'])->name('grievance.form');
     Route::post('grievances', [GrievanceController::class, 'store'])->name('grievances.store');
+    Route::get('/grievances/decode/{ticket_number}', [GrievanceController::class, 'decodeTicket'])->name('grievances.decode');
 });
 
-Route::middleware('auth','can:view_grivances')->group(function () {
-    Route::get('grievances', [GrievanceController::class, 'index'])->name('grievances.index');
+Route::middleware('auth')->group(function () {
+    Route::get('grievances', [GrievanceController::class, 'index'])->name('grievances.index')->middleware('can:view_grivances');
     Route::get('grievances/create', [GrievanceController::class, 'create'])->name('grievances.create');
     Route::get('grievances/{grievance}', [GrievanceController::class, 'show'])->name('grievances.show');
     Route::put('grievances/{grievance}', [GrievanceController::class, 'update'])->name('grievances.update');
+    Route::get('inbox', [GrievanceController::class, 'inbox'])->name('grievances.inbox');
+    Route::get('outbox', [GrievanceController::class, 'outbox'])->name('grievances.outbox');
 });
 
 require __DIR__.'/auth.php';
