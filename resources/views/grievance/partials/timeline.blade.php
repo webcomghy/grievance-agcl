@@ -32,6 +32,12 @@
                         </span>
                         <div class="ml-4">
                             <h3 class="text-lg font-semibold text-gray-900">{{ $transaction->status }}</h3>
+                            {{-- @dd($transaction->assignedTo) --}}
+                            @if($transaction->status === 'Closed')
+                                <p class="mb-2 text-base font-semibold text-gray-500">Grievance closed by {{ $transaction->createdBy->username ?? "NA"  }}</p>
+                            @else
+                                <h3 class="mb-2 text-base font-semibold text-gray-500">Assigned to {{ $transaction->assignedTo->username ?? "NA" }} by {{ $transaction->createdBy->username ?? "NA"  }}</h3>
+                            @endif
                             <p class="mb-2 text-base font-normal text-gray-500">{{ $transaction->description }}</p>
                             <time class="block mb-2 text-sm font-normal leading-none text-gray-400">{{ $transaction->created_at->format('M d, Y') }}</time>
                         </div>

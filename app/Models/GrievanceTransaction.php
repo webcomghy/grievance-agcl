@@ -23,4 +23,14 @@ class GrievanceTransaction extends Model
     {
         return $this->belongsTo(Grievance::class);
     }
+
+    public function assignedTo()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }
