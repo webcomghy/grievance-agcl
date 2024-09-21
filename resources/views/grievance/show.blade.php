@@ -109,12 +109,12 @@
         @include('grievance.partials.timeline')
     </div>
 
-    <div class="mt-6 flex justify-between">
+    {{-- <div class="mt-6 flex justify-between">
         <a href="{{ route('grievances.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
             Back to List
         </a>
         
-    </div>
+    </div> --}}
 </div>
 
 <!-- Asign Modal -->

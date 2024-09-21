@@ -81,6 +81,13 @@
                         <i class="fas fa-home mr-2 sidebar-icon"></i><span class="menu-text">Dashboard</span>
                     </a>
                 {{-- @endcan --}}
+
+                    @can('manage_roles_and_permissions')
+                        <a href="{{ route('roles-permissions.index') }}"
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                            <i class="fas fa-user-lock mr-2 sidebar-icon"></i><span class="menu-text">Roles & Permissions</span>
+                        </a>
+                    @endcan
                     @can('view_meter_uploads')
                         <a href="{{ route('meter_uploads.index') }}"
                             class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
@@ -109,12 +116,7 @@
                             <i class="fas fa-paper-plane mr-2 sidebar-icon"></i><span class="menu-text">Outbox</span>
                         </a>
                     
-                    @can('manage_roles_and_permissions')
-                        <a href="{{ route('roles-permissions.index') }}"
-                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                            <i class="fas fa-user-lock mr-2 sidebar-icon"></i><span class="menu-text">Roles & Permissions</span>
-                        </a>
-                    @endcan
+                    
             </nav>
         </aside>
 
