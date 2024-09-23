@@ -11,6 +11,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+require __DIR__.'/auth.php';
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -41,8 +43,6 @@ Route::middleware('auth')->group(function () {
     Route::get('inbox', [GrievanceController::class, 'inbox'])->name('grievances.inbox');
     Route::get('outbox', [GrievanceController::class, 'outbox'])->name('grievances.outbox');
 });
-
-require __DIR__.'/auth.php';
 
 Route::get('consumer/login', [ConsumerAuthController::class, 'showLoginForm'])->name('consumer.login.form');
 Route::post('consumer/login', [ConsumerAuthController::class, 'login'])->name('consumer.login');
