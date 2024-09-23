@@ -23,16 +23,6 @@ class GrievanceController extends Controller
                 ->orderBy('priority_score', 'desc')
                 ->orderBy('created_at', 'desc');
 
-            // Check if it's an outbox request
-            if (request()->has('isOutbox') && request('isOutbox')) {
-                $grievances->whereExists(function ($query) {
-                    $query->select(DB::raw(1))
-                          ->from('grievance_transactions')
-                          ->whereRaw('grievance_transactions.grievance_id = grievances.id')
-                          ->where('grievance_transactions.created_by', auth()->id());
-                });
-            }
-
             return datatables()->of($grievances)
                 ->addColumn('actions', function ($row) {
                     $btn = '<a href="' . route('grievances.show', $row->id) . '" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
@@ -53,8 +43,6 @@ class GrievanceController extends Controller
     public function create()
     {
         $categories = Grievance::$categories;
-
-        // auth user
 
 
         if (auth()->guard('consumer')->check()) {
@@ -203,16 +191,13 @@ class GrievanceController extends Controller
     {
         if (request()->ajax()) {
             // Fetch grievances where there are transactions created by the authenticated user
-            $grievances = Grievance::whereExists(function ($query) {
-                    $query->select(DB::raw(1))
-                          ->from('grievance_transactions') // Correct table name
-                          ->whereRaw('grievance_transactions.grievance_id = grievances.id') // linking grievance to transaction
-                          ->where('grievance_transactions.created_by', auth()->id()); // authenticated user
-                })
-                ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
-                ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
-                ->orderBy('priority_score', 'desc')
-                ->orderBy('created_at', 'desc');
+            $grievances = Grievance::whereHas('transactions', function ($query) {
+                $query->where('created_by', auth()->id()); // authenticated user
+            })
+            ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
+            ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
+            ->orderBy('priority_score', 'desc')
+            ->orderBy('created_at', 'desc');
 
             return datatables()->of($grievances)
                 ->addColumn('actions', function ($row) {
@@ -234,11 +219,8 @@ class GrievanceController extends Controller
     {
         if (request()->ajax()) {
             // Fetch grievances where there are transactions created by the authenticated user
-            $grievances = Grievance::whereExists(function ($query) {
-                    $query->select(DB::raw(1))
-                          ->from('grievance_transactions') // Correct table name
-                          ->whereRaw('grievance_transactions.grievance_id = grievances.id') // linking grievance to transaction
-                          ->where('grievance_transactions.assigned_to', auth()->id()); // authenticated user
+            $grievances = Grievance::whereHas('transactions', function ($query) {
+                    $query->where('assigned_to', auth()->id()); // authenticated user
                 })
                 ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")

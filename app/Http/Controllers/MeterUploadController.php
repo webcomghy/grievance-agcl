@@ -27,7 +27,7 @@ class MeterUploadController extends Controller
 
 
     public function setMonthAndDate(){
-        // list of month numbers name value pair
+        
         $months = [
             1 => 'January',
             2 => 'February',
@@ -46,7 +46,10 @@ class MeterUploadController extends Controller
         $years = range(2022, 2030);
 
         if(request()->ajax()) {
-            $data = AvailabilityDate::query();
+            $data = AvailabilityDate::query()
+                ->select('month', 'year', 'from_date', 'to_date')
+                ->orderBy('month', 'desc')
+                ->orderBy('year', 'desc');
             return datatables()->of($data)->make(true);
         }
 
@@ -71,7 +74,6 @@ class MeterUploadController extends Controller
             $from_date = $request->from_date;
             $to_date = $request->to_date;
 
-            // Availability Dates
             AvailabilityDate::create([
                 'month' => $month,
                 'year' => $year,
