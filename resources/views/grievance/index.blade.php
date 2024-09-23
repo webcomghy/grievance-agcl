@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 @section('title', 'Grievances')
 @section('action_buttons')
-    <a href="{{ route('grievances.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
+    {{-- <a href="{{ route('grievances.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out">
         <i class="fas fa-plus"></i>
-    </a>
+    </a> --}}
 @endsection
 @section('content')
 <div class="container mx-auto px-4 py-8">

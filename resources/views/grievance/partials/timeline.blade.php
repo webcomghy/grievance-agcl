@@ -35,6 +35,8 @@
                             {{-- @dd($transaction->assignedTo) --}}
                             @if($transaction->status === 'Closed')
                                 <p class="mb-2 text-base font-semibold text-gray-500">Grievance closed by {{ $transaction->createdBy->username ?? "NA"  }}</p>
+                            @elseif($transaction->status === 'Resolved')
+                                <h3 class="mb-2 text-base font-semibold text-gray-500">Resolved by {{ $transaction->createdBy->username ?? "NA"  }}</h3>
                             @else
                                 <h3 class="mb-2 text-base font-semibold text-gray-500">Assigned to {{ $transaction->assignedTo->username ?? "NA" }} by {{ $transaction->createdBy->username ?? "NA"  }}</h3>
                             @endif
