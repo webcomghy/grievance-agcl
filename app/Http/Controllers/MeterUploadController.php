@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AvailabilityDate;
 use App\Models\MeterUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MeterUploadController extends Controller
 {
@@ -40,14 +42,46 @@ class MeterUploadController extends Controller
         ];
 
         $years = range(2022, 2030);
-        
 
-        return view('meter_uploads.set_month_and_date', compact('months', 'years'));
+        if(request()->ajax()) {
+            $data = AvailabilityDate::query();
+            return datatables()->of($data)->make(true);
+        }
+
+        return view('meter_uploads.set_month_and_date', compact('months', 'years', ));
     }
 
 
     public function storeMonthDates(Request $request){
 
-        dd($request->all());
+        
+        $request->validate([
+            'month' => 'required',
+            'year' => 'required',
+            'from_date' => 'required',
+            'to_date' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $month = $request->month;
+            $year = $request->year;
+            $from_date = $request->from_date;
+            $to_date = $request->to_date;
+
+            // Availability Dates
+            AvailabilityDate::create([
+                'month' => $month,
+                'year' => $year,
+                'from_date' => $from_date,
+                'to_date' => $to_date,
+            ]);
+            DB::commit();
+            return redirect()->route('meter_uploads.set_dates')->with('success', 'Availability Dates Set Successfully');
+    }
+    catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->back()->with('error', "Failed to set Availability Dates");
+    }
     }
 }
