@@ -16,7 +16,9 @@ class MeterUploadController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $data = MeterUpload::query();
+            $data = MeterUpload::query()
+                ->select('id', 'meter_no', 'consumer_no', 'phone_number', 'yearMonth', 'reading', 'image', 'latitude', 'longitude', 'created_at')
+                ->orderBy('id', 'desc');
             return datatables()->of($data)->make(true);
         }
  

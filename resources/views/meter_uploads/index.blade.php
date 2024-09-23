@@ -17,12 +17,14 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Meter No</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Consumer No</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year Month</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reading</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 100px;">Image</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded At</th>
                 </tr>
             </thead>
         </table>
@@ -30,28 +32,11 @@
 </div>
 
 <!-- Modal for displaying larger image -->
-<div id="imageModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
-    <div class="bg-white rounded-lg overflow-hidden shadow-lg max-w-3xl w-full max-h-screen">
-        <div class="flex justify-between items-center p-4 border-b">
-            <h5 class="text-lg font-bold">Meter Image</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700" onclick="closeImageModal()">&times;</button>
-        </div>
-        <div class="p-4 overflow-auto">
-            <img id="modalImage" src="" class="w-full h-auto" alt="Meter Image">
-        </div>
-    </div>
-</div>
+@include('meter_uploads.partials.modals.image_modal')
 
 <!-- Modal for displaying location -->
-<div id="locationModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
-    <div class="bg-white rounded-lg overflow-hidden shadow-lg max-w-3xl w-full max-h-screen">
-        <div class="flex justify-between items-center p-4 border-b">
-            <h5 class="text-lg font-bold">Location</h5>
-            <button type="button" class="text-gray-500 hover:text-gray-700" onclick="closeLocationModal()">&times;</button>
-        </div>
-        <div id="map" class="h-96"></div>
-    </div>
-</div>
+@include('meter_uploads.partials.modals.location_modal')
+
 @endsection
 
 @section('scripts')
@@ -65,6 +50,7 @@
             ajax: '{{ route('meter_uploads.index') }}',
             columns: [
                 { data: 'id', name: 'id' },
+                { data: 'meter_no', name: 'meter_no' },
                 { data: 'consumer_no', name: 'consumer_no' },
                 { data: 'phone_number', name: 'phone_number' },
                 { data: 'yearMonth', name: 'yearMonth' },
@@ -78,6 +64,12 @@
                     var longitude = full.longitude;
                     return '<button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm" onclick="showLocationModal(' + latitude + ', ' + longitude + ')">View Location</button>';
                 }},
+                { data: 'created_at', name: 'created_at', render: function(data) {
+                    return new Date(data).toLocaleString('en-US', { 
+                        year: 'numeric', month: 'short', day: 'numeric', 
+                        hour: '2-digit', minute: '2-digit', hour12: false 
+                    }); // Format date to "Sep 21, 2024 06:44"
+                }}
             ],
             dom: 'lBfrtip',
             buttons: [
