@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermissionController;
 use App\Models\Grievance;
 use App\Models\GrievanceTransaction;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -14,35 +15,50 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::get('/dashboard', function () {
-    
+
     $userID = Auth::user()->id;
 
     $closed = GrievanceTransaction::select('created_by', 'status')->where('created_by', $userID)->where('status', 'Closed')->count();
     $resolved = GrievanceTransaction::select('created_by', 'status')->where('created_by', $userID)->where('status', 'Resolved')->count();
     $unread = Grievance::whereDoesntHave('transactions')->where('status', 'Pending')->count();
-    $inprogress = GrievanceTransaction::select('grievance_id','created_by', 'status')
+    $inprogress = GrievanceTransaction::select('grievance_id', 'created_by', 'status')
         ->where('created_by', $userID)->whereIn('status', ['Forwarded', 'Assigned'])->groupBy('grievance_id')->count();
     $total = Grievance::select('id')->count();
 
     $recentFive = Grievance::select('ticket_number', 'category', 'created_at')->orderBy('created_at', 'desc')->limit(5)->get();
 
-    $resolvedGrievances = Grievance::select('created_at', 'updated_at')->whereIn('status', ['Resolved', 'Closed'])->get();
+    $resolvedGrievances = Grievance::select('created_at', 'updated_at')
+        ->whereIn('status', ['Resolved', 'Closed'])
+        ->get();
 
-     $totalResolutionTime = $resolvedGrievances->sum(function ($grievance) {
-         return $grievance->updated_at->diffInSeconds($grievance->created_at);
-     });
- 
-     $averageResolutionTime = $resolvedGrievances->count() > 0 ? $totalResolutionTime / $resolvedGrievances->count() : 0;
- 
-     $averageTimeFormatted = gmdate("H:i:s", $averageResolutionTime);
-    
+    $totalTimeDifferenceInSeconds = 0;
+    $totalGrievances = $resolvedGrievances->count();
+
+    foreach ($resolvedGrievances as $grievance) {
+        // Calculate the difference in seconds between created_at and updated_at
+        $totalTimeDifferenceInSeconds += $grievance->updated_at->diffInSeconds($grievance->created_at);
+    }
+
+    if ($totalGrievances > 0) {
+        // Calculate the average time difference in seconds
+        $averageTimeDifferenceInSeconds = $totalTimeDifferenceInSeconds / $totalGrievances;
+
+        // Convert to a CarbonInterval for human-readable format
+        $averageTimeInterval = CarbonInterval::seconds($averageTimeDifferenceInSeconds)->cascade();
+
+        // Output in a human-readable format
+        $averageTimeFormatted = $averageTimeInterval->forHumans();
+    } else {
+        $averageTimeFormatted = 0;
+    }
+
     return view('dashboard', compact(
-        'closed', 
-        'resolved', 
-        'unread', 
+        'closed',
+        'resolved',
+        'unread',
         'inprogress',
         'recentFive',
         'total',
@@ -65,7 +81,7 @@ Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
 Route::get('grievance/form', [GrievanceController::class, 'create'])->name('grievance.form');
 Route::post('grievances', [GrievanceController::class, 'store'])->name('grievances.store');
 Route::middleware('auth:web,consumer')->group(function () {
-    
+
     Route::get('/grievances/decode/{ticket_number}', [GrievanceController::class, 'decodeTicket'])->name('grievances.decode')->middleware('can:can_decode_ticket');
 });
 
@@ -98,5 +114,4 @@ Route::middleware(['auth', 'can:manage_roles_and_permissions'])->group(function 
     Route::get('/users-with-roles', [RolePermissionController::class, 'getUsersWithRoles'])->name('users.with.roles');
     Route::post('/roles/remove', [RolePermissionController::class, 'removeRole'])->name('roles.remove');
     Route::get('/roles/permissions', [RolePermissionController::class, 'getRolePermissions'])->name('roles.permissions');
- });
-
+});
