@@ -28,7 +28,7 @@ Route::get('/dashboard', function () {
         ->where('created_by', $userID)->whereIn('status', ['Forwarded', 'Assigned'])->groupBy('grievance_id')->count();
     $total = Grievance::select('id')->count();
 
-    $recentFive = Grievance::select('ticket_number', 'category', 'created_at')->orderBy('created_at', 'desc')->limit(5)->get();
+    $recentFive = Grievance::select('ticket_number', 'status', 'category', 'created_at')->orderBy('created_at', 'desc')->limit(5)->get();
 
     $resolvedGrievances = Grievance::select('created_at', 'updated_at')
         ->whereIn('status', ['Resolved', 'Closed'])

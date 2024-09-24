@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 <div class="p-6">
-    <h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard Overview</h2>
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h2>
     
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div class="bg-white rounded-lg shadow-md p-6 transition duration-300 ease-in-out transform hover:scale-105">
@@ -68,6 +68,7 @@
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                     </tr>
                 </thead>
@@ -76,9 +77,13 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $recent->ticket_number }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $recent->category }}</td>
-                            {{-- <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Resolved</span>
-                            </td> --}}
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {{ 
+                                    $recent->status === 'Pending' 
+                                    || $recent->status === 'Forwarded' 
+                                    || $recent->status === 'Assigned' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'  }}">{{ $recent->status }}</span>
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $recent->created_at }}</td>
                         </tr>
                     @endforeach
