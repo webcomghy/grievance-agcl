@@ -37,8 +37,10 @@
                                 <p class="mb-2 text-base font-semibold text-gray-500">Grievance closed by {{ $transaction->createdBy->username ?? "NA"  }}</p>
                             @elseif($transaction->status === 'Resolved')
                                 <h3 class="mb-2 text-base font-semibold text-gray-500">Resolved by {{ $transaction->createdBy->username ?? "NA"  }}</h3>
-                            @else
+                            @elseif($transaction->status === 'Forwarded')
                                 <h3 class="mb-2 text-base font-semibold text-gray-500">Assigned to {{ $transaction->assignedTo->username ?? "NA" }} by {{ $transaction->createdBy->username ?? "NA"  }}</h3>
+                            @elseif($transaction->status === 'Assigned')
+                                <h3 class="mb-2 text-base font-semibold text-gray-500">Assigned to Emp ID: {{ $transaction->employee_id ?? "NA" }} by {{ $transaction->createdBy->username ?? "NA"  }}</h3>
                             @endif
                             <p class="mb-2 text-base font-normal text-gray-500">{{ $transaction->description }}</p>
                             <time class="block mb-2 text-sm font-normal leading-none text-gray-400">{{ $transaction->created_at->format('M d, Y') }}</time>

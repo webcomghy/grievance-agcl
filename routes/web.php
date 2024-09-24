@@ -29,9 +29,10 @@ Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
     Route::post('meter_uploads/set_dates/', [MeterUploadController::class, 'storeMonthDates'])->name('meter_uploads.set_month_and_date');
 });
 
+Route::get('grievance/form', [GrievanceController::class, 'create'])->name('grievance.form');
+Route::post('grievances', [GrievanceController::class, 'store'])->name('grievances.store');
 Route::middleware('auth:web,consumer')->group(function () {
-    Route::get('grievance/form', [GrievanceController::class, 'create'])->name('grievance.form');
-    Route::post('grievances', [GrievanceController::class, 'store'])->name('grievances.store');
+    
     Route::get('/grievances/decode/{ticket_number}', [GrievanceController::class, 'decodeTicket'])->name('grievances.decode')->middleware('can:can_decode_ticket');
 });
 

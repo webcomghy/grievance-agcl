@@ -44,10 +44,12 @@ class GrievanceController extends Controller
     {
         $categories = Grievance::$categories;
 
-
         if (auth()->guard('consumer')->check()) {
-            // dd(auth()->guard('consumer')->user());
             return view('consumer.form', compact('categories'));
+        }
+
+        if(auth()->user() === null){
+            return view('guest.form', compact('categories'));
         }
 
         return view('grievance.form', compact('categories'));
@@ -82,32 +84,26 @@ class GrievanceController extends Controller
 
         DB::beginTransaction();
         try {
-            // Use only category priority
             $category_priority = Grievance::$categories_priority[$validatedData['category']];
 
-            // Set priority directly from category
             $validatedData['priority_score'] = $category_priority;
             $validatedData['status'] = Grievance::$statuses[0];
 
-            // Create the grievance
             $grievance = Grievance::create($validatedData);
 
             $grievance_id = $grievance->id;
             $date = date('ymd');
             $time = date('His');
 
-            // Combine all elements into a single string
             $raw_string = $grievance_id . $date . $time;
 
-            // Encode the combined string using a local Base62 method
             $encoded_ticket = $this->encode((int) $raw_string);
 
-            $ticket_number = 'TKT-' . $encoded_ticket; // Resulting shorter ticket number
+            $ticket_number = 'TKT-' . $encoded_ticket;
 
             $grievance->update(['ticket_number' => $ticket_number]);
 
 
-            // dd("ok");
         } catch (\Throwable $th) {
             DB::rollBack();
 
@@ -190,9 +186,8 @@ class GrievanceController extends Controller
     public function outbox()
     {
         if (request()->ajax()) {
-            // Fetch grievances where there are transactions created by the authenticated user
             $grievances = Grievance::whereHas('transactions', function ($query) {
-                $query->where('created_by', auth()->id()); // authenticated user
+                $query->where('created_by', auth()->id());
             })
             ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
             ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
@@ -211,16 +206,14 @@ class GrievanceController extends Controller
                 ->make(true);
         }
 
-        // Return the view for non-AJAX requests
         return view('grievance.index', ['isOutbox' => true]);
     }
 
     public function inbox()
     {
         if (request()->ajax()) {
-            // Fetch grievances where there are transactions created by the authenticated user
             $grievances = Grievance::whereHas('transactions', function ($query) {
-                    $query->where('assigned_to', auth()->id()); // authenticated user
+                    $query->where('assigned_to', auth()->id()); 
                 })
                 ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
@@ -239,7 +232,6 @@ class GrievanceController extends Controller
                 ->make(true);
         }
 
-        // Return the view for non-AJAX requests
         return view('grievance.index', ['isInbox' => true]);
     }
 
@@ -276,8 +268,6 @@ class GrievanceController extends Controller
         return $encoded;
     }
 
-
-   
 
     /**
      * Decode a Base62 encoded string back to a number.
