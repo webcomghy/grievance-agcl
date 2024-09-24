@@ -20,26 +20,23 @@ Route::get('/dashboard', function () {
     
     $userID = Auth::user()->id;
 
-    $closed = GrievanceTransaction::where('created_by', $userID)->where('status', 'Closed')->count();
-    $resolved = GrievanceTransaction::where('created_by', $userID)->where('status', 'Resolved')->count();
+    $closed = GrievanceTransaction::select('created_by', 'status')->where('created_by', $userID)->where('status', 'Closed')->count();
+    $resolved = GrievanceTransaction::select('created_by', 'status')->where('created_by', $userID)->where('status', 'Resolved')->count();
     $unread = Grievance::whereDoesntHave('transactions')->where('status', 'Pending')->count();
-    $inprogress = GrievanceTransaction::where('created_by', $userID)->whereIn('status', ['Forwarded', 'Assigned'])->groupBy('grievance_id')->count();
-    $total = Grievance::all()->count();
+    $inprogress = GrievanceTransaction::select('grievance_id','created_by', 'status')
+        ->where('created_by', $userID)->whereIn('status', ['Forwarded', 'Assigned'])->groupBy('grievance_id')->count();
+    $total = Grievance::select('id')->count();
 
-    $recentFive = Grievance::orderBy('created_at', 'desc')->limit(5)->get();
+    $recentFive = Grievance::select('ticket_number', 'category', 'created_at')->orderBy('created_at', 'desc')->limit(5)->get();
 
-     // Fetch resolved grievances
-    $resolvedGrievances = Grievance::whereIn('status', ['Resolved', 'Closed'])->get();
+    $resolvedGrievances = Grievance::select('created_at', 'updated_at')->whereIn('status', ['Resolved', 'Closed'])->get();
 
-     // Calculate total resolution time
      $totalResolutionTime = $resolvedGrievances->sum(function ($grievance) {
          return $grievance->updated_at->diffInSeconds($grievance->created_at);
      });
  
-     // Calculate average resolution time
      $averageResolutionTime = $resolvedGrievances->count() > 0 ? $totalResolutionTime / $resolvedGrievances->count() : 0;
  
-     // Convert average time to a more readable format (e.g., days, hours, minutes)
      $averageTimeFormatted = gmdate("H:i:s", $averageResolutionTime);
     
     return view('dashboard', compact(
