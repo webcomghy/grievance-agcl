@@ -48,7 +48,7 @@ class GrievanceController extends Controller
             return view('consumer.form', compact('categories'));
         }
 
-        if(auth()->user() === null){
+        if(Auth::user() === null){
             return view('guest.form', compact('categories'));
         }
 
@@ -156,7 +156,7 @@ class GrievanceController extends Controller
                 'description' => $validatedData['description'],
                 'assigned_to' => $request->assigned_to ?? 0,
                 'employee_id' => $request->employee_id ?? 0,
-                'created_by' => auth()->id(),
+                'created_by' => Auth::user()->id,
             ]);
 
             if ($validatedData['status'] === 'Resolved' || $grievance->status === 'Closed') {
@@ -187,7 +187,7 @@ class GrievanceController extends Controller
     {
         if (request()->ajax()) {
             $grievances = Grievance::whereHas('transactions', function ($query) {
-                $query->where('created_by', auth()->id());
+                $query->where('created_by', Auth::user()->id);
             })
             ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
             ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
@@ -213,7 +213,7 @@ class GrievanceController extends Controller
     {
         if (request()->ajax()) {
             $grievances = Grievance::whereHas('transactions', function ($query) {
-                    $query->where('assigned_to', auth()->id()); 
+                    $query->where('assigned_to', Auth::user()->id); 
                 })
                 ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
