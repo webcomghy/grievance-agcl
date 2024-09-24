@@ -5,6 +5,9 @@ use App\Http\Controllers\GrievanceController;
 use App\Http\Controllers\MeterUploadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermissionController;
+use App\Models\Grievance;
+use App\Models\GrievanceTransaction;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,7 +17,40 @@ Route::get('/', function () {
 require __DIR__.'/auth.php';
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    
+    $userID = Auth::user()->id;
+
+    $closed = GrievanceTransaction::where('created_by', $userID)->where('status', 'Closed')->count();
+    $resolved = GrievanceTransaction::where('created_by', $userID)->where('status', 'Resolved')->count();
+    $unread = Grievance::whereDoesntHave('transactions')->where('status', 'Pending')->count();
+    $inprogress = GrievanceTransaction::where('created_by', $userID)->whereIn('status', ['Forwarded', 'Assigned'])->groupBy('grievance_id')->count();
+    $total = Grievance::all()->count();
+
+    $recentFive = Grievance::orderBy('created_at', 'desc')->limit(5)->get();
+
+     // Fetch resolved grievances
+    $resolvedGrievances = Grievance::whereIn('status', ['Resolved', 'Closed'])->get();
+
+     // Calculate total resolution time
+     $totalResolutionTime = $resolvedGrievances->sum(function ($grievance) {
+         return $grievance->updated_at->diffInSeconds($grievance->created_at);
+     });
+ 
+     // Calculate average resolution time
+     $averageResolutionTime = $resolvedGrievances->count() > 0 ? $totalResolutionTime / $resolvedGrievances->count() : 0;
+ 
+     // Convert average time to a more readable format (e.g., days, hours, minutes)
+     $averageTimeFormatted = gmdate("H:i:s", $averageResolutionTime);
+    
+    return view('dashboard', compact(
+        'closed', 
+        'resolved', 
+        'unread', 
+        'inprogress',
+        'recentFive',
+        'total',
+        'averageTimeFormatted'
+    ));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
