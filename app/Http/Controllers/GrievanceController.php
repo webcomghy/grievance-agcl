@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 class GrievanceController extends Controller
 {
@@ -16,16 +17,26 @@ class GrievanceController extends Controller
      */
     public function index()
     {
+        
+        $isConsumer = auth()->guard('consumer')->check();
+        $consumerID = auth()->guard('consumer')->user()->id ?? NULL;
+        
+        
         if (request()->ajax()) {
             $grievances = Grievance::query()
                 ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
+                ->when($isConsumer, function ($query) use ($consumerID) {
+                    return $query->where('consumer_id', $consumerID);
+                })
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
                 ->orderBy('priority_score', 'desc')
                 ->orderBy('created_at', 'desc');
 
             return datatables()->of($grievances)
-                ->addColumn('actions', function ($row) {
-                    $btn = '<a href="' . route('grievances.show', $row->id) . '" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
+                ->addColumn('actions', function ($row) use ($isConsumer) {
+                    $encryptedId = Crypt::encryptString($row->id);
+                    $btnRoute = $isConsumer ? 'grievances.showuser' : 'grievances.show';
+                    $btn = '<a href="' . route($btnRoute, $encryptedId) . '" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
                     return $btn;
                 })
                 ->addColumn('priority', function ($row) {
@@ -33,6 +44,10 @@ class GrievanceController extends Controller
                 })
                 ->rawColumns(['actions'])
                 ->make(true);
+        }
+
+        if($isConsumer){
+            return view('consumer.grievance.index');
         }
         return view('grievance.index');
     }
@@ -122,11 +137,19 @@ class GrievanceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Grievance $grievance)
+    public function show($encryptedId)
     {
+        $decryptedId = Crypt::decryptString($encryptedId);
+        $grievance = Grievance::findOrFail($decryptedId);
         $grievance->load('transactions');
 
         $users = User::select('id', 'username')->get();
+
+        $isConsumer = auth()->guard('consumer')->check();
+
+        if($isConsumer){
+            return view('consumer.grievance.show', compact('grievance', 'users'));
+        }
         return view('grievance.show', compact('grievance', 'users'));
     }
 

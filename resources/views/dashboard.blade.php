@@ -60,7 +60,7 @@
 
         <div class="bg-white rounded-lg shadow-md p-6 transition duration-300 ease-in-out transform hover:scale-105">
             <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-gray-700">Total Unread Grievances</h3>
+                <h3 class="text-lg font-semibold text-gray-700">Total Unattended Grievances</h3>
                 <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

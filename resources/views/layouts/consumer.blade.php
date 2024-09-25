@@ -16,6 +16,19 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
 </head>
 <body class="font-sans antialiased bg-gray-100">
     <div class="min-h-screen flex flex-col">
@@ -33,6 +46,9 @@
                                 </a>
                                 <a href="{{ route('grievance.form') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievance.form') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
                                     Submit Grievance
+                                </a>
+                                <a href="{{ route('grievances.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievances.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                                    Grievances
                                 </a>
                             </div>
                         </div>
@@ -79,6 +95,9 @@
                     </a>
                     <a href="{{ route('grievance.form') }}" class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('grievance.form') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
                         Submit Grievance
+                    </a>
+                    <a href="{{ route('grievances.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievances.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                        Grievances
                     </a>
                 </div>
                 <div class="pt-4 pb-3 border-t border-gray-200">
