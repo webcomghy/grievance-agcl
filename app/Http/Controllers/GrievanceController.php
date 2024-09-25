@@ -191,13 +191,15 @@ class GrievanceController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('grievances.show', $grievance)
+
+            $encryptedId = Crypt::encryptString($grievance->id);
+            return redirect()->route('grievances.show', $encryptedId)
                 ->with('success', 'Grievance updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
 
-            // dd($e);
-            return redirect()->route('grievances.show', $grievance)
+            $encryptedId = Crypt::encryptString($grievance->id);
+            return redirect()->route('grievances.show', $encryptedId)
                 ->with('error', 'Failed to update grievance: ');
         }
     }
@@ -223,7 +225,8 @@ class GrievanceController extends Controller
 
             return datatables()->of($grievances)
                 ->addColumn('actions', function ($row) {
-                    $btn = '<a href="' . route('grievances.show', $row->id) . '" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
+                    $encryptedId = Crypt::encryptString($row->id);
+                    $btn = '<a href="' . route('grievances.show', $encryptedId) . '" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
                     return $btn;
                 })
                 ->addColumn('priority', function ($row) {
@@ -249,7 +252,8 @@ class GrievanceController extends Controller
 
             return datatables()->of($grievances)
                 ->addColumn('actions', function ($row) {
-                    $btn = '<a href="' . route('grievances.show', $row->id) . '" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
+                    $encryptedId = Crypt::encryptString($row->id);
+                    $btn = '<a href="' . route('grievances.show', $encryptedId) . '" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
                     return $btn;
                 })
                 ->addColumn('priority', function ($row) {
