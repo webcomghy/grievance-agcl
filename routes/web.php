@@ -6,7 +6,6 @@ use App\Http\Controllers\MeterUploadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermissionController;
 use App\Models\Grievance;
-use App\Models\GrievanceTransaction;
 use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -94,6 +93,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'can:manage_roles_and_permissions'])->group(function () {
+    Route::get('/roles-permissions', [RolePermissionController::class, 'index'])->name('roles-permissions.index');
+    Route::post('/roles', [RolePermissionController::class, 'createRole'])->name('roles.create');
+    Route::post('/permissions', [RolePermissionController::class, 'createPermission'])->name('permissions.create');
+    Route::post('/roles/assign', [RolePermissionController::class, 'assignRole'])->name('roles.assign');
+    Route::post('/permissions/assign', [RolePermissionController::class, 'assignPermission'])->name('permissions.assign');
+    Route::get('/users-with-roles', [RolePermissionController::class, 'getUsersWithRoles'])->name('users.with.roles');
+    Route::post('/roles/remove', [RolePermissionController::class, 'removeRole'])->name('roles.remove');
+    Route::get('/roles/permissions', [RolePermissionController::class, 'getRolePermissions'])->name('roles.permissions');
+});
+
 Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
     Route::get('meter_uploads', [MeterUploadController::class, 'index'])->name('meter_uploads.index');
     Route::get('meter_uploads/set_dates/', [MeterUploadController::class, 'setMonthAndDate'])->name('meter_uploads.set_dates');
@@ -150,13 +160,4 @@ Route::middleware('auth:consumer')->group(function () {
     Route::post('/consumer/logout', [ConsumerAuthController::class, 'logout'])->name('consumer.logout');
 });
 
-Route::middleware(['auth', 'can:manage_roles_and_permissions'])->group(function () {
-    Route::get('/roles-permissions', [RolePermissionController::class, 'index'])->name('roles-permissions.index');
-    Route::post('/roles', [RolePermissionController::class, 'createRole'])->name('roles.create');
-    Route::post('/permissions', [RolePermissionController::class, 'createPermission'])->name('permissions.create');
-    Route::post('/roles/assign', [RolePermissionController::class, 'assignRole'])->name('roles.assign');
-    Route::post('/permissions/assign', [RolePermissionController::class, 'assignPermission'])->name('permissions.assign');
-    Route::get('/users-with-roles', [RolePermissionController::class, 'getUsersWithRoles'])->name('users.with.roles');
-    Route::post('/roles/remove', [RolePermissionController::class, 'removeRole'])->name('roles.remove');
-    Route::get('/roles/permissions', [RolePermissionController::class, 'getRolePermissions'])->name('roles.permissions');
-});
+
