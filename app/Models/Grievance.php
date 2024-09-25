@@ -26,6 +26,7 @@ class Grievance extends Model
         'longitude',
         'latitude',
         'grid_user',
+        'consumer_id',
         'is_grid_admin',
         'ticket_number',
     ];

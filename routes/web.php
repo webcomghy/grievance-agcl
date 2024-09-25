@@ -20,13 +20,35 @@ require __DIR__ . '/auth.php';
 Route::get('/dashboard', function () {
 
     $userID = Auth::user()->id;
+    $user = Auth::user();
+    $isAdmin = $user->hasRole('admin'); // Check if the user has the 'admin' role
 
-    $closed = GrievanceTransaction::select('created_by', 'status')->where('created_by', $userID)->where('status', 'Closed')->count();
-    $resolved = GrievanceTransaction::select('created_by', 'status')->where('created_by', $userID)->where('status', 'Resolved')->count();
-    $unread = Grievance::whereDoesntHave('transactions')->where('status', 'Pending')->count();
-    $inprogress = GrievanceTransaction::select('grievance_id', 'created_by', 'status')
-        ->where('created_by', $userID)->whereIn('status', ['Forwarded', 'Assigned'])->groupBy('grievance_id')->count();
-    $total = Grievance::select('id')->count();
+
+    $closed = Grievance::select('grid_user', 'status')
+        ->when(!$isAdmin, function ($query) use ($userID) {
+            return $query->where('grid_user', $userID);
+        })->where('status', 'Closed')->count();
+
+    $resolved = Grievance::select('grid_user', 'status')
+        ->when(!$isAdmin, function ($query) use ($userID) {
+            return $query->where('grid_user', $userID);
+        })->where('status', 'Resolved')->count();
+
+    $unread = Grievance::whereDoesntHave('transactions')
+        ->where('status', 'Pending')
+        ->when(!$isAdmin, function ($query) use ($userID) {
+            return $query->where('grid_user', $userID);
+        })->count();
+
+    $inprogress = Grievance::select('grid_user', 'status')
+        ->when(!$isAdmin, function ($query) use ($userID) {
+            return $query->where('grid_user', $userID);
+        })->whereIn('status', ['Forwarded', 'Assigned'])->count();
+
+    $total = Grievance::select('id')
+        ->when(!$isAdmin, function ($query) use ($userID) {
+            return $query->where('grid_user', $userID);
+        })->count();
 
     $recentFive = Grievance::select('ticket_number', 'status', 'category', 'created_at')->orderBy('created_at', 'desc')->limit(5)->get();
 
@@ -99,7 +121,28 @@ Route::post('consumer/login', [ConsumerAuthController::class, 'login'])->name('c
 
 Route::middleware('auth:consumer')->group(function () {
     Route::get('/consumer/dashboard', function () {
-        return view('consumer.dashboard');
+        $userID = auth()->guard('consumer')->user()->id;
+
+        $unread = Grievance::where('consumer_id', $userID)->whereDoesntHave('transactions')->count();
+        $closed = Grievance::where('consumer_id', $userID)->where('status', 'Closed')->count();
+        $resolved = Grievance::where('consumer_id', $userID)->where('status', 'Resolved')->count();
+        $inprogress = Grievance::where('consumer_id', $userID)->whereIn('status', ['Forwarded', 'Assigned'])->count();
+        $total = Grievance::where('consumer_id', $userID)->count();
+
+        $recentFive = Grievance::select('consumer_id','ticket_number', 'status', 'category', 'created_at')->orderBy('created_at', 'desc')
+            ->where('consumer_id', $userID)
+            ->limit(5)
+            ->get();
+
+        return view('consumer.dashboard', 
+            compact(
+                'unread', 
+                'closed', 
+                'resolved', 
+                'inprogress', 
+                'total',
+                'recentFive'
+        ));
     })->name('consumer.dashboard');
 
     Route::post('/consumer/logout', [ConsumerAuthController::class, 'logout'])->name('consumer.logout');

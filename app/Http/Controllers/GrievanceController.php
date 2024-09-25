@@ -42,6 +42,7 @@ class GrievanceController extends Controller
      */
     public function create()
     {
+
         $categories = Grievance::$categories;
 
         if (auth()->guard('consumer')->check()) {
@@ -78,8 +79,11 @@ class GrievanceController extends Controller
         ]);
 
         if ($validatedData['is_grid_admin'] == 1) {
-            $user = Auth::user()->username;
+            $user = Auth::user()->id;
             $validatedData['grid_user'] = $user;
+        } else {
+            $validatedData['grid_user'] = null;
+            $validatedData['consumer_id'] = auth()->guard('consumer')->user()->id ?? null;
         }
 
         DB::beginTransaction();
