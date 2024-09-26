@@ -20,7 +20,7 @@ Route::get('/dashboard', function () {
 
     $userID = Auth::user()->id;
     $user = Auth::user();
-    $isAdmin = $user->hasRole('admin'); // Check if the user has the 'admin' role
+    $isAdmin = $user->hasRole('admin');
 
 
     $closed = Grievance::select('grid_user', 'status')

@@ -8,7 +8,10 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-bold text-gray-800">Grievances</h2>
+        <h2 class="text-3xl font-bold text-gray-800">
+            Grievances 
+            {{ request()->is('outbox') ? "(Outbox)" : (request()->is('inbox') ? "(Inbox)" : "(All)") }}
+        </h2>
         
     </div>
     <div id="priority_filter_container" class="mb-6">
