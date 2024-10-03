@@ -37,4 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::put('grievances/{grievance}', [GrievanceController::class, 'update'])->name('grievances.update');
     Route::get('inbox', [GrievanceController::class, 'inbox'])->name('grievances.inbox');
     Route::get('outbox', [GrievanceController::class, 'outbox'])->name('grievances.outbox');
+    Route::get('meter_uploads/edit/{id}', [MeterUploadController::class, 'editMonthDate'])->name('meter_uploads.edit');
+    Route::put('meter_uploads/update/{id}', [MeterUploadController::class, 'updateMonthDate'])->name('meter_uploads.update');
+    
 });

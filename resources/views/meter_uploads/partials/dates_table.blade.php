@@ -6,6 +6,7 @@
             <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
             <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">From Date</th>
             <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">To Date</th>
+            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
     </thead>
 </table>

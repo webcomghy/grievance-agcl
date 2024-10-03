@@ -21,13 +21,19 @@
                 ajax: "{{ route('meter_uploads.set_dates') }}",
                 pageLength: 5,
                 columns: [
-                    {data: 'month', name: 'month', render: function(data) { 
+                    { data: 'month', name: 'month', render: function(data) { 
                         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
                         return months[data - 1];
                     }},
-                    {data: 'year', name: 'year'},
-                    {data: 'from_date', name: 'from_date'},
-                    {data: 'to_date', name: 'to_date'},
+                    { data: 'year', name: 'year' },
+                    { data: 'from_date', name: 'from_date' },
+                    { data: 'to_date', name: 'to_date' },
+                    { 
+                        data: 'actions', 
+                        name: 'actions', 
+                        orderable: false, 
+                        searchable: false 
+                    }
                 ]
             });
         });
