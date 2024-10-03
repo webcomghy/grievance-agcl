@@ -29,6 +29,9 @@ RUN composer install
 # Change ownership of our applications
 RUN chown -R www-data:www-data /var/www
 
+# Change permissions of the storage and bootstrap/cache directories
+RUN chmod -R 777 /var/www/storage /var/www/bootstrap/cache
+
 # Expose port 9000 (default for PHP-FPM)
 EXPOSE 9000
 
