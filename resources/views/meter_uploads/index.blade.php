@@ -49,7 +49,9 @@
             serverSide: true,
             ajax: '{{ route('meter_uploads.index') }}',
             columns: [
-                { data: 'id', name: 'id' },
+                { data: null, name: 'id', orderable: false, searchable: false, render: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1; // Calculate serial number
+                }},
                 { data: 'meter_no', name: 'meter_no' },
                 { data: 'consumer_no', name: 'consumer_no' },
                 { data: 'phone_number', name: 'phone_number' },
