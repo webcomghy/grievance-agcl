@@ -37,7 +37,7 @@
                 <div class="flex justify-between h-16">
                     <div class="flex items-center">
                         <a href="{{ route('consumer.dashboard') }}" class="flex-shrink-0">
-                            <img src="{{ asset('path/to/your/logo.png') }}" alt="Logo" class="h-8 w-auto">
+                            <img src="{{ asset('logo.jpg') }}" alt="Logo" class="h-8 w-auto">
                         </a>
                         <div class="hidden md:block ml-10">
                             <div class="flex items-baseline space-x-4">

@@ -27,6 +27,8 @@ Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
     Route::get('meter_uploads', [MeterUploadController::class, 'index'])->name('meter_uploads.index');
     Route::get('meter_uploads/set_dates/', [MeterUploadController::class, 'setMonthAndDate'])->name('meter_uploads.set_dates');
     Route::post('meter_uploads/set_dates/', [MeterUploadController::class, 'storeMonthDates'])->name('meter_uploads.set_month_and_date');
+    Route::get('meter_uploads/edit/{id}', [MeterUploadController::class, 'editMonthDate'])->name('meter_uploads.edit');
+    Route::put('meter_uploads/update/{id}', [MeterUploadController::class, 'updateMonthDate'])->name('meter_uploads.update');
 });
 
 
@@ -37,7 +39,5 @@ Route::middleware('auth')->group(function () {
     Route::put('grievances/{grievance}', [GrievanceController::class, 'update'])->name('grievances.update');
     Route::get('inbox', [GrievanceController::class, 'inbox'])->name('grievances.inbox');
     Route::get('outbox', [GrievanceController::class, 'outbox'])->name('grievances.outbox');
-    Route::get('meter_uploads/edit/{id}', [MeterUploadController::class, 'editMonthDate'])->name('meter_uploads.edit');
-    Route::put('meter_uploads/update/{id}', [MeterUploadController::class, 'updateMonthDate'])->name('meter_uploads.update');
-    
+    Route::get('/grievances/decode/{ticket_number}', [GrievanceController::class, 'decodeTicket'])->name('grievances.decode')->middleware('can:can_decode_ticket');
 });

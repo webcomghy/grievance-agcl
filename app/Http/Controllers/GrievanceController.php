@@ -14,11 +14,14 @@ class GrievanceController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
+
         
         $isConsumer = auth()->guard('consumer')->check();
         $consumerID = auth()->guard('consumer')->user()->id ?? NULL;
+        
         
         
         if (request()->ajax()) {
