@@ -7,7 +7,7 @@ services:
     working_dir: /var/www
     volumes:
       - ./:/var/www
-      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - /var/www/grievance-redressal/docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
