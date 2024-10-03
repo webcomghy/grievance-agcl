@@ -227,9 +227,13 @@ class GrievanceController extends Controller
 
     public function inbox()
     {
+        $isAdmin = Auth::user()->hasRole('admin');
         if (request()->ajax()) {
-            $grievances = Grievance::whereHas('transactions', function ($query) {
-                    $query->where('assigned_to', Auth::user()->id); 
+            $grievances = Grievance::whereHas('transactions', function ($query) use ($isAdmin) {
+                    $query->where('assigned_to', Auth::user()->id)
+                    ->when($isAdmin, function ($query)  {
+                        return $query->orWhere('employee_id' , '!=',  0);
+                    }); 
                 })
                 ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
