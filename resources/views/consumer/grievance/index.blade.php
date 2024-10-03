@@ -1,42 +1,54 @@
 <x-consumer-layout>
-<div class="bg-white rounded-lg shadow-md p-4">
-    <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-3xl font-bold text-gray-800">Grievances</h2>
-            
+    <div class="bg-white rounded-lg shadow-md p-4">
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-800">Grievances</h2>
+
+            </div>
+            <div id="priority_filter_container" class="mb-6">
+                <label for="priority_filter" class="block text-sm font-medium text-gray-700 mb-2">Filter by
+                    Priority:</label>
+                <select id="priority_filter"
+                    class="block w-full max-w-xs bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="">All</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+            <div class="overflow-x-auto bg-white rounded-lg shadow">
+                <table class="min-w-full" id="grievances_table">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Ticket No</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Consumer No</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                CA No</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Category</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Phone</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Priority</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
-        <div id="priority_filter_container" class="mb-6">
-            <label for="priority_filter" class="block text-sm font-medium text-gray-700 mb-2">Filter by Priority:</label>
-            <select id="priority_filter" class="block w-full max-w-xs bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                <option value="">All</option>
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-            </select>
-        </div>
-        <div class="overflow-x-auto bg-white rounded-lg shadow">
-            <table class="min-w-full" id="grievances_table">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket No</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Consumer No</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CA No</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
 
 
-    <script type="text/javascript">
-        $(document).ready(function() {
+        <script type="text/javascript">
+            $(document).ready(function() {
             
             $('#grievances_table').DataTable({
                 processing: true,
@@ -89,14 +101,43 @@
                 ],
                 dom: 'lBfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' 
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' 
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' 
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' 
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' 
+                    }
+                }
+            ]
             });
     
             $('#priority_filter').on('change', function() {
                 $('#grievances_table').DataTable().ajax.reload();
             });
         });
-    </script>
-</div>
+        </script>
+    </div>
 </x-consumer-layout>

@@ -25,6 +25,8 @@
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 100px;">Image</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded At</th>
+                    <th class="hidden">Latitude</th> <!-- Hidden Latitude Column -->
+                    <th class="hidden">Longitude</th> <!-- Hidden Longitude Column -->
                 </tr>
             </thead>
         </table>
@@ -40,7 +42,6 @@
 @endsection
 
 @section('scripts')
-
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -71,11 +72,42 @@
                         year: 'numeric', month: 'short', day: 'numeric', 
                         hour: '2-digit', minute: '2-digit', hour12: false 
                     }); // Format date to "Sep 21, 2024 06:44"
-                }}
+                }},
+                { data: 'latitude', name: 'latitude', visible: false }, // Include hidden Latitude column
+                { data: 'longitude', name: 'longitude', visible: false } // Include hidden Longitude column
             ],
             dom: 'lBfrtip',
             buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: ':not(:nth-child(7), :nth-child(8))' // Exclude Image and Location columns
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: ':not(:nth-child(7), :nth-child(8))' // Exclude Image and Location columns
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':not(:nth-child(7), :nth-child(8))' // Exclude Image and Location columns
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':not(:nth-child(7), :nth-child(8))' // Exclude Image and Location columns
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':not(:nth-child(7), :nth-child(8))' // Exclude Image and Location columns
+                    }
+                }
             ]
         });
     });

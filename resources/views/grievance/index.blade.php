@@ -99,8 +99,38 @@
             ],
             dom: 'lBfrtip',
             buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' // Exclude Image and Location columns
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' // Exclude Image and Location columns
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' // Exclude Image and Location columns
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' // Exclude Image and Location columns
+                    }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':not(:nth-child(10))' // Exclude Image and Location columns
+                    }
+                }
             ]
+           
         });
 
         $('#priority_filter').on('change', function() {
