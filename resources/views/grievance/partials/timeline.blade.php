@@ -53,7 +53,7 @@
                     </span>
                     <div class="ml-4">
                         <h3 class="text-lg font-semibold text-gray-900">Grievance Received</h3>
-                        <p class="mb-2 text-base font-normal text-gray-500">Grievance received by the grid admin</p>
+                        <p class="mb-2 text-base font-normal text-gray-500">Grievance received by the admin</p>
                         <time class="block mb-2 text-sm font-normal leading-none text-gray-400">{{ $grievance->created_at->format('M d, Y') }}</time>
                     </div>
                 </li>

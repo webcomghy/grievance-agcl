@@ -215,17 +215,19 @@
         // Prepare data for export
         var data = [
             ['Transactions'],
-            ['Status', 'Description', 'Date']
+            ['Status', 'Description', 'Current User', 'Assigned To (Employee)','Date']
         ];
 
         // Add initial grievance submission
-        data.push(['Grievance Received', 'Grievance received by the grid admin', '{{ $grievance->created_at->format('M d, Y') }}']);
+        data.push(['Grievance Received', 'Grievance received by the admin', '', '', '{{ $grievance->created_at->format('M d, Y') }}']);
         
         // Add all transactions
         @foreach($grievance->transactions->sortBy('created_at') as $transaction)
             data.push([
                 '{{ $transaction->status }}',
                 '{{ $transaction->description }}',
+                '{{ ($transaction->status === "Resolved" || $transaction->status === "Closed") ? $transaction->createdBy->username : ($transaction->assignedTo->username ?? "") }}',
+                '{{ $transaction->employee_id == 0 ? "" : $transaction->employee_id }}',
                 '{{ $transaction->created_at->format('M d, Y') }}'
             ]);
         @endforeach
