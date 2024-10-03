@@ -10,11 +10,11 @@
                         <div class="mb-4 flex space-x-4">
                             <div class="w-1/2">
                                 <label for="consumer_no" class="block text-sm font-medium">Consumer No</label>
-                                <input type="text" id="consumer_no" name="consumer_no" class="border p-2 w-full">
+                                <input type="text" id="consumer_no" name="consumer_no" value="{{ Auth::guard('consumer')->user()->consumer_number }}" class="border p-2 w-full">
                             </div>
                             <div class="w-1/2">
                                 <label for="ca_no" class="block text-sm font-medium">CA Number</label>
-                                <input type="text" id="ca_no" name="ca_no"  class="border p-2 w-full">
+                                <input type="text" id="ca_no" name="ca_no" value="{{ Auth::guard('consumer')->user()->ca_no }}"  class="border p-2 w-full">
                             </div>
                         </div>
                         <div class="mb-4 flex space-x-4">
@@ -24,8 +24,12 @@
                             </div>
                             <div class="w-1/2">
                                 <label for="phone" class="block text-sm font-medium">Phone</label>
-                                <input type="text" id="phone" name="phone" required class="border p-2 w-full">
+                                <input type="text" id="phone" name="phone" value="{{ Auth::guard('consumer')->user()->mobile_number }}"  required class="border p-2 w-full">
                             </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium">Email</label>
+                            <input type="email" id="email" name="email" value="{{ Auth::guard('consumer')->user()->email }}"  class="border p-2 w-full">
                         </div>
                         <div class="mb-4">
                             <label for="category" class="block text-sm font-medium">Category</label>
@@ -35,14 +39,12 @@
                                 @endforeach
                             </select>
                         </div>
+                      
                         <div class="mb-4">
                             <label for="address" class="block text-sm font-medium">Address</label>
                             <input type="text" id="address" name="address" required class="border p-2 w-full">
                         </div>
-                        <div class="mb-4">
-                            <label for="email" class="block text-sm font-medium">Email</label>
-                            <input type="email" id="email" name="email" class="border p-2 w-full">
-                        </div>
+                        
                         <div class="mb-4">
                             <label for="description" class="block text-sm font-medium">Description</label>
                             <textarea id="description" name="description" required class="border p-2 w-full"></textarea>

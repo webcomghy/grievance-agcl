@@ -28,6 +28,10 @@
                             </div>
                         </div>
                         <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium">Email</label>
+                            <input type="email" id="email" name="email" class="border p-2 w-full">
+                        </div>
+                        <div class="mb-4">
                             <label for="category" class="block text-sm font-medium">Category</label>
                             <select id="category" name="category" required class="border p-2 w-full">
                                 @foreach($categories as $category)
@@ -39,10 +43,7 @@
                             <label for="address" class="block text-sm font-medium">Address</label>
                             <input type="text" id="address" name="address" required class="border p-2 w-full">
                         </div>
-                        <div class="mb-4">
-                            <label for="email" class="block text-sm font-medium">Email</label>
-                            <input type="email" id="email" name="email" class="border p-2 w-full">
-                        </div>
+                        
                         <div class="mb-4">
                             <label for="description" class="block text-sm font-medium">Description</label>
                             <textarea id="description" name="description" required class="border p-2 w-full"></textarea>
