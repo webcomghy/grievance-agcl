@@ -169,7 +169,11 @@
                         </button>
                         <div id="userDropdown"
                             class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10 hidden">
-                            
+                            @can('set_date_for_upload')
+                                <a href="{{ route('meter_uploads.set_dates') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Set Dates 
+                                </a>
+                            @endcan
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
