@@ -88,11 +88,21 @@ class GrievanceController extends Controller
             'name' => 'required',
             'address' => 'required',
             'phone' => 'required',
-            
             'description' => 'required',
             'is_grid_admin' => 'required|boolean',
             'longitude' => 'required_if:is_grid_admin,0',
             'latitude' => 'required_if:is_grid_admin,0',
+        ], [
+            'consumer_no.required_if' => 'Consumer number is required when CA number is not provided.',
+            'ca_no.required_if' => 'CA number is required when Consumer number is not provided.',
+            'category.required' => 'Category is required.',
+            'name.required' => 'Name is required.',
+            'address.required' => 'Address is required.',
+            'phone.required' => 'Phone number is required.',
+            'description.required' => 'Description is required.',
+            'is_grid_admin.required' => 'Grid admin status is required.',
+            'longitude.required_if' => 'Longitude is required if not a grid admin.',
+            'latitude.required_if' => 'Latitude is required if not a grid admin.',
         ]);
 
         if ($validatedData['is_grid_admin'] == 1) {
