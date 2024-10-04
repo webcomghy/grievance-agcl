@@ -173,7 +173,7 @@ $(document).ready(function() {
 
     Swal.fire({
         title: 'Instructions',
-        html: 'To assign role to user, hold the shift key and click on user(s) and then click on role(s).<br><br><strong>Please reselect previous user roles otherwise roles will be removed.</strong><br><br>To assign permission to role, select a role from the drop down and hold shift to select multiple roles.',
+        html: 'To assign role to user, hold the Ctrl key and click on user(s) and then click on role(s).<br><br><strong>Please reselect previous user roles otherwise roles will be removed.</strong><br><br>To assign permission to role, select a role from the drop down and hold Ctrl to select role(s).',
         icon: 'info',
         confirmButtonText: 'Got it!'
     });
