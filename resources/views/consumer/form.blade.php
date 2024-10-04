@@ -75,15 +75,18 @@
     <script>
         // Show SweetAlert to request location permission
         window.onload = function() {
-            Swal.fire({
-                title: 'Location Permission',
-                text: 'Please allow location access in the browser dialog.',
-                icon: 'info',
-                showConfirmButton: false, // Remove the confirm button
-                showCancelButton: false, // Remove the cancel button
-                timer: 3000 // Optional: auto-close after 3 seconds
+            navigator.permissions.query({ name: 'geolocation' }).then(function(permissionStatus) {
+                if (permissionStatus.state === 'prompt') {
+                    Swal.fire({
+                        title: 'Location Permission',
+                        text: 'Please allow location access in the browser dialog.',
+                        icon: 'info',
+                        showConfirmButton: false, // Remove the confirm button
+                        showCancelButton: false, // Remove the cancel button
+                        timer: 3000 // Optional: auto-close after 3 seconds
+                    });
+                }
             });
-        
         };
     </script>
 </x-consumer-layout>
