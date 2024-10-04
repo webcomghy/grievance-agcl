@@ -1,0 +1,8 @@
+[Thu Oct 03 17:16:56.568065 2024] [ssl:emerg] [pid 1:tid 1] AH02565: Certificate and private key selfreading.assamgas.co.in:443:0 from /etc/ssl/b81ee2f8fab4935d.crt and /etc/ssl/assamgas.co.in.key do not match
+[Thu Oct 03 17:18:38.971889 2024] [ssl:emerg] [pid 1:tid 1] AH02565: Certificate and private key selfreading.assamgas.co.in:443:0 from /etc/ssl/b81ee2f8fab4935d.crt and /etc/ssl/assamgas.co.in.key do not match
+[Thu Oct 03 17:24:47.867370 2024] [ssl:emerg] [pid 1:tid 1] AH02565: Certificate and private key selfreading.assamgas.co.in:443:0 from /etc/ssl/b81ee2f8fab4935d.crt and /etc/ssl/assamgas.co.in.key do not match
+[Thu Oct 03 17:32:49.253709 2024] [ssl:emerg] [pid 1:tid 1] AH02565: Certificate and private key selfreading.assamgas.co.in:443:0 from /etc/ssl/b81ee2f8fab4935d.crt and /etc/ssl/assamgas.co.in.key do not match
+[Thu Oct 03 17:34:49.821337 2024] [ssl:emerg] [pid 1:tid 1] AH02565: Certificate and private key selfreading.assamgas.co.in:443:0 from /etc/ssl/b81ee2f8fab4935d.crt and /etc/ssl/assamgas.co.in.key do not match
+[Thu Oct 03 23:50:16.859927 2024] [core:error] [pid 17:tid 17] [client 8.211.199.102:35178] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
+[Thu Oct 03 23:50:17.799862 2024] [core:error] [pid 25:tid 25] [client 8.211.199.102:35456] AH10244: invalid URI path (/cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh)
+[Fri Oct 04 04:13:53.015064 2024] [core:error] [pid 18:tid 18] [client 8.216.87.246:40862] AH10244: invalid URI path (/cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh)
