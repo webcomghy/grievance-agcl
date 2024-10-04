@@ -29,6 +29,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
 <body class="font-sans antialiased bg-gray-100">
     <div class="min-h-screen flex flex-col">
@@ -56,7 +57,8 @@
                     <div class="hidden md:flex md:items-center md:ml-6">
                         <div class="ml-3 relative">
                             <div class="relative inline-block text-left">
-                                <div>
+                                <div class="">
+                                    
                                     <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                         {{ Auth::guard('consumer')->user()->consumer_number }}
                                         <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -166,7 +168,9 @@
                 <p class="text-center text-sm text-gray-500">
                     &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. All rights reserved.
                 </p>
+               
             </div>
+           
         </footer>
     </div>
 

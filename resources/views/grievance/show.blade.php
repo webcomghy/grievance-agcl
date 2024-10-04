@@ -211,6 +211,10 @@
 </script>
 
 <script>
+    function printGrievanceCard() {
+        window.print();
+    }
+    
     function exportTransactions() {
         // Prepare data for export
         var data = [
