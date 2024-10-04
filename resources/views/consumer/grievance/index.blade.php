@@ -1,4 +1,5 @@
 <x-consumer-layout>
+    @section('title', 'Grievances')
     <div class="bg-white rounded-lg shadow-md p-4">
         <div class="container mx-auto px-4 py-8">
             <div class="flex justify-between items-center mb-6">

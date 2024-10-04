@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title', 'Grievance Redressal System')</title>
 
     <!-- Fonts -->
     {{-- <link rel="preconnect" href="https://fonts.bunny.net">
@@ -75,6 +75,26 @@
             </div>
         </main>
     </div>
+
+    <script>
+        function closeAlert(alertId) {
+            const alert = document.getElementById(alertId);
+            alert.classList.add('alert-fade-out');
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 500);
+        }
+
+        // Auto-close alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', () => {
+            const alerts = document.querySelectorAll('[role="alert"]');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    closeAlert(alert.id);
+                }, 5000);
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 <x-consumer-layout>
-
+    @section('title', 'Grievance Details')
     <style>
         @media print {
             body * {
@@ -40,9 +40,9 @@
                 <h1 class="text-3xl font-bold text-gray-800 mb-6">Grievance Details for {{ $grievance->ticket_number }}</h1>
             </div>
             <div class="">
-                <button onclick="exportTransactions()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
+                {{-- <button onclick="exportTransactions()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
                     <i class="fas fa-file-excel"></i>
-                </button>
+                </button> --}}
                 
                 <button onclick="printGrievanceCard()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
                     <i class="fas fa-print"></i>

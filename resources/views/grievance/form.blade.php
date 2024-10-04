@@ -18,14 +18,7 @@
                 </div>
             </div>
 
-            <div>
-                <label for="category" class="block text-sm font-medium mb-1">Category</label>
-                <select id="category" name="category" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    @foreach($categories as $category)
-                        <option value="{{ $category }}">{{ $category }}</option>
-                    @endforeach
-                </select>
-            </div>
+            
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -41,6 +34,15 @@
             <div>
                 <label for="email" class="block text-sm font-medium mb-1">Email</label>
                 <input type="email" id="email" name="email" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="category" class="block text-sm font-medium mb-1">Category</label>
+                <select id="category" name="category" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    @foreach($categories as $category)
+                        <option value="{{ $category }}">{{ $category }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div>

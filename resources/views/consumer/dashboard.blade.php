@@ -1,4 +1,5 @@
 <x-consumer-layout>
+    @section('title', 'Dashboard')
     <div class="p-6">
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h2>
     

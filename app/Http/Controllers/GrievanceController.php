@@ -88,7 +88,7 @@ class GrievanceController extends Controller
             'name' => 'required',
             'address' => 'required',
             'phone' => 'required',
-            'email' => 'required|email',
+            
             'description' => 'required',
             'is_grid_admin' => 'required|boolean',
             'longitude' => 'required_if:is_grid_admin,0',
@@ -145,7 +145,7 @@ class GrievanceController extends Controller
         $grievance = Grievance::findOrFail($decryptedId);
         $grievance->load('transactions');
 
-        $users = User::select('id', 'username')->get();
+        $users = User::select('id', 'username')->orderBy('username')->get();
 
         $isConsumer = auth()->guard('consumer')->check();
 

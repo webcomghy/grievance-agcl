@@ -96,7 +96,7 @@
                     @can('view_grivances')
                         <a href="{{ route('grievances.index') }}"
                             class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                            <i class="fas fa-list mr-2 sidebar-icon"></i><span class="menu-text">Grievances</span>
+                            <i class="fas fa-list mr-2 sidebar-icon"></i><span class="menu-text">Grievances (All)</span>
                         </a>
                     @endcan
 
