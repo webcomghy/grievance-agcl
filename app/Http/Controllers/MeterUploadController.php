@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AvailabilityDate;
 use App\Models\MeterUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MeterUploadController extends Controller
@@ -15,10 +16,16 @@ class MeterUploadController extends Controller
 
     public function index()
     {
+        $username = Auth::user()->username;
         if (request()->ajax()) {
             $data = MeterUpload::query()
-                ->select('id', 'meter_no', 'consumer_no', 'phone_number', 'yearMonth', 'reading', 'image', 'latitude', 'longitude', 'created_at')
-                ->orderBy('id', 'desc');
+                ->select('id', 'meter_no', 'consumer_no', 'phone_number', 'yearMonth', 'reading', 'image', 'latitude', 'longitude', 'created_at');
+
+            if ($username !== 'admin') {
+                $data->where('grid_id', $username);
+            }
+
+            $data->orderBy('id', 'desc');
             return datatables()->of($data)->make(true);
         }
 
