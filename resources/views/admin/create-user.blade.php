@@ -76,7 +76,15 @@
                 ajax: '{{ route('users.index') }}',
                 columns: [
                     { data: 'username', name: 'username' },
-                    { data: 'created_at', name: 'created_at' },
+                    { data: 'created_at', name: 'created_at', render: function(data) {
+                        if(data === null) {
+                            return '';
+                        }
+                        return new Date(data).toLocaleString('en-US', { 
+                            year: 'numeric', month: 'short', day: 'numeric', 
+                            hour: '2-digit', minute: '2-digit', hour12: false 
+                        }); // Format date to "Sep 21, 2024 06:44"
+                    }},
                     { data: 'actions', name: 'actions', orderable: false, searchable: false }
                 ],
                 pageLength: 5

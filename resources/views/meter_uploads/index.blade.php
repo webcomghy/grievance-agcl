@@ -33,6 +33,7 @@
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded At</th>
                     <th class="hidden">Latitude</th> <!-- Hidden Latitude Column -->
                     <th class="hidden">Longitude</th> <!-- Hidden Longitude Column -->
+                    <th class="hidden">Image URL</th> <!-- Hidden Image URL Column -->
                 </tr>
             </thead>
         </table>

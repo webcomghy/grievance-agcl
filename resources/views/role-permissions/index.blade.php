@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+@section('title', 'Roles and Permissions Management')
 @section('styles')
 <style>
     .loader {

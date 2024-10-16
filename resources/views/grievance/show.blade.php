@@ -293,12 +293,12 @@
             title: 'Action Buttons Information',
             html: `
                 <ul style="text-align: left;">
-                    <li><i class="fas fa-user-plus" style="color: #F59E0B;"></i> <strong>Assign:</strong> Assign the grievance to a user.</li>
-                    <li><i class="fas fa-forward" style="color: #3B82F6;"></i> <strong>Forward:</strong> Forward the grievance to another user.</li>
-                    <li><i class="fas fa-close" style="color: #EF4444;"></i> <strong>Close:</strong> Close the grievance and mark it as rejected.</li>
-                    <li><i class="fas fa-check" style="color: #22C55E;"></i> <strong>Resolve:</strong> Mark the grievance as resolved.</li>
-                    <li><i class="fas fa-file-excel" style="color: #A855F7;"></i> <strong>Export:</strong> Export transaction details to Excel.</li>
-                    <li><i class="fas fa-print" style="color: #22C55E;"></i> <strong>Print:</strong> Print the grievance details.</li>
+                    <li><strong>Assign <i class="fas fa-user-plus" style="color: #F59E0B;"></i> :</strong> Assign the grievance to a user.</li>
+                    <li><strong>Forward <i class="fas fa-forward" style="color: #3B82F6;"></i> :</strong> Forward the grievance to another user.</li>
+                    <li><strong>Close <i class="fas fa-close" style="color: #EF4444;"></i> :</strong> Close the grievance and mark it as rejected.</li>
+                    <li><strong>Resolve <i class="fas fa-check" style="color: #22C55E;"></i> :</strong> Mark the grievance as resolved.</li>
+                    <li><strong>Export <i class="fas fa-file-excel" style="color: #A855F7;"></i> :</strong> Export transaction details to Excel.</li>
+                    <li><strong>Print <i class="fas fa-print" style="color: #22C55E;"></i> :</strong> Print the grievance details.</li>
                 </ul>
             `,
             icon: 'info',
