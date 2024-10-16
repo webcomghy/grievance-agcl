@@ -80,6 +80,13 @@
                         class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
                         <i class="fas fa-home mr-2 sidebar-icon"></i><span class="menu-text">Dashboard</span>
                     </a>
+
+                    @can('add_user')
+                        <a href="{{ route('users.create') }}"
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                            <i class="fas fa-user-plus mr-2 sidebar-icon"></i><span class="menu-text">Users</span>
+                        </a>
+                    @endcan
            
                     @can('manage_roles_and_permissions')
                         <a href="{{ route('roles-permissions.index') }}"

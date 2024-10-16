@@ -22,6 +22,7 @@ class User extends Authenticatable
     protected $table = 'grid_admins';
 
     protected $fillable = [
+        'username',
         'name',
         'email',
         'password',

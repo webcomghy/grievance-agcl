@@ -74,7 +74,10 @@
                     }); // Format date to "Sep 21, 2024 06:44"
                 }},
                 { data: 'latitude', name: 'latitude', visible: false }, // Include hidden Latitude column
-                { data: 'longitude', name: 'longitude', visible: false } // Include hidden Longitude column
+                { data: 'longitude', name: 'longitude', visible: false }, // Include hidden Longitude column
+                { data: 'image', name: 'image', render: function(data) {
+                    return 'https://assamgas.co.in/' + data; // Return full URL for the image
+                }, visible: false }  // Include hidden Image column
             ],
             dom: 'lBfrtip',
             buttons: [
