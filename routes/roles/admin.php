@@ -37,7 +37,11 @@ Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
     Route::post('meter_uploads/set_dates/', [MeterUploadController::class, 'storeMonthDates'])->name('meter_uploads.set_month_and_date');
     Route::get('meter_uploads/edit/{id}', [MeterUploadController::class, 'editMonthDate'])->name('meter_uploads.edit');
     Route::put('meter_uploads/update/{id}', [MeterUploadController::class, 'updateMonthDate'])->name('meter_uploads.update');
+    Route::get('/meter-upload', [MeterUploadController::class, 'showUploadForm'])->name('meter_uploads.upload');
+    Route::post('/self-reading/import', [MeterUploadController::class, 'import'])->name('self_reading.import');
 });
+
+
 
 
 Route::middleware('auth')->group(function () {

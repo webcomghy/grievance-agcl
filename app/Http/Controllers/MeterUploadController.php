@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SelfReadingImport;
 use App\Models\AvailabilityDate;
 use App\Models\MeterUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MeterUploadController extends Controller
 {
@@ -135,5 +137,20 @@ class MeterUploadController extends Controller
         $availabilityDate->update($request->all());
 
         return redirect()->route('meter_uploads.set_dates')->with('success', 'Availability Date Updated Successfully');
+    }
+
+    public function showUploadForm()
+    {
+        return view('meter_uploads.import'); // Create this view
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        Excel::import(new SelfReadingImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Data imported successfully.');
     }
 }
