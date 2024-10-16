@@ -29,15 +29,7 @@
                                 <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
                                 <input type="password" id="password_confirmation" name="password_confirmation" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                             </div>
-                            {{-- <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700">Grid</label>
-                                <div class="flex items-center">
-                                    <input type="radio" id="admin" name="grid_id" value="admin" class="mr-2" onclick="toggleGridSelection(false)">
-                                    <label for="admin" class="mr-4">Admin</label>
-                                    <input type="radio" id="support" name="grid_id" value="support" class="mr-2" onclick="toggleGridSelection(false)">
-                                    <label for="support">Support</label>
-                                </div>
-                            </div> --}}
+                            
                             <div class="mb-4">
                                 <label for="grid_id" class="block text-sm font-medium text-gray-700">Select Grid</label>
                                 <select id="grid_id" name="grid_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
@@ -55,7 +47,6 @@
                         </form>
                     </div>
 
-                    <!-- Existing Users Table -->
                     <div>
                         <h2 class="text-xl font-semibold mb-2">Existing Users</h2>
                         <table id="usersTable" class="min-w-full bg-white">
@@ -98,7 +89,7 @@
                     url: '{{ route("users.destroy", ":username") }}'.replace(':username', username),
                     type: 'DELETE',
                     data: {
-                        _token: '{{ csrf_token() }}' // Include CSRF token for security
+                        _token: '{{ csrf_token() }}' 
                     },
                     success: function(response) {
                         alert('User deleted successfully.');
