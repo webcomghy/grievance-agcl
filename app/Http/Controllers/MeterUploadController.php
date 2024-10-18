@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\SelfReadingImport;
 use App\Models\AvailabilityDate;
+use App\Models\ConsumerMaster;
 use App\Models\MeterUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,16 +20,38 @@ class MeterUploadController extends Controller
     public function index()
     {
         $username = Auth::user()->username;
+
+        $isConsumer = auth()->guard('consumer')->check();
+        $consumerNo = auth()->guard('consumer')->user()->consumer_number ?? NULL;
+
+        // dd($consumerNo);
+        $consumerMaster = ConsumerMaster::select('CONSUMER_NO', 'BA_NO', 'CA_NO')
+            ->firstWhere('CONSUMER_NO', $consumerNo);
+
+
         if (request()->ajax()) {
             $data = MeterUpload::query()
                 ->select('id', 'meter_no', 'consumer_no', 'phone_number', 'yearMonth', 'reading', 'image', 'latitude', 'longitude', 'created_at');
 
-            if ($username !== 'admin') {
+            if ($username !== 'admin' && $isConsumer === false) {
                 $data->where('grid_id', $username);
+            }
+
+            if($isConsumer) {
+                // $data->where('consumer_no1', $consumerMaster->CONSUMER_NO);
+                $data->where(function($query) use ($consumerMaster) {
+                    $query->where('consumer_no', $consumerMaster->CA_NO)
+                          ->orWhere('consumer_no', $consumerMaster->BA_NO)
+                          ->orWhere('consumer_no', $consumerMaster->CONSUMER_NO);
+                });
             }
 
             $data->orderBy('id', 'desc');
             return datatables()->of($data)->make(true);
+        }
+
+        if($isConsumer) {
+            return view('consumer.meter_uplods.index');
         }
 
         return view('meter_uploads.index');

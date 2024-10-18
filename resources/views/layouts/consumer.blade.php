@@ -52,6 +52,9 @@
                                 <a href="{{ route('grievances.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievances.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
                                     Grievances
                                 </a>
+                                <a href="{{ route('meter_uploads.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('meter_uploads.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                                    Meter Uploads
+                                </a>
                             </div>
                         </div>
                     </div>
