@@ -5,7 +5,7 @@
             <div class="bg-white overflow-hidden shadow-lg sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h2 class="text-2xl font-bold mb-6 text-gray-800">Create Grievance</h2>
-                    <form method="post" action="{{ route('grievances.store') }}" class="space-y-4">
+                    <form method="post" action="{{ route('grievances.store') }}" class="space-y-4" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="is_grid_admin" value=0>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -34,10 +34,17 @@
                         </div>
                         <div>
                             <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-                            <select id="category" name="category" required class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                @foreach($categories as $category)
+                            <select id="category" name="category" required class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="updateSubcategories()">
+                                <option value="">Select a category</option>
+                                @foreach (array_keys(App\Models\Grievance::$categories) as $category)
                                     <option value="{{ $category }}">{{ $category }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="subcategory" class="block text-sm font-medium text-gray-700">Subcategory</label>
+                            <select id="subcategory" name="subcategory" required class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="">Select a subcategory</option>
                             </select>
                         </div>
                         <div>
@@ -47,6 +54,10 @@
                         <div>
                             <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                             <textarea id="description" name="description" required class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                        </div>
+                        <div>
+                            <label for="file_upload" class="block text-sm font-medium text-gray-700">Upload File (optional)</label>
+                            <input type="file" id="file_upload" name="file_upload" class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <input type="hidden" id="latitude" name="latitude">
                         <input type="hidden" id="longitude" name="longitude">
@@ -88,5 +99,28 @@
                 }
             });
         };
+    </script>
+
+    <script>
+        const categories = @json(App\Models\Grievance::$categories);
+
+        function updateSubcategories() {
+            const categorySelect = document.getElementById('category');
+            const subcategorySelect = document.getElementById('subcategory');
+            const selectedCategory = categorySelect.value;
+
+            // Clear previous subcategory options
+            subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+
+            if (selectedCategory && categories[selectedCategory]) {
+                const subcategories = categories[selectedCategory];
+                for (const subcategory of subcategories) {
+                    const option = document.createElement('option');
+                    option.value = subcategory;
+                    option.textContent = subcategory;
+                    subcategorySelect.appendChild(option);
+                }
+            }
+        }
     </script>
 </x-consumer-layout>

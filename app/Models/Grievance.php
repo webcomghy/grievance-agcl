@@ -16,45 +16,67 @@ class Grievance extends Model
         'consumer_no',
         'ca_no',
         'category',
+        'subcategory',
         'name',
         'address',
         'phone',
         'email',
         'description',
+        'file_path',
+        'resolved_file_path',
         'status',
         'priority_score', 
         'longitude',
         'latitude',
         'grid_user',
+        'grid_code',
         'consumer_id',
         'is_grid_admin',
         'ticket_number',
     ];
     
     public static $categories = [
-        'Bill Related',
-        'Payment Related',
-        'Additional Connection',
-        'Disconnection - Temporary',
-        'Disconnection - Permanent',
-        'Name Change',
-        'Mobile No Change',
-        'Email Change',
-        'Gas Leakage',
-        'Others',
+        'Gas Supply Related' => [
+            'Fire/Leakage',
+            'Cut',
+            'Bubbles coming out from water bodies',
+            'Gas connection not provided within 3 months from the date of application',
+            'New connection required, Lat Long Auto-Capturing required',
+            'Temporary disconnection required',
+            'Shifting required',
+            'Meter damage',
+            'Meter not working',
+            'Any Other issues',
+        ],
+        'Bill Related' => [
+            'Bill not received',
+            'High bill amount',
+            'Wrong bill delivered',
+            'Wrong bill amount',
+            'How to download the bill. Option 1: Should direct to a self-help video',
+            'Disconnected but bills are still generated',
+            'Non receipt of bills',
+            'Bills cannot be downloaded',
+            'Any Other issues',
+        ],
+        'Payment Related' => [
+            "Can't pay online",
+            'What is the last date for bill payment?',
+            'How to pay online? Option 1: Should direct to a self-help video',
+            'Any Other issues',
+        ],
+        'KYC Related' => [
+            'Change of ownership',
+            'Mobile number and email update',
+            'Any Other issues',
+        ],
     ];
 
     public static $categories_priority = [
         'Bill Related' => 5,
         'Payment Related' => 6,
-        'Additional Connection' => 3,
-        'Disconnection - Temporary' => 5,
-        'Disconnection - Permanent' => 5,
-        'Name Change' => 3,
-        'Mobile No Change' => 3,
-        'Email Change' => 3,
-        'Gas Leakage' => 9,
-        'Others' => 3,
+        'KYC Related' => 3,
+        'Gas Supply Related' => 9,
     ];
 
     public static $statuses = [
@@ -63,6 +85,7 @@ class Grievance extends Model
         'Assigned',
         'Resolved',
         'Closed',
+        'Withdrawn',
     ];
 
     protected function priority(): Attribute

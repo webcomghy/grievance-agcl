@@ -10,37 +10,48 @@ use Illuminate\Support\Facades\Route;
 Route::get('/dashboard', function () {
 
     $userID = Auth::user()->id;
+    $gridCode = Auth::user()->grid_code;
     $user = Auth::user();
     $isAdmin = $user->hasRole('admin');
 
 
-    $closed = Grievance::select('grid_user', 'status')
-        ->when(!$isAdmin, function ($query) use ($userID) {
-            return $query->where('grid_user', $userID);
+    $closed = Grievance::select('grid_user', 'grid_code', 'status')
+        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+            return $query->where('grid_user', $userID)
+                ->orWhere('grid_code', $gridCode);
         })->where('status', 'Closed')->count();
 
-    $resolved = Grievance::select('grid_user', 'status')
-        ->when(!$isAdmin, function ($query) use ($userID) {
-            return $query->where('grid_user', $userID);
+    $resolved = Grievance::select('grid_user', 'grid_code', 'status')
+        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+            return $query->where('grid_user', $userID)
+                ->orWhere('grid_code', $gridCode);
         })->where('status', 'Resolved')->count();
 
     $unread = Grievance::whereDoesntHave('transactions')
         ->where('status', 'Pending')
-        ->when(!$isAdmin, function ($query) use ($userID) {
-            return $query->where('grid_user', $userID);
+        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+            return $query->where('grid_user', $userID)
+                ->orWhere('grid_code', $gridCode);
         })->count();
 
-    $inprogress = Grievance::select('grid_user', 'status')
-        ->when(!$isAdmin, function ($query) use ($userID) {
-            return $query->where('grid_user', $userID);
+    $inprogress = Grievance::select('grid_user', 'grid_code', 'status')
+        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+            return $query->where('grid_user', $userID)
+                ->orWhere('grid_code', $gridCode);
         })->whereIn('status', ['Forwarded', 'Assigned'])->count();
 
     $total = Grievance::select('id')
-        ->when(!$isAdmin, function ($query) use ($userID) {
-            return $query->where('grid_user', $userID);
+        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+            return $query->where('grid_user', $userID)
+                ->orWhere('grid_code', $gridCode);
         })->count();
 
-    $recentFive = Grievance::select('ticket_number', 'status', 'category', 'created_at')->orderBy('created_at', 'desc')->limit(5)->get();
+    $recentFive = Grievance::select('ticket_number', 'status', 'category', 'created_at')
+        ->where('grid_code', Auth::user()->grid_code)
+        ->orWhere('grid_user', Auth::user()->id)
+        ->orderBy('created_at', 'desc')
+        ->limit(5)
+        ->get();
 
     $resolvedGrievances = Grievance::select('created_at', 'updated_at')
         ->whereIn('status', ['Resolved', 'Closed'])
@@ -104,7 +115,4 @@ Route::middleware('auth:consumer')->group(function () {
                 'recentFive'
         ));
     })->name('consumer.dashboard');
-    Route::get('grievances/userdata', [GrievanceController::class, 'index'])->name('grievances.indexuser');
-    Route::get('grievances/userdata/{grievance}', [GrievanceController::class, 'show'])->name('grievances.showuser');
-    Route::get('meter_uploads_user', [MeterUploadController::class, 'index'])->name('meter_uploads.indexuser');
 });

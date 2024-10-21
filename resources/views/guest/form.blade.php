@@ -1,4 +1,6 @@
+
 <x-guest-layout>
+ 
     @section('title', 'Submit a Grievance')
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -8,7 +10,7 @@
                         <img src="{{ asset('logo.jpg') }}" alt="Logo" class="mx-auto h-16 w-auto">
                     </div>
                     <h2 class="text-2xl font-bold mb-4 text-gray-800">Add your Grievance</h2>
-                    <form method="post" action="{{ route('grievances.store') }}">
+                    <form method="post" action="{{ route('grievances.store') }}" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="is_grid_admin" value=0>
                         <div class="mb-4 flex space-x-4">
@@ -35,12 +37,20 @@
                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                             <input type="email" id="email" name="email" class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
-                        <div class="mb-4">
+                      
+                        <div>
                             <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-                            <select id="category" name="category" required class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                @foreach($categories as $category)
+                            <select id="category" name="category" required class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="updateSubcategories()">
+                                <option value="">Select a category</option>
+                                @foreach (array_keys(App\Models\Grievance::$categories) as $category)
                                     <option value="{{ $category }}">{{ $category }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="subcategory" class="block text-sm font-medium text-gray-700">Subcategory</label>
+                            <select id="subcategory" name="subcategory" required class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="">Select a subcategory</option>
                             </select>
                         </div>
                         <div class="mb-4">
@@ -51,6 +61,10 @@
                         <div class="mb-4">
                             <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                             <textarea id="description" name="description" required class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                        </div>
+                        <div>
+                            <label for="file_upload" class="block text-sm font-medium text-gray-700">Upload File (optional)</label>
+                            <input type="file" id="file_upload" name="file_upload" class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <input type="hidden" id="latitude" name="latitude">
                         <input type="hidden" id="longitude" name="longitude">
@@ -92,5 +106,27 @@
                 }
             });
         };
+</script>
+<script>
+    const categories = @json(App\Models\Grievance::$categories);
+
+    function updateSubcategories() {
+        const categorySelect = document.getElementById('category');
+        const subcategorySelect = document.getElementById('subcategory');
+        const selectedCategory = categorySelect.value;
+
+        // Clear previous subcategory options
+        subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+
+        if (selectedCategory && categories[selectedCategory]) {
+            const subcategories = categories[selectedCategory];
+            for (const subcategory of subcategories) {
+                const option = document.createElement('option');
+                option.value = subcategory;
+                option.textContent = subcategory;
+                subcategorySelect.appendChild(option);
+            }
+        }
+    }
 </script>
 </x-guest-layout>

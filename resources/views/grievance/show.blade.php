@@ -13,58 +13,68 @@
     @endif
 </span>
 
-@if($grievance->status === 'Pending' || $grievance->status === 'Forwarded' || $grievance->status === 'Assigned')
-@if(isset($grievance->transactions->last()->assigned_to))
-@if($grievance->transactions->last()->assigned_to == auth()->user()->id)
-@if($grievance->status !== 'Assigned')
-<button onclick="openAsignModal()"
-    class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mr-2">
-    <i class="fas fa-user-plus"></i>
-</button>
-<button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-    <i class="fas fa-forward"></i>
-</button>
-@endif
-@endif
-@if($grievance->transactions->last()->assigned_to == auth()->user()->id || auth()->user()->hasRole('admin'))
-@if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
-@can('can_close')
-<button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
-    <i class="fas fa-close"></i>
-</button>
-@endcan
-@can('can_resolve')
-<button onclick="openResolveModal()"
-    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
-    <i class="fas fa-check"></i>
-</button>
-@endcan
-@endif
-@endif
-@elseif (auth()->user()->hasRole('admin'))
-@if($grievance->status !== 'Assigned')
-<button onclick="openAsignModal()"
-    class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mr-2">
-    <i class="fas fa-user-plus"></i>
-</button>
-<button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
-    <i class="fas fa-forward"></i>
-</button>
-@endif
-@if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
-@can('can_close')
-<button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
-    <i class="fas fa-close"></i>
-</button>
-@endcan
-@can('can_resolve')
-<button onclick="openResolveModal()"
-    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
-    <i class="fas fa-check"></i>
-</button>
-@endcan
-@endif
-@endif
+@if( $grievance->status === 'Forwarded' || $grievance->status === 'Assigned')
+    @if(isset($grievance->transactions->last()->assigned_to))
+        @if($grievance->transactions->last()->assigned_to == auth()->user()->id)
+            @if($grievance->status !== 'Assigned')
+                <button onclick="openAsignModal()"
+                    class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mr-2">
+                    <i class="fas fa-user-plus"></i>
+                </button>
+                <button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+                    <i class="fas fa-forward"></i>
+                </button>
+            @endif
+        @endif
+
+        @if($grievance->transactions->last()->assigned_to == auth()->user()->id || auth()->user()->hasRole('admin'))
+            @if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
+                @can('can_close')
+                    <button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
+                        <i class="fas fa-close"></i>
+                    </button>
+                @endcan
+                @can('can_resolve')
+                    <button onclick="openResolveModal()"
+                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
+                        <i class="fas fa-check"></i>
+                    </button>
+                @endcan
+            @endif
+        @endif
+    @elseif (auth()->user()->hasRole('admin'))
+        @if($grievance->status !== 'Assigned')
+            <button onclick="openAsignModal()"
+                class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mr-2">
+                <i class="fas fa-user-plus"></i>
+            </button>
+            <button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+                <i class="fas fa-forward"></i>
+            </button>
+        @endif
+
+        @if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
+            @can('can_close')
+                <button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
+                    <i class="fas fa-close"></i>
+                </button>
+            @endcan
+            @can('can_resolve')
+                <button onclick="openResolveModal()"
+                    class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
+                    <i class="fas fa-check"></i>
+                </button>
+            @endcan
+        @endif
+    @endif
+@elseif($grievance->status === 'Pending' )
+    <button onclick="openAsignModal()"
+        class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mr-2">
+            <i class="fas fa-user-plus"></i>
+    </button>
+    <button onclick="openForwardModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+        <i class="fas fa-forward"></i>
+    </button>
 @endif
 
 <button onclick="exportTransactions()"
@@ -85,9 +95,9 @@
         <div id="grievanceCard" class="bg-white shadow-md rounded-lg overflow-hidden lg:w-2/3">
             <div class="p-6">
                 <h2 class="text-2xl font-semibold text-gray-800 mb-4">{{ $grievance->category }}</h2>
+                <p><strong>Subcategory:</strong> {{ $grievance->subcategory ?? 'N/A' }}</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        {{-- <p><strong>Ticket No:</strong> {{ $grievance->ticket_number }}</p> --}}
                         <p><strong>Consumer No:</strong> {{ $grievance->consumer_no }}</p>
                         <p><strong>CA No:</strong> {{ $grievance->ca_no }}</p>
                         <p><strong>Name:</strong> {{ $grievance->name }}</p>
@@ -120,6 +130,22 @@
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">Description:</h3>
                     <p class="text-gray-600">{{ $grievance->description }}</p>
                 </div>
+                
+                @if(isset($grievance->file_path))
+                <div class="mt-4">
+                    <a href="{{ asset($grievance->file_path) }}" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-download"></i> Download File
+                    </a>
+                </div>
+                @endif
+
+                @if(isset($grievance->resolved_file_path))
+                <div class="mt-4">
+                    <a href="{{ asset($grievance->resolved_file_path) }}" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-download"></i> Download Resolved Proof
+                    </a>
+                </div>
+                @endif
             </div>
         </div>
 
@@ -312,3 +338,4 @@
 
 
 @endsection
+

@@ -1,48 +1,48 @@
 <x-consumer-layout>
     @section('title', 'Meter Uploads')
-    @section('content')
-    <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-3xl font-bold text-gray-800">Meter Uploads</h2>
-        </div>
-        <div class="overflow-x-auto bg-white rounded-lg shadow">
-            <table class="min-w-full" id="meter_uploads_table">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Meter No</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Consumer No</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year Month</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reading</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 100px;">Image</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                        <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded At</th>
-                        <th class="hidden">Latitude</th> <!-- Hidden Latitude Column -->
-                        <th class="hidden">Longitude</th> <!-- Hidden Longitude Column -->
-                        <th class="hidden">Image URL</th> <!-- Hidden Image URL Column -->
-                    </tr>
-                </thead>
-            </table>
+    <div class="bg-white rounded-lg shadow-md p-4">
+        <div class="container mx-auto px-4 py-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-800">Meter Uploads</h2>
+            </div>
+            <div class="overflow-x-auto bg-white rounded-lg shadow">
+                <table class="min-w-full" id="meter_uploads_table">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Meter No</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Consumer No</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year Month</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reading</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 100px;">Image</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded At</th>
+                            <th class="hidden">Latitude</th> <!-- Hidden Latitude Column -->
+                            <th class="hidden">Longitude</th> <!-- Hidden Longitude Column -->
+                            <th class="hidden">Image URL</th> <!-- Hidden Image URL Column -->
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
     </div>
-
     <!-- Modal for displaying larger image -->
     @include('meter_uploads.partials.modals.image_modal')
 
     <!-- Modal for displaying location -->
     @include('meter_uploads.partials.modals.location_modal')
 
-    @endsection
 
-    @section('scripts')
+
+
 
     <script type="text/javascript">
         $(document).ready(function() {
             $('#meter_uploads_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('meter_uploads.index') }}',
+                ajax: '{{ route('meter_uploads.indexuser') }}',
                 columns: [
                     { data: null, name: 'id', orderable: false, searchable: false, render: function(data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1; // Calculate serial number

@@ -3,7 +3,7 @@
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <form action="{{ route('grievances.update', $grievance) }}" method="POST">
+            <form action="{{ route('grievances.update', $grievance) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="status" value="Resolved">
@@ -21,6 +21,10 @@
                             <div class="mb-4">
                                 <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                                 <textarea id="description" name="description" rows="3" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                            </div>
+                            <div class="mb-4">
+                                <label for="file_upload" class="block text-sm font-medium text-gray-700">Upload File (optional)</label>
+                                <input type="file" id="file_upload" name="file_upload" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500" />
                             </div>
                         </div>
                     </div>
