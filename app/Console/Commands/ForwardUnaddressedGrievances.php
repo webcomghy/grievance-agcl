@@ -30,7 +30,7 @@ class ForwardUnaddressedGrievances extends Command
     public function handle()
     {
         $grievances = Grievance::where('status', 'Pending')
-            ->where('updated_at', '<', Carbon::now()->subHours(48))
+            ->where('updated_at', '<', Carbon::now()->subHours(24))
             ->whereDoesntHave('transactions')
             ->get();
 
@@ -49,7 +49,7 @@ class ForwardUnaddressedGrievances extends Command
     private function forwardGrievance(Grievance $grievance)
     {
         // Assuming you have a way to determine the higher authority
-        $admin = User::where('username', 'Admin')->first();
+        $admin = User::where('username', 'nodal_officer')->first();
 
         if ($admin) {
             try {
@@ -62,7 +62,7 @@ class ForwardUnaddressedGrievances extends Command
                 // Create a new grievance transaction
                 $grievance->transactions()->create([
                     'status' => 'Forwarded',
-                    'description' => 'Automatically forwarded due to inactivity for 48 hours',
+                    'description' => 'Automatically forwarded due to inactivity for 24 hours',
                     'assigned_to' => $admin->id,
                     'created_by' => $admin->id, // Assuming 1 is the system user ID
                 ]);
