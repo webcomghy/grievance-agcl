@@ -65,6 +65,10 @@
                 <label for="file_upload" class="block text-sm font-medium text-gray-700">Upload File (optional)</label>
                 <input type="file" id="file_upload" name="file_upload" class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
+            <div>
+                <label for="admin_remark" class="block text-sm font-medium mb-1">Remark (optional)</label>
+                <textarea id="admin_remark" name="admin_remark" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="3"></textarea>
+            </div>
            
             <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md font-semibold text-sm uppercase tracking-widest hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">Submit Grievance</button>
         </form>

@@ -130,7 +130,15 @@
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">Description:</h3>
                     <p class="text-gray-600">{{ $grievance->description }}</p>
                 </div>
-                
+
+                <!-- Display admin remark -->
+                @if(isset($grievance->admin_remark))
+                <div class="mt-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Remark:</h3>
+                    <p class="text-gray-600">{{ $grievance->admin_remark }}</p>
+                </div>
+                @endif
+
                 @if(isset($grievance->file_path))
                 <div class="mt-4">
                     <a href="{{ asset($grievance->file_path) }}" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
@@ -158,7 +166,6 @@
             class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
             Back to List
         </a>
-
     </div> --}}
 </div>
 

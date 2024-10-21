@@ -101,6 +101,7 @@ class GrievanceController extends Controller
             'address' => 'required',
             'phone' => 'required',
             'description' => 'required',
+            'admin_remark' => 'nullable',
             'file_upload' => 'nullable|file|max:2048|mimes:jpg,jpeg,png,pdf', // Validate file types
             'is_grid_admin' => 'required|boolean',
             'longitude' => 'required_if:is_grid_admin,0',

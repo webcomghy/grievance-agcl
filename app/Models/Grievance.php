@@ -22,6 +22,7 @@ class Grievance extends Model
         'phone',
         'email',
         'description',
+        'admin_remark',
         'file_path',
         'resolved_file_path',
         'status',
