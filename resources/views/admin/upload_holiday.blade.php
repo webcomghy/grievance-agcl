@@ -98,18 +98,21 @@
         overflow: hidden;
     }
 
-    .form-container, .calendar-container {
-        flex: 1 1 48%; /* Take up equal width */
-    }
 
     .form-container {
         padding-right: 20px;
+        flex: 1 1 20%; /* Updated to take up 20% width */
+    }
+
+    .calendar-container {
+        flex: 1 1 78%; /* Adjusted to take up remaining width */
     }
 </style>
-
+<h2 class="text-3xl font-bold text-gray-800">Upload Holidays</h2>
 <div class="container">
+
     <div class="form-container">
-        <h2 class="text-3xl font-bold text-gray-800">Upload Holidays</h2>
+        
         <form action="{{ route('holidays.import') }}" method="POST" enctype="multipart/form-data" class="mt-4">
             @csrf
             <div class="mb-4">
