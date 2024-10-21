@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Grievance;
 use App\Models\User;
+use App\Models\Holiday;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -29,6 +30,10 @@ class ForwardUnaddressedGrievances extends Command
      */
     public function handle()
     {
+        $holidays = Holiday::pluck('date')->map(function ($date) {
+            return Carbon::parse($date)->format('Y-m-d');
+        })->toArray(); // Fetch holiday dates and format them
+
         $grievances = Grievance::where('status', 'Pending')
             ->where('updated_at', '<', Carbon::now()->subHours(24))
             ->whereDoesntHave('transactions')
@@ -40,10 +45,19 @@ class ForwardUnaddressedGrievances extends Command
         }
 
         foreach ($grievances as $grievance) {
+            if ($this->isHoliday($grievance->updated_at, $holidays)) {
+                $this->info("Grievance ID {$grievance->id} is on a holiday and will not be forwarded.");
+                continue; // Skip forwarding if it's a holiday
+            }
             $this->forwardGrievance($grievance);
         }
 
         $this->info('Unaddressed grievances have been forwarded.');
+    }
+
+    private function isHoliday($date, $holidays)
+    {
+        return in_array($date->format('Y-m-d'), $holidays) || $date->isSunday();
     }
 
     private function forwardGrievance(Grievance $grievance)

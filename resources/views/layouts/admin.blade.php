@@ -87,6 +87,13 @@
                             <i class="fas fa-user-plus mr-2 sidebar-icon"></i><span class="menu-text">Users</span>
                         </a>
                     @endcan
+
+                    @can('upload_holiday')
+                        <a href="{{ route('holidays.upload') }}"
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                            <i class="fas fa-calendar mr-2 sidebar-icon"></i><span class="menu-text">Holidays</span>
+                        </a>
+                    @endcan
            
                     @can('manage_roles_and_permissions')
                         <a href="{{ route('roles-permissions.index') }}"

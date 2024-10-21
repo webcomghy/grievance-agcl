@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GrievanceController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\MeterUploadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermissionController;
@@ -52,4 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::get('inbox', [GrievanceController::class, 'inbox'])->name('grievances.inbox');
     Route::get('outbox', [GrievanceController::class, 'outbox'])->name('grievances.outbox');
     Route::get('/grievances/decode/{ticket_number}', [GrievanceController::class, 'decodeTicket'])->name('grievances.decode')->middleware('can:can_decode_ticket');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/holidays/upload', [HolidayController::class, 'showUploadForm'])->name('holidays.upload');
+    Route::post('/holidays/import', [HolidayController::class, 'import'])->name('holidays.import');
 });
