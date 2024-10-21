@@ -28,6 +28,7 @@ class GrievanceController extends Controller
 
         $isAdmin = Auth::user()->hasRole('admin');
         $isCallCenter = Auth::user()->hasRole('support');
+        $isNodalOfficer = Auth::user()->hasRole('nodal_officer');
 
         
         if (request()->ajax()) {
@@ -36,7 +37,7 @@ class GrievanceController extends Controller
                 ->when($isConsumer, function ($query) use ($consumerID) {
                     return $query->where('consumer_id', $consumerID);
                 })
-                ->when(!$isConsumer && !$isAdmin && !$isCallCenter, function ($query) use ($grid_code) {
+                ->when(!$isConsumer && !$isAdmin && !$isCallCenter && !$isNodalOfficer, function ($query) use ($grid_code) {
                     return $query->where('grid_code', $grid_code);
                 })
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")

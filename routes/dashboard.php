@@ -13,42 +13,45 @@ Route::get('/dashboard', function () {
     $gridCode = Auth::user()->grid_code;
     $user = Auth::user();
     $isAdmin = $user->hasRole('admin');
+    $isNodalOfficer = $user->hasRole('nodal_officer');
 
 
     $closed = Grievance::select('grid_user', 'grid_code', 'status')
-        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+        ->when(!$isAdmin && !$isNodalOfficer, function ($query) use ($userID, $gridCode) {
             return $query->where('grid_user', $userID)
                 ->orWhere('grid_code', $gridCode);
         })->where('status', 'Closed')->count();
 
     $resolved = Grievance::select('grid_user', 'grid_code', 'status')
-        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+        ->when(!$isAdmin && !$isNodalOfficer, function ($query) use ($userID, $gridCode) {
             return $query->where('grid_user', $userID)
                 ->orWhere('grid_code', $gridCode);
         })->where('status', 'Resolved')->count();
 
     $unread = Grievance::whereDoesntHave('transactions')
         ->where('status', 'Pending')
-        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+        ->when(!$isAdmin && !$isNodalOfficer, function ($query) use ($userID, $gridCode) {
             return $query->where('grid_user', $userID)
                 ->orWhere('grid_code', $gridCode);
         })->count();
 
     $inprogress = Grievance::select('grid_user', 'grid_code', 'status')
-        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+        ->when(!$isAdmin && !$isNodalOfficer, function ($query) use ($userID, $gridCode) {
             return $query->where('grid_user', $userID)
                 ->orWhere('grid_code', $gridCode);
         })->whereIn('status', ['Forwarded', 'Assigned'])->count();
 
     $total = Grievance::select('id')
-        ->when(!$isAdmin, function ($query) use ($userID, $gridCode) {
+        ->when(!$isAdmin && !$isNodalOfficer, function ($query) use ($userID, $gridCode) {
             return $query->where('grid_user', $userID)
                 ->orWhere('grid_code', $gridCode);
         })->count();
 
     $recentFive = Grievance::select('ticket_number', 'status', 'category', 'created_at')
-        ->where('grid_code', Auth::user()->grid_code)
-        ->orWhere('grid_user', Auth::user()->id)
+        ->when(!$isAdmin && !$isNodalOfficer, function ($query) {
+            return $query->where('grid_code', Auth::user()->grid_code)
+                ->orWhere('grid_user', Auth::user()->id);
+        })
         ->orderBy('created_at', 'desc')
         ->limit(5)
         ->get();

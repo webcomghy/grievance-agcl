@@ -48,9 +48,9 @@
                     <i class="fas fa-print"></i>
                 </button>
                 @if($grievance->created_at->diffInHours() < 24 && $grievance->status !== 'Withdrawn')
-                <button onclick="openWithdrawModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-                    Withdraw Complaint
-                </button>
+                    <button onclick="openWithdrawModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                        Withdraw Complaint
+                    </button>
                 @endif
             </div>
         </div>
