@@ -5,11 +5,33 @@
 @section('action_buttons')
 <span class="text-gray-600 mr-4">
     <i class="far fa-clock"></i>
-    @if(isset($grievance->transactions->last()->assigned_to))
-    {{ $grievance->transactions->last()->created_at->diffForHumans() }} has passed since {{
-    $grievance->transactions->last()->status }}
+    @php
+        $holidays = \App\Models\Holiday::pluck('date')->map(function ($date) {
+            return \Carbon\Carbon::parse($date)->format('Y-m-d');
+        })->toArray();
+
+        $lastTransaction = $grievance->transactions->last();
+        $referenceDate = $lastTransaction ? $lastTransaction->created_at : $grievance->created_at;
+
+        $currentDate = \Carbon\Carbon::now();
+
+        $nonHolidayDays = 0;
+
+        for ($date = clone $referenceDate; $date->lessThanOrEqualTo($currentDate); $date->addDay()) {
+            if (!in_array($date->format('Y-m-d'), $holidays)) {
+                $nonHolidayDays++;
+            }
+        }
+    @endphp
+
+    @if($nonHolidayDays > 0)
+        @if(isset($lastTransaction->assigned_to))
+            {{ $nonHolidayDays }} day{{ $nonHolidayDays > 1 ? 's' : '' }} have passed since {{ $lastTransaction->status }}
+        @else
+            {{ $nonHolidayDays }} day{{ $nonHolidayDays > 1 ? 's' : '' }} have passed since the submission
+        @endif
     @else
-    {{ $grievance->created_at->diffForHumans() }} has passed since the submission
+        No days have passed since the reference date due to holidays.
     @endif
 </span>
 
@@ -345,4 +367,7 @@
 
 
 @endsection
+
+
+
 
