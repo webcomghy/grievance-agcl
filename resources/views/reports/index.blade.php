@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Reports')
+@section('title', $status . " Grievances")
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
