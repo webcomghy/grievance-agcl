@@ -130,10 +130,39 @@
                     </a>
 
                     @can('view_reports')
-                        <a href="{{ route('grievances.pending') }}"
-                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">  
-                            <i class="fas fa-file mr-2 sidebar-icon"></i><span class="menu-text">Reports</span>
-                        </a>
+                        <div>
+                            <a href="#" onclick="toggleSubmenu(event, 'reportsSubmenu')" 
+                                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">  
+                                <i class="fas fa-file mr-2 sidebar-icon"></i><span class="menu-text">Reports</span>
+                                <i class="ml-2 fas fa-chevron-down ml-auto"></i> <!-- Arrow icon for submenu -->
+                            </a>
+                            <div id="reportsSubmenu" class="ml-4 hidden pl-4">
+                                <a href="{{ route('reports.index', ['status' => 'Pending']) }}" 
+                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                                    <span class="menu-text">Pending Reports</span>
+                                </a>
+                                <a href="{{ route('reports.index', ['status' => 'Forwarded']) }}" 
+                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                                    <span class="menu-text">Forwarded Reports</span>
+                                </a>
+                                <a href="{{ route('reports.index', ['status' => 'Assigned']) }}" 
+                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                                    <span class="menu-text">Assigned Reports</span>
+                                </a>
+                                <a href="{{ route('reports.index', ['status' => 'Resolved']) }}" 
+                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                                    <span class="menu-text">Resolved Reports</span>
+                                </a>
+                                <a href="{{ route('reports.index', ['status' => 'Closed']) }}" 
+                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                                    <span class="menu-text">Closed Reports</span>
+                                </a>
+                                <a href="{{ route('reports.index', ['status' => 'Withdrawn']) }}" 
+                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                                    <span class="menu-text">Withdrawn Reports</span>
+                                </a>
+                            </div>
+                        </div>
                     @endcan
             </nav>
         </aside>
@@ -317,6 +346,15 @@
                 }, 5000);
             });
         });
+
+        function toggleSubmenu(event, submenuId) {
+            event.preventDefault(); // Prevent the default anchor link behavior
+            const submenu = document.getElementById(submenuId);
+            if (submenu) {
+                submenu.classList.toggle('hidden');
+            }
+        }
+        
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     @yield('scripts')

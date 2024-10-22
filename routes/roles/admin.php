@@ -62,5 +62,5 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('reports', [ReportController::class, 'index'])->name('grievances.pending');
+    Route::get('reports/{status}', [ReportController::class, 'index'])->name('reports.index');
 });

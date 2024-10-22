@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $status = null)
     {
         if ($request->ajax()) {
             $query = Grievance::select(
@@ -23,7 +23,7 @@ class ReportController extends Controller
                     'grid_code', 
                     'status', 
                     'created_at'
-                )->where('status', 'Pending');
+                )->where('status', $status);
 
             // Filter based on time since created
             if ($request->has('time_filter')) {
@@ -54,7 +54,7 @@ class ReportController extends Controller
                 ->make(true);
         }
 
-        return view('reports.index');
+        return view('reports.index' , ['status' => $status]);
     }
 
 }

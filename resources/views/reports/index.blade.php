@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Unattended Grievances')
+@section('title', 'Reports')
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <h2 class="text-3xl font-bold mb-6">Unattended Grievances</h2>
+    <h2 class="text-3xl font-bold mb-6">{{$status}} Grievances</h2>
 
     <div class="mb-4 flex items-center">
         <div class="mr-4 flex-grow">
@@ -66,7 +66,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '{{ route('grievances.pending') }}',
+                url: '{{ route('reports.index', ['status' => $status]) }}',
                 data: function (d) {
                     d.category = $('.category-filter.active').data('category'); // Get selected category
                     d.time_filter = $('.time-filter.active').data('time'); // Get selected time filter
