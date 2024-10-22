@@ -75,96 +75,125 @@
                 </button>
             </div>
             <nav class="mt-4">
-                
-                    <a href="{{ route('dashboard') }}"
+                <!-- Dashboard -->
+                <a href="{{ route('dashboard') }}"
+                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                    <i class="fas fa-home mr-2 sidebar-icon"></i><span class="menu-text">Dashboard</span>
+                </a>
+            
+                <!-- User Management -->
+                @can('add_user')
+                    <div>
+                        <a href="#" onclick="toggleSubmenu(event, 'userManagementSubmenu')" 
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                            <i class="fas fa-user mr-2 sidebar-icon"></i><span class="menu-text">User Management</span>
+                            <i class="ml-2 fas fa-chevron-down ml-auto"></i> <!-- Arrow icon for submenu -->
+                        </a>
+                        <div id="userManagementSubmenu" class="ml-4 hidden pl-4">
+                            <a href="{{ route('users.create') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Add User
+                            </a>
+                            <a href="{{ route('roles-permissions.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Roles & Permissions
+                            </a>
+                        </div>
+                    </div>
+                @endcan
+            
+                <!-- Grievance Management -->
+                <div>
+                    <a href="#" onclick="toggleSubmenu(event, 'grievanceManagementSubmenu')" 
                         class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                        <i class="fas fa-home mr-2 sidebar-icon"></i><span class="menu-text">Dashboard</span>
+                        <i class="fas fa-list mr-2 sidebar-icon"></i><span class="menu-text">Grievance Management</span>
+                        <i class="ml-2 fas fa-chevron-down ml-auto"></i> <!-- Arrow icon for submenu -->
                     </a>
-
-                    @can('add_user')
-                        <a href="{{ route('users.create') }}"
-                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                            <i class="fas fa-user-plus mr-2 sidebar-icon"></i><span class="menu-text">Users</span>
+                    <div id="grievanceManagementSubmenu" class="ml-4 hidden pl-4">
+                        @can('view_grivances')
+                            <a href="{{ route('grievances.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                All Grievances
+                            </a>
+                        @endcan
+                        <a href="{{ route('grievances.create') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                            Create Grievance
                         </a>
-                    @endcan
-
-                    @can('upload_holiday')
-                        <a href="{{ route('holidays.upload') }}"
-                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                            <i class="fas fa-calendar mr-2 sidebar-icon"></i><span class="menu-text">Holidays</span>
+                        <a href="{{ route('grievances.inbox') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                            Inbox
                         </a>
-                    @endcan
-           
-                    @can('manage_roles_and_permissions')
-                        <a href="{{ route('roles-permissions.index') }}"
-                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                            <i class="fas fa-user-lock mr-2 sidebar-icon"></i><span class="menu-text">Roles & Permissions</span>
+                        <a href="{{ route('grievances.outbox') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                            Outbox
                         </a>
-                    @endcan
-                    @can('view_meter_uploads')
-                        <a href="{{ route('meter_uploads.index') }}"
+                    </div>
+                </div>
+            
+                <!-- Holiday Management -->
+                @can('upload_holiday')
+                    <div>
+                        <a href="#" onclick="toggleSubmenu(event, 'holidayManagementSubmenu')" 
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
+                            <i class="fas fa-calendar mr-2 sidebar-icon"></i><span class="menu-text">Holiday Management</span>
+                            <i class="ml-2 fas fa-chevron-down ml-auto"></i> <!-- Arrow icon for submenu -->
+                        </a>
+                        <div id="holidayManagementSubmenu" class="ml-4 hidden pl-4">
+                            <a href="{{ route('holidays.upload') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Upload Holidays
+                            </a>
+                        </div>
+                    </div>
+                @endcan
+            
+                <!-- Meter Uploads -->
+                @can('view_meter_uploads')
+                    <div>
+                        <a href="#" onclick="toggleSubmenu(event, 'meterUploadsSubmenu')" 
                             class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
                             <i class="fas fa-file-upload mr-2 sidebar-icon"></i><span class="menu-text">Meter Uploads</span>
+                            <i class="ml-2 fas fa-chevron-down ml-auto"></i> <!-- Arrow icon for submenu -->
                         </a>
-                    @endcan
-                    @can('view_grivances')
-                        <a href="{{ route('grievances.index') }}"
-                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                            <i class="fas fa-list mr-2 sidebar-icon"></i><span class="menu-text">Grievances (All)</span>
-                        </a>
-                    @endcan
-
-                    <a href="{{ route('grievances.create') }}"
-                        class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                        <i class="fas fa-plus mr-2 sidebar-icon"></i><span class="menu-text">Create Grievance</span>
-                    </a>
-
-                    <a href="{{ route('grievances.inbox') }}"
-                        class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                        <i class="fas fa-inbox mr-2 sidebar-icon"></i><span class="menu-text">Inbox</span>
-                    </a>
-
-                    <a href="{{ route('grievances.outbox') }}"
-                        class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                        <i class="fas fa-paper-plane mr-2 sidebar-icon"></i><span class="menu-text">Outbox</span>
-                    </a>
-
-                    @can('view_reports')
-                        <div>
-                            <a href="#" onclick="toggleSubmenu(event, 'reportsSubmenu')" 
-                                class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">  
-                                <i class="fas fa-file mr-2 sidebar-icon"></i><span class="menu-text">Reports</span>
-                                <i class="ml-2 fas fa-chevron-down ml-auto"></i> <!-- Arrow icon for submenu -->
+                        <div id="meterUploadsSubmenu" class="ml-4 hidden pl-4">
+                            <a href="{{ route('meter_uploads.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                View Uploads
                             </a>
-                            <div id="reportsSubmenu" class="ml-4 hidden pl-4">
-                                <a href="{{ route('reports.index', ['status' => 'Pending']) }}" 
-                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                                    <span class="menu-text">Pending Reports</span>
+                            @can('set_date_for_upload')
+                                <a href="{{ route('meter_uploads.set_dates') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                    Set Dates
                                 </a>
-                                <a href="{{ route('reports.index', ['status' => 'Forwarded']) }}" 
-                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                                    <span class="menu-text">Forwarded Reports</span>
-                                </a>
-                                <a href="{{ route('reports.index', ['status' => 'Assigned']) }}" 
-                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                                    <span class="menu-text">Assigned Reports</span>
-                                </a>
-                                <a href="{{ route('reports.index', ['status' => 'Resolved']) }}" 
-                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                                    <span class="menu-text">Resolved Reports</span>
-                                </a>
-                                <a href="{{ route('reports.index', ['status' => 'Closed']) }}" 
-                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                                    <span class="menu-text">Closed Reports</span>
-                                </a>
-                                <a href="{{ route('reports.index', ['status' => 'Withdrawn']) }}" 
-                                    class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
-                                    <span class="menu-text">Withdrawn Reports</span>
-                                </a>
-                            </div>
+                            @endcan
                         </div>
-                    @endcan
+                    </div>
+                @endcan
+            
+                <!-- Reports -->
+                @can('view_reports')
+                    <div>
+                        <a href="#" onclick="toggleSubmenu(event, 'reportsSubmenu')" 
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">  
+                            <i class="fas fa-file mr-2 sidebar-icon"></i><span class="menu-text">Reports</span>
+                            <i class="ml-2 fas fa-chevron-down ml-auto"></i> <!-- Arrow icon for submenu -->
+                        </a>
+                        <div id="reportsSubmenu" class="ml-4 hidden pl-4">
+                            <a href="{{ route('reports.index', ['status' => 'Pending']) }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Pending Reports
+                            </a>
+                            <a href="{{ route('reports.index', ['status' => 'Forwarded']) }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Forwarded Reports
+                            </a>
+                            <a href="{{ route('reports.index', ['status' => 'Assigned']) }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Assigned Reports
+                            </a>
+                            <a href="{{ route('reports.index', ['status' => 'Resolved']) }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Resolved Reports
+                            </a>
+                            <a href="{{ route('reports.index', ['status' => 'Closed']) }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Closed Reports
+                            </a>
+                            <a href="{{ route('reports.index', ['status' => 'Withdrawn']) }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Withdrawn Reports
+                            </a>
+                        </div>
+                    </div>
+                @endcan
             </nav>
+            
         </aside>
 
         <!-- Main Content -->
