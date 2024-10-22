@@ -27,9 +27,15 @@ class ReportController extends Controller
                 }
             }
 
+            // Filter by category if provided
+            if ($request->has('category')) {
+                $query->where('category', $request->input('category'));
+            }
+
             return datatables()->of($query)
-                ->addColumn('actions', function ($row) {
-                    return '<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded">View</button>';
+                
+                ->addColumn('priority', function ($row) {
+                    return $row->priority; // Assuming priority is a field in the Grievance model
                 })
                 ->rawColumns(['actions'])
                 ->make(true);
