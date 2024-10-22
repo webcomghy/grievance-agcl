@@ -4,6 +4,7 @@ use App\Http\Controllers\GrievanceController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\MeterUploadController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -58,4 +59,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/holidays/upload', [HolidayController::class, 'showUploadForm'])->name('holidays.upload');
     Route::post('/holidays/import', [HolidayController::class, 'import'])->name('holidays.import');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('reports', [ReportController::class, 'index'])->name('grievances.pending');
 });

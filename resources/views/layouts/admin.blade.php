@@ -128,6 +128,13 @@
                         class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">
                         <i class="fas fa-paper-plane mr-2 sidebar-icon"></i><span class="menu-text">Outbox</span>
                     </a>
+
+                    @can('view_reports')
+                        <a href="{{ route('reports.index') }}"
+                            class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 flex items-center">  
+                            <i class="fas fa-file mr-2 sidebar-icon"></i><span class="menu-text">Reports</span>
+                        </a>
+                    @endcan
             </nav>
         </aside>
 
