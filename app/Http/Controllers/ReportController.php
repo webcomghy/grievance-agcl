@@ -10,7 +10,20 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Grievance::query()->where('status', 'Pending');
+            $query = Grievance::select(
+                    'id', 
+                    'consumer_no', 
+                    'ca_no', 
+                    'ticket_number', 
+                    'category', 
+                    'subcategory',
+                    'name', 
+                    'phone', 
+                    'priority_score',
+                    'grid_code', 
+                    'status', 
+                    'created_at'
+                )->where('status', 'Pending');
 
             // Filter based on time since created
             if ($request->has('time_filter')) {

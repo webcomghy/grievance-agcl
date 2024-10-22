@@ -36,6 +36,7 @@
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
@@ -95,6 +96,12 @@
                                (priorityClasses[data] || 'bg-gray-100 text-gray-800') + '">' + data + '</span>';
                     }
                 },
+                { data: 'created_at', name: 'created_at', render: function(data) {
+                    return new Date(data).toLocaleString('en-US', { 
+                        year: 'numeric', month: 'short', day: 'numeric', 
+                        hour: '2-digit', minute: '2-digit', hour12: false 
+                    }); // Format date to "Sep 21, 2024 06:44"
+                }},
                 { data: 'actions', name: 'actions', orderable: false, searchable: false }
             ],
             dom: 'lBfrtip',

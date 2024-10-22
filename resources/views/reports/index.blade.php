@@ -46,9 +46,11 @@
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub-Category</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grid Code</th>
                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
                 </tr>
             </thead>
         </table>
@@ -80,7 +82,7 @@
                 { data: 'category', name: 'category' },
                 { data: 'subcategory', name: 'sub_category' },
                 { data: 'name', name: 'name' },
-                
+                { data: 'phone', name: 'phone' },
                 { data: 'priority', name: 'priority', render: function(data) {
                     return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ' + (data === 'High' ? 'bg-red-100 text-red-800' : (data === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800')) + '">' + data + '</span>';
                 }},
@@ -88,7 +90,12 @@
                 { data: 'status', name: 'status', render: function(data) {
                     return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ' + (data === 'Pending' ? 'bg-yellow-100 text-yellow-800' : (data === 'Resolved' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')) + '">' + data + '</span>';
                 }},
-                
+                { data: 'created_at', name: 'created_at', render: function(data) {
+                    return new Date(data).toLocaleString('en-US', { 
+                        year: 'numeric', month: 'short', day: 'numeric', 
+                        hour: '2-digit', minute: '2-digit', hour12: false 
+                    }); // Format date to "Sep 21, 2024 06:44"
+                }},
             ],
             dom: 'lBfrtip',// Add buttons to the DataTable
             buttons: [

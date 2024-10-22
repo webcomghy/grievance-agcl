@@ -33,7 +33,18 @@ class GrievanceController extends Controller
         
         if (request()->ajax()) {
             $grievances = Grievance::query()
-                ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
+                ->select(
+                        'id', 
+                        'consumer_no', 
+                        'ca_no', 
+                        'ticket_number', 
+                        'category', 
+                        'name', 
+                        'phone', 
+                        'priority_score', 
+                        'status', 
+                        'created_at'
+                    )
                 ->when($isConsumer, function ($query) use ($consumerID) {
                     return $query->where('consumer_id', $consumerID);
                 })
