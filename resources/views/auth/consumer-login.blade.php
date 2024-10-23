@@ -39,14 +39,14 @@
                 </div>
             </form>
             
-            <div class="mt-4 text-center">
+            {{-- <div class="mt-4 text-center">
                 <p class="text-sm text-gray-600">
                     Not a consumer? 
                     <a href="{{ route('login') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
                         Login here
                     </a>
                 </p>
-            </div>
+            </div> --}}
             <div class="mt-4 text-center">
                 <p class="text-sm text-gray-600">
                     Don't have an account? 
