@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-gray-100">
+<html lang="en" class="h-full bg-gray-100">add 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,6 +47,15 @@
                     </a>
                 </p>
             </div>
+            <div class="mt-4 text-center">
+                <p class="text-sm text-gray-600">
+                    Don't have an account? 
+                    <a href="https://assamgas.co.in/login" class="font-medium text-indigo-600 hover:text-indigo-500">
+                        Register here
+                    </a>
+                </p>
+            </div>
+
         </div>
     </div>
 </body>

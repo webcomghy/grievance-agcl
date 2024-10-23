@@ -23,7 +23,6 @@ class GrievanceController extends Controller
         $isConsumer = auth()->guard('consumer')->check();
         $consumerID = auth()->guard('consumer')->user()->id ?? NULL;
         
-        
         $grid_code = Auth::user()->grid_code;
 
         $isAdmin = Auth::user()->hasRole('admin');
