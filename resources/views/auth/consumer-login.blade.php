@@ -50,7 +50,7 @@
             <div class="mt-4 text-center">
                 <p class="text-sm text-gray-600">
                     Don't have an account? 
-                    <a href="https://assamgas.co.in/login" class="font-medium text-indigo-600 hover:text-indigo-500">
+                    <a href="https://assamgas.co.in/login" target="_blank" class="font-medium text-indigo-600 hover:text-indigo-500">
                         Register here
                     </a>
                 </p>
