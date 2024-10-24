@@ -41,6 +41,7 @@ Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
     Route::put('meter_uploads/update/{id}', [MeterUploadController::class, 'updateMonthDate'])->name('meter_uploads.update');
     Route::get('/meter-upload', [MeterUploadController::class, 'showUploadForm'])->name('meter_uploads.upload');
     Route::post('/self-reading/import', [MeterUploadController::class, 'import'])->name('self_reading.import');
+    Route::get('/failedlogs', [MeterUploadController::class, 'failedUploads'])->name('self_reading.failedlogs');
 });
 
 

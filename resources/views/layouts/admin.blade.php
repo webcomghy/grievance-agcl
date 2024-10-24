@@ -158,6 +158,9 @@
                                     Set Dates
                                 </a>
                             @endcan
+                            <a href="{{ route('self_reading.failedlogs') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600">
+                                Failed Logs
+                            </a>
                         </div>
                     </div>
                 @endcan

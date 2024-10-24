@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Imports\SelfReadingImport;
 use App\Models\AvailabilityDate;
 use App\Models\ConsumerMaster;
+use App\Models\MeterfailedLog;
 use App\Models\MeterUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -175,5 +176,19 @@ class MeterUploadController extends Controller
         Excel::import(new SelfReadingImport, $request->file('file'));
 
         return redirect()->back()->with('success', 'Data imported successfully.');
+    }
+
+    public function failedUploads(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = MeterfailedLog::query()
+                ->select('id', 'consumer_no', 'phone_number', 'yearMonth', 'previousReading', 'reading', 'meter_no', 'latitude', 'longitude',  'created_at'); // Adjust the fields as necessary
+
+            return datatables()->of($data)
+                ->rawColumns(['actions']) // Allow HTML in the actions column
+                ->make(true);
+        }
+
+        return view('meter_uploads.failed_uploads'); // Create this view
     }
 }
