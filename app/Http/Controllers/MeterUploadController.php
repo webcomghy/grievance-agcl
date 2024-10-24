@@ -32,7 +32,18 @@ class MeterUploadController extends Controller
 
         if (request()->ajax()) {
             $data = MeterUpload::query()
-                ->select('id', 'meter_no', 'consumer_no', 'phone_number', 'yearMonth', 'reading', 'image', 'latitude', 'longitude', 'created_at');
+                ->select(
+                    'id', 
+                    'meter_no', 
+                    'consumer_no', 
+                    'phone_number',
+                    'yearMonth', 
+                    'reading', 
+                    'image', 
+                    'latitude', 
+                    'longitude', 
+                    'created_at'
+                );
 
             if ($username !== 'admin' && $isConsumer === false) {
                 $data->where('grid_id', $username);
@@ -182,7 +193,18 @@ class MeterUploadController extends Controller
     {
         if ($request->ajax()) {
             $data = MeterfailedLog::query()
-                ->select('id', 'consumer_no', 'phone_number', 'yearMonth', 'previousReading', 'reading', 'meter_no', 'latitude', 'longitude',  'created_at'); // Adjust the fields as necessary
+                ->select(
+                    'id', 
+                    'consumer_no', 
+                    'phone_number', 
+                    'yearMonth', 
+                    'previousReading', 
+                    'reading', 
+                    'meter_no', 
+                    'latitude', 
+                    'longitude',  
+                    'created_at'
+                )->orderBy('id', 'desc');; // Adjust the fields as necessary
 
             return datatables()->of($data)
                 ->rawColumns(['actions']) // Allow HTML in the actions column

@@ -37,7 +37,9 @@
             serverSide: true,
             ajax: '{{ route('self_reading.failedlogs') }}',
             columns: [
-                { data: 'id', name: 'id' },
+                { data: null, name: 'id', orderable: false, searchable: false, render: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1; // Calculate serial number
+                }},
                 { data: 'consumer_no', name: 'consumer_no' },
                 { data: 'phone_number', name: 'phone_number' },
                 { data: 'yearMonth', name: 'yearMonth' },
