@@ -18,7 +18,7 @@ class HolidaysImport implements ToModel, WithHeadingRow
             // Assuming the Excel file has 'name' and 'date' columns
             $holiday = new Holiday([
                 'name' => $row['name'], // Use the header name to map the value
-                'date' => Date::excelToDateTimeObject($row['date'])->format('Y-m-d'), // Convert to a string format
+                'date' => \Carbon\Carbon::createFromFormat('d-m-Y', $row['date'])->format('Y-m-d'), // Convert to a string format
                 'status' => 'Active', // Set default status to Active
             ]);
             
