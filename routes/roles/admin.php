@@ -50,6 +50,7 @@ Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('grievances', [GrievanceController::class, 'index'])->name('grievances.index')->middleware('can:view_grivances');
     Route::get('grievances/create', [GrievanceController::class, 'create'])->name('grievances.create');
+    Route::get('/consumers/check', [GrievanceController::class, 'checkConsumer'])->name('consumers.check');
     Route::get('grievances/{grievance}', [GrievanceController::class, 'show'])->name('grievances.show');
     Route::put('grievances/{grievance}', [GrievanceController::class, 'update'])->name('grievances.update');
     Route::get('inbox', [GrievanceController::class, 'inbox'])->name('grievances.inbox');

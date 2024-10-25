@@ -129,6 +129,19 @@ class GrievanceController extends Controller
             'latitude.required_if' => 'Latitude is required if not a grid admin.',
         ]);
 
+        $consumer = ConsumerMaster::query()
+            ->where('CONSUMER_NO', $request->consumer_no)
+            ->orWhere('CA_NO', $request->consumer_no)
+            ->orWhere('BA_NO', $request->consumer_no)
+            ->first();
+
+        if (!$consumer) {
+            return redirect()->back()->with('error', 'Consumer not found.');
+        }
+
+        $validatedData['consumer_no'] = $consumer->CONSUMER_NO ?? null;
+        $validatedData['ca_no'] = $consumer->CA_NO ?? null;
+
         // Check for double extensions
         if ($request->hasFile('file_upload')) {
             $file = $request->file('file_upload');
@@ -403,5 +416,39 @@ class GrievanceController extends Controller
         // Check for double extensions
         $parts = pathinfo($filename);
         return isset($parts['extension']) && substr_count($filename, '.') > 1;
+    }
+
+    public function checkConsumer(Request $request)
+    {
+        $consumerNo = $request->input('consumer_no');
+
+        // Validate the input
+        $request->validate([
+            'consumer_no' => 'required|string',
+        ]);
+
+        // Find the consumer by consumer number
+        $consumer = ConsumerMaster::query()
+            ->where('CONSUMER_NO', $consumerNo)
+            ->orWhere('CA_NO', $consumerNo)
+            ->orWhere('BA_NO', $consumerNo)
+            ->first();
+
+        if ($consumer) {
+            // Return success response with consumer data
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'email' => $consumer->EMAIL,
+                    'name' => $consumer->FIRST_NAME,
+                ],
+            ]);
+        } else {
+            // Return failure response
+            return response()->json([
+                'success' => false,
+                'message' => 'Consumer not found',
+            ]);
+        }
     }
 }

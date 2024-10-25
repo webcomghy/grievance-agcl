@@ -19,24 +19,22 @@
                                 <input type="text" id="consumer_no" name="consumer_no" class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
                             <div class="w-1/2">
-                                <label for="ca_no" class="block text-sm font-medium text-gray-700">CA Number</label>
-                                <input type="text" id="ca_no" name="ca_no" class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            </div>
-                        </div>
-                        <div class="mb-4 flex space-x-4">
-                            <div class="w-1/2">
                                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                                 <input type="text" id="name" name="name" required class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
+                        </div>
+                        <div class="mb-4 flex space-x-4">
+                            
                             <div class="w-1/2">
                                 <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-                                <input type="text" id="phone" name="phone" required class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <input type="text" id="phone" name="phone" required class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onblur="validateMobileNumber()">
+                            </div>
+                            <div class="w-1/2">
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" id="email" name="email" class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" onblur="validateEmail()">
                             </div>
                         </div>
-                        <div class="mb-4">
-                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" id="email" name="email" class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        </div>
+                        
                       
                         <div>
                             <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
@@ -65,6 +63,7 @@
                         <div>
                             <label for="file_upload" class="block text-sm font-medium text-gray-700">Upload File (optional)</label>
                             <input type="file" id="file_upload" name="file_upload" class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <p>Max file size: 2 MB</p>
                         </div>
                         <input type="hidden" id="latitude" name="latitude">
                         <input type="hidden" id="longitude" name="longitude">
@@ -128,5 +127,21 @@
             }
         }
     }
+
+    function validateMobileNumber() {
+            const mobileNumber = document.getElementById('phone').value; // Assuming phone input has id 'phone'
+            let regex = new RegExp(/(0|91)?[6-9][0-9]{9}/);
+            if (!regex.test(mobileNumber) || mobileNumber.length !== 10) {
+                Swal.fire('Invalid Mobile Number', 'Please enter a valid 10-digit mobile number.', 'error'); // SweetAlert for invalid mobile number
+            }
+        }
+
+        function validateEmail() {
+            const email = document.getElementById('email').value; // Assuming email input has id 'email'
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                Swal.fire('Invalid Email', 'Please enter a valid email address.', 'error'); // SweetAlert for invalid email
+            }
+        }
 </script>
 </x-guest-layout>
