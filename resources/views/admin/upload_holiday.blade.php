@@ -95,10 +95,24 @@
         font-size: 0.8rem;
         border-radius: 4px;
         text-overflow: ellipsis; /* Show ellipsis if text is too long */
-        white-space: normal; /* Allow wrapping */
+        white-space: nowrap; /* Prevent wrapping */
         overflow: hidden; /* Hide overflow */
+        position: relative; /* Position relative for tooltip */
     }
 
+    .holiday:hover::after {
+        content: attr(title); /* Show the title attribute as tooltip */
+        position: absolute;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        white-space: nowrap; /* Prevent wrapping */
+        top: 100%; /* Position below the element */
+        left: 50%; /* Center horizontally */
+        transform: translateX(-50%); /* Adjust for centering */
+        z-index: 10; /* Ensure it appears above other elements */
+    }
 
     .form-container {
         padding-right: 20px;
