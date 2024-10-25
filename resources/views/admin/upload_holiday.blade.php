@@ -64,7 +64,7 @@
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         grid-auto-rows: 100px;
-        gap: 2px;
+        gap: 2px; /* Set a uniform gap for both rows and columns */
     }
 
     .day {
@@ -75,6 +75,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        overflow: hidden; /* Hide overflow */
     }
 
     .today {
@@ -93,9 +94,9 @@
         padding: 4px;
         font-size: 0.8rem;
         border-radius: 4px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
+        text-overflow: ellipsis; /* Show ellipsis if text is too long */
+        white-space: normal; /* Allow wrapping */
+        overflow: hidden; /* Hide overflow */
     }
 
 
@@ -112,7 +113,6 @@
 <div class="container">
 
     <div class="form-container">
-        
         <form action="{{ route('holidays.import') }}" method="POST" enctype="multipart/form-data" class="mt-4">
             @csrf
             <div class="mb-4">
@@ -120,23 +120,30 @@
                 <input type="file" name="file" id="file" class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 focus:border-blue-500" required>
             </div>
             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">Upload</button>
+            
+            <!-- Added download link for sample file with label -->
+            <div class="mt-4 flex items-center">
+              
+                <span class="bg-green-200 text-green-800 font-semibold py-1 px-2 rounded mr-2">Download:</span>
+                <a href="{{ asset('static/holiday.csv') }}" class="text-blue-500 hover:underline">Sample File</a>
+            </div>
+            
+            @if(session('success'))
+                <div class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </form>
-
-        @if(session('success'))
-            <div class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if($errors->any())
-            <div class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                <ul class="list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
     </div>
 
     <div class="calendar-container">
