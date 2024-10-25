@@ -127,7 +127,7 @@
 <div class="container">
 
     <div class="form-container">
-        <form action="{{ route('holidays.import') }}" method="POST" enctype="multipart/form-data" class="mt-4">
+        <form action="{{ route('holidays.import') }}" method="POST" enctype="multipart/form-data" class="mt-4" onsubmit="disableSubmitButton(this)">
             @csrf
             <div class="mb-4">
                 <label for="file" class="block text-sm font-medium text-gray-700">Select File</label>
@@ -137,26 +137,9 @@
             
             <!-- Added download link for sample file with label -->
             <div class="mt-4 flex items-center">
-              
                 <span class="bg-green-200 text-green-800 font-semibold py-1 px-2 rounded mr-2">Download:</span>
                 <a href="{{ asset('static/holiday.csv') }}" class="text-blue-500 hover:underline">Sample File</a>
             </div>
-            
-            @if(session('success'))
-                <div class="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                    <ul class="list-disc list-inside">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
         </form>
     </div>
 
@@ -184,6 +167,12 @@
 </div>
 
 <script>
+    function disableSubmitButton(form) {
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.innerText = 'Uploading...'; // Optional: Change button text
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const holidays = @json($holidays);
         const calendarHeader = document.getElementById('calendarHeader');

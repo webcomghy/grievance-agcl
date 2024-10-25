@@ -16,17 +16,19 @@ class HolidaysImport implements ToModel, WithHeadingRow
         DB::beginTransaction();
         try {
             // Assuming the Excel file has 'name' and 'date' columns
-            $holiday = new Holiday([
-                'name' => $row['name'], // Use the header name to map the value
-                'date' => \Carbon\Carbon::createFromFormat('d-m-Y', $row['date'])->format('Y-m-d'), // Convert to a string format
-                'status' => 'Active', // Set default status to Active
-            ]);
-            
-            $holiday->save(); // Save the holiday record
+            $holiday = Holiday::updateOrCreate(
+                [
+                    'name' => $row['name'], // Attributes to check for existing record
+                    'date' => \Carbon\Carbon::createFromFormat('d-m-Y', $row['date'])->format('Y-m-d'), // Convert to a string format
+                ],
+                [
+                    'status' => 'Active', // Set default status to Active
+                ]
+            );
 
             // Commit the transaction
             DB::commit();
-            return $holiday; // Return the created holiday
+            return $holiday; // Return the created or updated holiday
         } catch (\Exception $e) {
             // Rollback the transaction if something went wrong
             DB::rollBack();
