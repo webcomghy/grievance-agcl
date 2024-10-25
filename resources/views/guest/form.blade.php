@@ -131,6 +131,7 @@
     function validateMobileNumber() {
             const mobileNumber = document.getElementById('phone').value; // Assuming phone input has id 'phone'
             let regex = new RegExp(/(0|91)?[6-9][0-9]{9}/);
+            if (!mobileNumber) return;
             if (!regex.test(mobileNumber) || mobileNumber.length !== 10) {
                 Swal.fire('Invalid Mobile Number', 'Please enter a valid 10-digit mobile number.', 'error'); // SweetAlert for invalid mobile number
             }
@@ -138,6 +139,7 @@
 
         function validateEmail() {
             const email = document.getElementById('email').value; // Assuming email input has id 'email'
+            if (!email) return;
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 Swal.fire('Invalid Email', 'Please enter a valid email address.', 'error'); // SweetAlert for invalid email

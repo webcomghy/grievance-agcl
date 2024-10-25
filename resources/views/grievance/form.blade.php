@@ -1,6 +1,21 @@
 @extends('layouts.admin')
 @section('title', 'Add Grievance')
 @section('content')
+<style>
+    .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
     <section id="grievance-form" class="p-4 max-w-4xl mx-auto">
         <h2 class="text-2xl font-bold mb-6">Create Grievance</h2>
         <form method="post" action="{{ route('grievances.store') }}" class="space-y-6"  enctype="multipart/form-data">
@@ -131,6 +146,7 @@
 
         function validateMobileNumber() {
             const mobileNumber = document.getElementById('phone').value; // Assuming phone input has id 'phone'
+            if (!mobileNumber) return; // Skip validation if input is empty
             let regex = new RegExp(/(0|91)?[6-9][0-9]{9}/);
             if (!regex.test(mobileNumber) || mobileNumber.length !== 10) {
                 Swal.fire('Invalid Mobile Number', 'Please enter a valid 10-digit mobile number.', 'error'); // SweetAlert for invalid mobile number
@@ -139,6 +155,7 @@
 
         function validateEmail() {
             const email = document.getElementById('email').value; // Assuming email input has id 'email'
+            if (!email) return; // Skip validation if input is empty
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 Swal.fire('Invalid Email', 'Please enter a valid email address.', 'error'); // SweetAlert for invalid email
@@ -146,19 +163,5 @@
         }
     </script>
 
-    <style>
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3498db;
-            width: 120px;
-            height: 120px;
-            animation: spin 2s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    
 @endsection

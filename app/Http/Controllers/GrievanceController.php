@@ -109,7 +109,8 @@ class GrievanceController extends Controller
             'subcategory' => 'required',
             'name' => 'required',
             'address' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|digits:10',
+            'email' => 'nullable|email',
             'description' => 'required',
             'admin_remark' => 'nullable',
             'file_upload' => 'nullable|file|max:2048|mimes:jpg,jpeg,png,pdf', // Validate file types
@@ -123,6 +124,8 @@ class GrievanceController extends Controller
             'name.required' => 'Name is required.',
             'address.required' => 'Address is required.',
             'phone.required' => 'Phone number is required.',
+            'phone.digits' => 'Phone number must be 10 digits.',
+            'email.email' => 'Invalid email format.',
             'description.required' => 'Description is required.',
             'is_grid_admin.required' => 'Grid admin status is required.',
             'longitude.required_if' => 'Longitude is required if not a grid admin.',
