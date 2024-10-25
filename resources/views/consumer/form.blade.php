@@ -57,6 +57,7 @@
                             <label for="file_upload" class="block text-sm font-medium text-gray-700">Upload File (optional)</label>
                             <input type="file" id="file_upload" name="file_upload" class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <p class="text-sm text-gray-500">Max file size: 2 MB</p>
+                            
                         </div>
                         <input type="hidden" id="latitude" name="latitude">
                         <input type="hidden" id="longitude" name="longitude">
