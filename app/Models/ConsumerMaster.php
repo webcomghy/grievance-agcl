@@ -11,5 +11,4 @@ class ConsumerMaster extends Model
 
     protected $table = 'tblconsumermaster';
 
-    
 }

@@ -25,7 +25,6 @@ class MeterUploadController extends Controller
         $isConsumer = auth()->guard('consumer')->check();
         $consumerNo = auth()->guard('consumer')->user()->consumer_number ?? NULL;
 
-        // dd($consumerNo);
         $consumerMaster = ConsumerMaster::select('CONSUMER_NO', 'BA_NO', 'CA_NO')
             ->firstWhere('CONSUMER_NO', $consumerNo);
 

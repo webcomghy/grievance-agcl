@@ -16,5 +16,4 @@ class Holiday extends Model
         'status',
     ];
 
-    
 }

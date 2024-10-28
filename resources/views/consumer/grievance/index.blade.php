@@ -62,7 +62,7 @@
                 },
                 columns: [
                     { data: null, name: 'id', orderable: false, searchable: false, render: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1; // Calculate serial number
+                        return meta.row + meta.settings._iDisplayStart + 1; 
                     }},
                     { data: 'ticket_number', name: 'ticket_number' },
                     { data: 'consumer_no', name: 'consumer_no' },

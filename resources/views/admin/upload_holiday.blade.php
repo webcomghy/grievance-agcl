@@ -64,7 +64,7 @@
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         grid-auto-rows: 100px;
-        gap: 2px; /* Set a uniform gap for both rows and columns */
+        gap: 2px; 
     }
 
     .day {
@@ -75,7 +75,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        overflow: hidden; /* Hide overflow */
+        overflow: hidden; 
     }
 
     .today {
@@ -94,33 +94,33 @@
         padding: 4px;
         font-size: 0.8rem;
         border-radius: 4px;
-        text-overflow: ellipsis; /* Show ellipsis if text is too long */
-        white-space: nowrap; /* Prevent wrapping */
-        overflow: hidden; /* Hide overflow */
-        position: relative; /* Position relative for tooltip */
+        text-overflow: ellipsis; 
+        white-space: nowrap; 
+        overflow: hidden; 
+        position: relative; 
     }
 
     .holiday:hover::after {
-        content: attr(title); /* Show the title attribute as tooltip */
+        content: attr(title); 
         position: absolute;
         background: rgba(0, 0, 0, 0.7);
         color: #fff;
         padding: 4px 8px;
         border-radius: 4px;
-        white-space: nowrap; /* Prevent wrapping */
-        top: 100%; /* Position below the element */
-        left: 50%; /* Center horizontally */
-        transform: translateX(-50%); /* Adjust for centering */
-        z-index: 10; /* Ensure it appears above other elements */
+        white-space: nowrap; 
+        top: 100%; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        z-index: 10; 
     }
 
     .form-container {
         padding-right: 20px;
-        flex: 1 1 20%; /* Updated to take up 20% width */
+        flex: 1 1 20%; 
     }
 
     .calendar-container {
-        flex: 1 1 78%; /* Adjusted to take up remaining width */
+        flex: 1 1 78%; 
     }
 </style>
 <h2 class="text-3xl font-bold text-gray-800">Upload Holidays</h2>
@@ -135,7 +135,6 @@
             </div>
             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">Upload</button>
             
-            <!-- Added download link for sample file with label -->
             <div class="mt-4 flex items-center">
                 <span class="bg-green-200 text-green-800 font-semibold py-1 px-2 rounded mr-2">Download:</span>
                 <a href="{{ asset('static/holiday.csv') }}" class="text-blue-500 hover:underline">Sample File</a>
@@ -170,7 +169,7 @@
     function disableSubmitButton(form) {
         const submitButton = form.querySelector('button[type="submit"]');
         submitButton.disabled = true;
-        submitButton.innerText = 'Uploading...'; // Optional: Change button text
+        submitButton.innerText = 'Uploading...'; 
     }
 
     document.addEventListener('DOMContentLoaded', function() {

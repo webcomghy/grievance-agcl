@@ -11,5 +11,4 @@ class GridMaster extends Model
 
     protected $table = 'tblgridmaster';
 
-
 }

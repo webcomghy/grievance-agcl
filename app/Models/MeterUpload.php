@@ -20,6 +20,5 @@ class MeterUpload extends Model
         'longitude',
         'latitude',
     ];
-
-
+    
 }

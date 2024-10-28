@@ -18,9 +18,9 @@
                             <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 100px;">Image</th>
                             <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
                             <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded At</th>
-                            <th class="hidden">Latitude</th> <!-- Hidden Latitude Column -->
-                            <th class="hidden">Longitude</th> <!-- Hidden Longitude Column -->
-                            <th class="hidden">Image URL</th> <!-- Hidden Image URL Column -->
+                            <th class="hidden">Latitude</th> 
+                            <th class="hidden">Longitude</th>
+                            <th class="hidden">Image URL</th> 
                         </tr>
                     </thead>
                 </table>
@@ -45,7 +45,7 @@
                 ajax: '{{ route('meter_uploads.indexuser') }}',
                 columns: [
                     { data: null, name: 'id', orderable: false, searchable: false, render: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1; // Calculate serial number
+                        return meta.row + meta.settings._iDisplayStart + 1; 
                     }},
                     { data: 'meter_no', name: 'meter_no' },
                     { data: 'consumer_no', name: 'consumer_no' },

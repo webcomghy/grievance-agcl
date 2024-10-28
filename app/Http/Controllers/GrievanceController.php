@@ -298,7 +298,18 @@ class GrievanceController extends Controller
             $grievances = Grievance::whereHas('transactions', function ($query) {
                 $query->where('created_by', Auth::user()->id);
             })
-                ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
+                ->select(
+                    'id', 
+                    'consumer_no', 
+                    'ca_no', 
+                    'ticket_number', 
+                    'category', 
+                    'name', 
+                    'phone', 
+                    'priority_score', 
+                    'status', 
+                    'created_at'
+                )
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
                 ->orderBy('priority_score', 'desc')
                 ->orderBy('created_at', 'desc');
@@ -330,7 +341,18 @@ class GrievanceController extends Controller
                         return $query->orWhere('employee_id', '!=',  0);
                     });
             })
-                ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
+                ->select(
+                    'id', 
+                    'consumer_no', 
+                    'ca_no', 
+                    'ticket_number', 
+                    'category', 
+                    'name', 
+                    'phone', 
+                    'priority_score', 
+                    'status', 
+                    'created_at'
+                )
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
                 ->orderBy('priority_score', 'desc')
                 ->orderBy('created_at', 'desc');

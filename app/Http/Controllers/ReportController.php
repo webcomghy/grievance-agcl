@@ -25,7 +25,6 @@ class ReportController extends Controller
                     'created_at'
                 )->where('status', $status);
 
-            // Filter based on time since created
             if ($request->has('time_filter')) {
                 $timeFilter = $request->input('time_filter');
                 $now = now();
@@ -40,7 +39,6 @@ class ReportController extends Controller
                 }
             }
 
-            // Filter by category if provided
             if ($request->has('category')) {
                 $query->where('category', $request->input('category'));
             }
@@ -48,7 +46,7 @@ class ReportController extends Controller
             return datatables()->of($query)
                 
                 ->addColumn('priority', function ($row) {
-                    return $row->priority; // Assuming priority is a field in the Grievance model
+                    return $row->priority; 
                 })
                 ->rawColumns(['actions'])
                 ->make(true);

@@ -108,5 +108,4 @@ class RolePermissionController extends Controller
         return response()->json($role->permissions->pluck('name'));
     }
 
-   
 }
