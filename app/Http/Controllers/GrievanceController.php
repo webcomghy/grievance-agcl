@@ -172,7 +172,10 @@ class GrievanceController extends Controller
         DB::beginTransaction();
         try {
             $category_priority = Grievance::$categories_priority[$validatedData['category']];
+            // $subcategory_priority = Grievance::$subcategories_priority[$validatedData['subcategory']];
 
+            // $validatedData['priority_score'] = $category_priority + $subcategory_priority;
+            
             $validatedData['priority_score'] = $category_priority;
             $validatedData['status'] = Grievance::$statuses[0];
 

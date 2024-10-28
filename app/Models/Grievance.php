@@ -80,6 +80,32 @@ class Grievance extends Model
         'Gas Supply Related' => 9,
     ];
 
+    public static $subcategories_priority = [
+        'Fire/Leakage' => 9,
+        'Cut' => 9,
+        'Bubbles coming out from water bodies' => 8,
+        'Gas connection not provided within 3 months from the date of application' => 7,
+        'New connection required, Lat Long Auto-Capturing required' => 5,
+        'Temporary disconnection required' => 5,
+        'Shifting required' => 4,
+        'Meter damage' => 5,
+        'Meter not working' => 5,
+        'Any Other issues' => 3,
+        'Bill not received' => 4,
+        'High bill amount' => 3,
+        'Wrong bill delivered' => 5,
+        'Wrong bill amount' => 4,
+        'How to download the bill. Option 1: Should direct to a self-help video' => 2,
+        'Disconnected but bills are still generated' => 5,
+        'Non receipt of bills' => 5,
+        'Bills cannot be downloaded' => 5,
+        "Can't pay online" => 5,
+        'What is the last date for bill payment?' => 3,
+        'How to pay online? Option 1: Should direct to a self-help video' => 3,
+        'Change of ownership' => 5,
+        'Mobile number and email update' => 3,
+    ];
+
     public static $statuses = [
         'Pending',
         'Forwarded',
