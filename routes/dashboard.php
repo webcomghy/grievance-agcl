@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\GrievanceController;
-use App\Http\Controllers\MeterUploadController;
 use App\Models\Grievance;
 use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\Auth;
@@ -65,18 +63,14 @@ Route::get('/dashboard', function () {
     $totalGrievances = $resolvedGrievances->count();
 
     foreach ($resolvedGrievances as $grievance) {
-        // Calculate the difference in seconds between created_at and updated_at
         $totalTimeDifferenceInSeconds += $grievance->updated_at->diffInSeconds($grievance->created_at);
     }
 
     if ($totalGrievances > 0) {
-        // Calculate the average time difference in seconds
         $averageTimeDifferenceInSeconds = $totalTimeDifferenceInSeconds / $totalGrievances;
 
-        // Convert to a CarbonInterval for human-readable format
         $averageTimeInterval = CarbonInterval::seconds($averageTimeDifferenceInSeconds)->cascade();
 
-        // Output in a human-readable format
         $averageTimeFormatted = $averageTimeInterval->forHumans();
     } else {
         $averageTimeFormatted = 0;

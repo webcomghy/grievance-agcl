@@ -44,9 +44,6 @@ Route::middleware('auth', 'can:view_meter_uploads')->group(function () {
     Route::get('/failedlogs', [MeterUploadController::class, 'failedUploads'])->name('self_reading.failedlogs');
 });
 
-
-
-
 Route::middleware('auth')->group(function () {
     Route::get('grievances', [GrievanceController::class, 'index'])->name('grievances.index')->middleware('can:view_grivances');
     Route::get('grievances/create', [GrievanceController::class, 'create'])->name('grievances.create');

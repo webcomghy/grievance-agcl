@@ -19,31 +19,31 @@ class GrievanceController extends Controller
     public function index()
     {
 
-        
+
         $isConsumer = auth()->guard('consumer')->check();
         $consumerID = auth()->guard('consumer')->user()->id ?? NULL;
-        
+
         $grid_code = Auth::user()->grid_code;
 
         $isAdmin = Auth::user()->hasRole('admin');
         $isCallCenter = Auth::user()->hasRole('support');
         $isNodalOfficer = Auth::user()->hasRole('nodal_officer');
 
-        
+
         if (request()->ajax()) {
             $grievances = Grievance::query()
                 ->select(
-                        'id', 
-                        'consumer_no', 
-                        'ca_no', 
-                        'ticket_number', 
-                        'category', 
-                        'name', 
-                        'phone', 
-                        'priority_score', 
-                        'status', 
-                        'created_at'
-                    )
+                    'id',
+                    'consumer_no',
+                    'ca_no',
+                    'ticket_number',
+                    'category',
+                    'name',
+                    'phone',
+                    'priority_score',
+                    'status',
+                    'created_at'
+                )
                 ->when($isConsumer, function ($query) use ($consumerID) {
                     return $query->where('consumer_id', $consumerID);
                 })
@@ -68,7 +68,7 @@ class GrievanceController extends Controller
                 ->make(true);
         }
 
-        if($isConsumer){
+        if ($isConsumer) {
             return view('consumer.grievance.index');
         }
         return view('grievance.index');
@@ -86,7 +86,7 @@ class GrievanceController extends Controller
             return view('consumer.form', compact('categories'));
         }
 
-        if(Auth::user() === null){
+        if (Auth::user() === null) {
             return view('guest.form', compact('categories'));
         }
 
@@ -100,9 +100,8 @@ class GrievanceController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all()); // Removed for processing
 
-    $validatedData = $request->validate([
+        $validatedData = $request->validate([
             'consumer_no' => 'nullable|exclude_if:category,Others,Gas Leakage|required_if:ca_no,null|',
             'ca_no' => 'nullable|exclude_if:category,Others,Gas Leakage|required_if:consumer_no,null',
             'category' => 'required',
@@ -145,7 +144,6 @@ class GrievanceController extends Controller
         $validatedData['consumer_no'] = $consumer->CONSUMER_NO ?? null;
         $validatedData['ca_no'] = $consumer->CA_NO ?? null;
 
-        // Check for double extensions
         if ($request->hasFile('file_upload')) {
             $file = $request->file('file_upload');
             if ($this->hasDoubleExtension($file->getClientOriginalName())) {
@@ -161,13 +159,13 @@ class GrievanceController extends Controller
             $validatedData['consumer_id'] = auth()->guard('consumer')->user()->id ?? null;
         }
 
-        if($validatedData['ca_no'] === NULL){
+        if ($validatedData['ca_no'] === NULL) {
             $ca_number = ConsumerMaster::where('CONSUMER_NO', $validatedData['consumer_no'])->first()->CA_NO ?? null;
-            if($ca_number === null){
+            if ($ca_number === null) {
                 return redirect()->back()->with('error', 'Consumer not found.');
             }
-            $validatedData['grid_code'] = substr($ca_number, 2, 4); // Exclude first two characters and take next four
-        }else{
+            $validatedData['grid_code'] = substr($ca_number, 2, 4);
+        } else {
             $validatedData['grid_code'] = substr($validatedData['ca_no'], 2, 4);
         }
 
@@ -192,28 +190,23 @@ class GrievanceController extends Controller
 
             $grievance->update(['ticket_number' => $ticket_number]);
 
-            // Handle file upload
             if ($request->hasFile('file_upload')) {
                 $file = $request->file('file_upload');
-                $ticket_number = 'TKT-' . $encoded_ticket; // Ensure ticket number is generated
+                $ticket_number = 'TKT-' . $encoded_ticket; 
 
-                // Create a directory for the ticket number if it doesn't exist
                 $directoryPath = public_path('uploads/' . $ticket_number);
                 if (!file_exists($directoryPath)) {
                     mkdir($directoryPath, 0755, true);
                 }
 
-                // Store the file in the created directory
                 $filePath = $file->move($directoryPath, $file->getClientOriginalName()); // Use move instead of storeAs
                 $validatedData['file_path'] = 'uploads/' . $ticket_number . '/' . $file->getClientOriginalName();
 
                 $grievance->update($validatedData);
             }
-
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            // dd($th)->getMessage();
             return redirect()->back()->with('error', 'Something went wrong. Please try again.');
         }
 
@@ -235,7 +228,7 @@ class GrievanceController extends Controller
 
         $isConsumer = auth()->guard('consumer')->check();
 
-        if($isConsumer){
+        if ($isConsumer) {
             return view('consumer.grievance.show', compact('grievance', 'users'));
         }
         return view('grievance.show', compact('grievance', 'users'));
@@ -246,7 +239,7 @@ class GrievanceController extends Controller
      */
     public function update(Request $request, Grievance $grievance)
     {
-    
+
         $validatedData = $request->validate([
             'status' => 'required|in:' . implode(',', Grievance::$statuses),
             'description' => 'required|string',
@@ -271,18 +264,15 @@ class GrievanceController extends Controller
                 $grievance->update(['priority_score' => 0]);
             }
 
-            // Handle file upload
             if ($request->hasFile('file_upload')) {
                 $file = $request->file('file_upload');
-                $ticket_number = $grievance->ticket_number; // Assuming ticket_number is already set
+                $ticket_number = $grievance->ticket_number;
                 $directoryPath = public_path('uploads/' . $ticket_number);
 
-                // Create a directory for the ticket number if it doesn't exist
                 if (!file_exists($directoryPath)) {
                     mkdir($directoryPath, 0755, true);
                 }
 
-                // Store the file with the prefix 'resolved_proof_'
                 $filePath = $file->move($directoryPath, 'resolved_proof_' . $file->getClientOriginalName());
                 $grievance->update(['resolved_file_path' => 'uploads/' . $ticket_number . '/' . 'resolved_proof_' . $file->getClientOriginalName()]);
             }
@@ -290,10 +280,9 @@ class GrievanceController extends Controller
             DB::commit();
 
             $encryptedId = Crypt::encryptString($grievance->id);
-            
+
             return redirect()->back()
                 ->with('success', 'Grievance updated successfully.');
-                
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -309,10 +298,10 @@ class GrievanceController extends Controller
             $grievances = Grievance::whereHas('transactions', function ($query) {
                 $query->where('created_by', Auth::user()->id);
             })
-            ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
-            ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
-            ->orderBy('priority_score', 'desc')
-            ->orderBy('created_at', 'desc');
+                ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
+                ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
+                ->orderBy('priority_score', 'desc')
+                ->orderBy('created_at', 'desc');
 
             return datatables()->of($grievances)
                 ->addColumn('actions', function ($row) {
@@ -333,15 +322,14 @@ class GrievanceController extends Controller
     public function inbox()
     {
         $isAdmin = Auth::user()->hasRole('admin');
-        
-        // dd($grid_code);
+
         if (request()->ajax()) {
             $grievances = Grievance::whereHas('transactions', function ($query) use ($isAdmin) {
-                    $query->where('assigned_to', Auth::user()->id)
-                    ->when($isAdmin, function ($query)  {
-                        return $query->orWhere('employee_id' , '!=',  0);
-                    }); 
-                })
+                $query->where('assigned_to', Auth::user()->id)
+                    ->when($isAdmin, function ($query) {
+                        return $query->orWhere('employee_id', '!=',  0);
+                    });
+            })
                 ->select('id', 'consumer_no', 'ca_no', 'ticket_number', 'category', 'name', 'phone', 'priority_score', 'status', 'created_at')
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
                 ->orderBy('priority_score', 'desc')
@@ -416,7 +404,6 @@ class GrievanceController extends Controller
 
     private function hasDoubleExtension($filename)
     {
-        // Check for double extensions
         $parts = pathinfo($filename);
         return isset($parts['extension']) && substr_count($filename, '.') > 1;
     }
@@ -425,12 +412,10 @@ class GrievanceController extends Controller
     {
         $consumerNo = $request->input('consumer_no');
 
-        // Validate the input
         $request->validate([
             'consumer_no' => 'required|string',
         ]);
 
-        // Find the consumer by consumer number
         $consumer = ConsumerMaster::query()
             ->where('CONSUMER_NO', $consumerNo)
             ->orWhere('CA_NO', $consumerNo)
@@ -438,7 +423,6 @@ class GrievanceController extends Controller
             ->first();
 
         if ($consumer) {
-            // Return success response with consumer data
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -447,7 +431,6 @@ class GrievanceController extends Controller
                 ],
             ]);
         } else {
-            // Return failure response
             return response()->json([
                 'success' => false,
                 'message' => 'Consumer not found',
