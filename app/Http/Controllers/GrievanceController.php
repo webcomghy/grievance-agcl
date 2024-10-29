@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\ConsumerMaster;
 use App\Models\Grievance;
 use App\Models\User;
+use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Notification;
 
 class GrievanceController extends Controller
 {
@@ -181,6 +183,8 @@ class GrievanceController extends Controller
             $validatedData['grid_code'] = substr($validatedData['ca_no'], 2, 4);
         }
 
+        $gridAdmin = User::where('grid_code', $validatedData['grid_code'])->first();
+
         DB::beginTransaction();
         try {
             $category_priority = Grievance::$categories_priority[$validatedData['category']];
@@ -223,6 +227,13 @@ class GrievanceController extends Controller
             DB::rollBack();
 
             return redirect()->back()->with('error', 'Something went wrong. Please try again.');
+        }
+
+        $message = "Grievance created successfully. Your ticket number is: " . $ticket_number;
+        $gridAdmin->notify(new UserNotification($message));
+
+        if (!empty($validatedData['email'])) {
+            Notification::route('mail', $validatedData['email'])->notify(new UserNotification($message));
         }
 
         DB::commit();
