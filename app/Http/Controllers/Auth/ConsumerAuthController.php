@@ -42,6 +42,10 @@ class ConsumerAuthController extends Controller
 
         $request->session()->regenerateToken();
 
+        if(session()->has('mobile_number')){
+            session()->forget(['mobile_number']);
+        }
+       
         return redirect('/');
     }
 
@@ -86,7 +90,6 @@ class ConsumerAuthController extends Controller
 
             // Store the OTP in the session or database for verification
             session(['otp' => $otp, 'mobile_number' => $request->mobile_number]);
-            Log::info('Session data set:', session()->all());
 
             return response()->json(['success' => true, 'message' => 'OTP sent to your mobile number.']);
         } else {
