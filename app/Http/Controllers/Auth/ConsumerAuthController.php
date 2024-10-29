@@ -48,7 +48,7 @@ class ConsumerAuthController extends Controller
             session()->forget(['mobile_number']);
         }
        
-        return redirect('/');
+        return redirect('/consumer/login');
     }
 
     public function loginWithOTP(Request $request)
