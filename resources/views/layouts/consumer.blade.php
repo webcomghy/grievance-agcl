@@ -53,7 +53,7 @@
                                         Dashboard
                                     </a>
                                 @endif
-                                <a href="{{ route('grievance.form') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievance.form') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                                <a href="{{ route('grievance.form') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievance.form', 'grievance.otp.form') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
                                     Submit Grievance
                                 </a>
                                 @if(session()->has('mobile_number'))
@@ -66,7 +66,7 @@
                                     </a>
                                 @endif
                                 @if (session()->has('mobile_number'))
-                                    <a href="{{ route('meter_uploads.indexotp') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('meter_uploads.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                                    <a href="{{ route('meter_uploads.indexotp') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('meter_uploads.indexotp') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
                                         Meter Uploads
                                     </a>
                                 @else
