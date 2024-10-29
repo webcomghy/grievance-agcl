@@ -42,6 +42,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
+        if(session()->has('mobile_number')){
+            session()->forget(['mobile_number']);
+        }
+       
         return redirect('/');
     }
 }

@@ -22,7 +22,11 @@ class MeterUploadController extends Controller
     {
         $username = Auth::user() ? Auth::user()->username : NULL;
 
+        // dd($username);
+
         $mobileNumber = session('mobile_number');
+
+        // dd($mobileNumber);
         $isMobileNumber = false;
         if($mobileNumber){
             $isMobileNumber = true;

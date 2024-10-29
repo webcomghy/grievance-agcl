@@ -66,3 +66,4 @@ Route::get('consumer/otp-login', [ConsumerAuthController::class, 'loginWithOTP']
 Route::post('consumer/otp-login', [ConsumerAuthController::class, 'loginWithOTP'])->name('consumer.otp.login');
 Route::post('consumer/request-otp', [ConsumerAuthController::class, 'requestOTP'])->name('consumer.request.otp');
 Route::post('consumer/verify-otp', [ConsumerAuthController::class, 'verifyOTP'])->name('consumer.verify.otp');
+Route::post('otp-logout', [ConsumerAuthController::class, 'logout'])->name('otp.logout');

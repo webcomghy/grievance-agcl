@@ -31,6 +31,11 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body class="font-sans antialiased bg-gray-100">
     <div class="min-h-screen flex flex-col">
@@ -86,7 +91,7 @@
                                 </div>
                                 <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1" id="user-menu">
                                     <div class="py-1" role="none">
-                                        <form method="POST" action="{{ route('consumer.logout') }}">
+                                        <form method="POST" action="{{ session()->has('mobile_number') ? route('otp.logout') : route('consumer.logout') }}">
                                             @csrf
                                             <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1">
                                                 Log Out
@@ -140,7 +145,7 @@
                         </div>
                     </div>
                     <div class="mt-3 px-2 space-y-1">
-                        <form method="POST" action="{{ route('consumer.logout') }}">
+                        <form method="POST" action="{{ session()->has('mobile_number') ? route('otp.logout') : route('consumer.logout') }}">
                             @csrf
                             <button type="submit" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-blue-500 hover:text-white">
                                 Log Out

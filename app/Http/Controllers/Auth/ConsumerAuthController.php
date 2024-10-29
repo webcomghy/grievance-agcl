@@ -36,6 +36,8 @@ class ConsumerAuthController extends Controller
 
     public function logout(Request $request)
     {
+
+        // dd("ok");
         Auth::guard('consumer')->logout();
 
         $request->session()->invalidate();
