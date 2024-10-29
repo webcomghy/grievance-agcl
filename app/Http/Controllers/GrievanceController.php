@@ -18,18 +18,24 @@ class GrievanceController extends Controller
 
     public function index()
     {
+      
 
+        $mobileNumber = session('mobile_number');
+        $isMobileNumber = false;
+        if($mobileNumber){
+            $isMobileNumber = true;
+        }
 
         $isConsumer = auth()->guard('consumer')->check();
         $consumerID = auth()->guard('consumer')->user()->id ?? NULL;
 
-        $grid_code = Auth::user()->grid_code;
+        $grid_code = Auth::user() ? Auth::user()->grid_code : NULL;
 
-        $isAdmin = Auth::user()->hasRole('admin');
-        $isCallCenter = Auth::user()->hasRole('support');
-        $isNodalOfficer = Auth::user()->hasRole('nodal_officer');
+        $isAdmin = Auth::user() ? Auth::user()->hasRole('admin') : false;
+        $isCallCenter = Auth::user() ? Auth::user()->hasRole('call_center') : false;
+        $isNodalOfficer = Auth::user() ? Auth::user()->hasRole('nodal_officer') : false;
 
-
+        
         if (request()->ajax()) {
             $grievances = Grievance::query()
                 ->select(
@@ -47,7 +53,10 @@ class GrievanceController extends Controller
                 ->when($isConsumer, function ($query) use ($consumerID) {
                     return $query->where('consumer_id', $consumerID);
                 })
-                ->when(!$isConsumer && !$isAdmin && !$isCallCenter && !$isNodalOfficer, function ($query) use ($grid_code) {
+                ->when($isMobileNumber, function ($query) use ($mobileNumber) {
+                    return $query->where('phone', $mobileNumber);
+                })
+                ->when(!$isConsumer && !$isAdmin && !$isCallCenter && !$isNodalOfficer && !$isMobileNumber, function ($query) use ($grid_code) {
                     return $query->where('grid_code', $grid_code);
                 })
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
@@ -55,9 +64,9 @@ class GrievanceController extends Controller
                 ->orderBy('created_at', 'desc');
 
             return datatables()->of($grievances)
-                ->addColumn('actions', function ($row) use ($isConsumer) {
+                ->addColumn('actions', function ($row) use ($isConsumer, $isMobileNumber) {
                     $encryptedId = Crypt::encryptString($row->id);
-                    $btnRoute = $isConsumer ? 'grievances.showuser' : 'grievances.show';
+                    $btnRoute = $isConsumer ? 'grievances.showuser' : ($isMobileNumber ? 'grievances.showotp' : 'grievances.show');
                     $btn = '<a href="' . route($btnRoute, $encryptedId) . '" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-md text-sm">View</a>';
                     return $btn;
                 })
@@ -68,7 +77,8 @@ class GrievanceController extends Controller
                 ->make(true);
         }
 
-        if ($isConsumer) {
+        if ($isConsumer || $isMobileNumber) {
+            
             return view('consumer.grievance.index');
         }
         return view('grievance.index');
@@ -80,9 +90,11 @@ class GrievanceController extends Controller
     public function create()
     {
 
+        $mobileNumber = session('mobile_number');
+  
         $categories = Grievance::$categories;
 
-        if (auth()->guard('consumer')->check()) {
+        if (auth()->guard('consumer')->check() || $mobileNumber) {
             return view('consumer.form', compact('categories'));
         }
 
@@ -112,7 +124,7 @@ class GrievanceController extends Controller
             'email' => 'nullable|email',
             'description' => 'required',
             'admin_remark' => 'nullable',
-            'file_upload' => 'nullable|file|max:2048|mimes:jpg,jpeg,png,pdf', // Validate file types
+            'file_upload' => 'nullable|file|max:2048|mimes:jpg,jpeg,png,pdf',
             'is_grid_admin' => 'required|boolean',
             'longitude' => 'required_if:is_grid_admin,0',
             'latitude' => 'required_if:is_grid_admin,0',
@@ -223,6 +235,12 @@ class GrievanceController extends Controller
      */
     public function show($encryptedId)
     {
+        $mobileNumber = session('mobile_number');
+        $isMobileNumber = false;
+        if($mobileNumber){
+            $isMobileNumber = true;
+        }
+
         $decryptedId = Crypt::decryptString($encryptedId);
         $grievance = Grievance::findOrFail($decryptedId);
         $grievance->load('transactions');
@@ -231,7 +249,7 @@ class GrievanceController extends Controller
 
         $isConsumer = auth()->guard('consumer')->check();
 
-        if ($isConsumer) {
+        if ($isConsumer || $isMobileNumber) {
             return view('consumer.grievance.show', compact('grievance', 'users'));
         }
         return view('grievance.show', compact('grievance', 'users'));

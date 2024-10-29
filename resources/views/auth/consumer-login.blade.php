@@ -37,6 +37,13 @@
                         {{ __('Log in') }}
                     </button>
                 </div>
+
+                <!-- New OTP Login Button -->
+                <div>
+                    <a href="{{ route('consumer.otp.login') }}" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        {{ __('Log in with OTP') }}
+                    </a>
+                </div>
             </form>
             
             {{-- <div class="mt-4 text-center">

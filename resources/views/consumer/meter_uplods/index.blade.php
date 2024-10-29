@@ -42,7 +42,7 @@
             $('#meter_uploads_table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('meter_uploads.indexuser') }}',
+                ajax: '{{ session('mobile_number') ? route('meter_uploads.indexotp') : route('meter_uploads.indexuser') }}',
                 columns: [
                     { data: null, name: 'id', orderable: false, searchable: false, render: function(data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1; 

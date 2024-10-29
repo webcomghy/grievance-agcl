@@ -62,3 +62,7 @@ Route::middleware('auth')->group(function () {
 Route::get('consumer/login', [ConsumerAuthController::class, 'showLoginForm'])->name('consumer.login.form');
 Route::post('consumer/login', [ConsumerAuthController::class, 'login'])->name('consumer.login');
 Route::post('/consumer/logout', [ConsumerAuthController::class, 'logout'])->name('consumer.logout')->middleware('auth:consumer');
+Route::get('consumer/otp-login', [ConsumerAuthController::class, 'loginWithOTP'])->name('consumer.otp.login');
+Route::post('consumer/otp-login', [ConsumerAuthController::class, 'loginWithOTP'])->name('consumer.otp.login');
+Route::post('consumer/request-otp', [ConsumerAuthController::class, 'requestOTP'])->name('consumer.request.otp');
+Route::post('consumer/verify-otp', [ConsumerAuthController::class, 'verifyOTP'])->name('consumer.verify.otp');

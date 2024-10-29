@@ -43,18 +43,32 @@
                         </a>
                         <div class="hidden md:block ml-10">
                             <div class="flex items-baseline space-x-4">
-                                <a href="{{ route('consumer.dashboard') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('consumer.dashboard') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
-                                    Dashboard
-                                </a>
+                                @if(!session()->has('mobile_number'))
+                                    <a href="{{ route('consumer.dashboard') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('consumer.dashboard') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                                        Dashboard
+                                    </a>
+                                @endif
                                 <a href="{{ route('grievance.form') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievance.form') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
                                     Submit Grievance
                                 </a>
-                                <a href="{{ route('grievances.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievances.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
-                                    Grievances
-                                </a>
-                                <a href="{{ route('meter_uploads.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('meter_uploads.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
-                                    Meter Uploads
-                                </a>
+                                @if(session()->has('mobile_number'))
+                                    <a href="{{ route('grievances.indexotp') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievances.indexotp') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                                        Grievances
+                                    </a>
+                                @else
+                                    <a href="{{ route('grievances.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievances.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                                        Grievances
+                                    </a>
+                                @endif
+                                @if (session()->has('mobile_number'))
+                                    <a href="{{ route('meter_uploads.indexotp') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('meter_uploads.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                                        Meter Uploads
+                                    </a>
+                                @else
+                                    <a href="{{ route('meter_uploads.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('meter_uploads.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                                        Meter Uploads
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -64,7 +78,7 @@
                                 <div class="">
                                     
                                     <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                                        {{ Auth::guard('consumer')->user()->consumer_number }}
+                                        {{ Auth::guard('consumer')->check() ? Auth::guard('consumer')->user()->consumer_number : session()->get('mobile_number') }}
                                         <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                         </svg>
@@ -102,9 +116,16 @@
                     <a href="{{ route('grievance.form') }}" class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('grievance.form') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
                         Submit Grievance
                     </a>
-                    <a href="{{ route('grievances.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievances.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
-                        Grievances
-                    </a>
+                   
+                    @if(session()->has('mobile_number'))
+                        <a href="{{ route('grievances.indexotp') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievances.indexotp') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                            Grievances
+                        </a>
+                    @else
+                        <a href="{{ route('grievances.indexuser') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('grievances.indexuser') ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-blue-500 hover:text-white' }}">
+                            Grievances
+                        </a>
+                    @endif
                 </div>
                 <div class="pt-4 pb-3 border-t border-gray-200">
                     <div class="flex items-center px-5">
@@ -114,8 +135,8 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <div class="text-base font-medium text-gray-800">{{ Auth::guard('consumer')->user()->name }}</div>
-                            <div class="text-sm font-medium text-gray-500">{{ Auth::guard('consumer')->user()->email }}</div>
+                            <div class="text-base font-medium text-gray-800">{{ Auth::guard('consumer')->check() ? Auth::guard('consumer')->user()->name : null }}</div>
+                            <div class="text-sm font-medium text-gray-500">{{ Auth::guard('consumer')->check() ? Auth::guard('consumer')->user()->consumer_no : null }}</div>
                         </div>
                     </div>
                     <div class="mt-3 px-2 space-y-1">

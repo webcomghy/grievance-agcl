@@ -20,7 +20,13 @@ class MeterUploadController extends Controller
 
     public function index()
     {
-        $username = Auth::user()->username;
+        $username = Auth::user() ? Auth::user()->username : NULL;
+
+        $mobileNumber = session('mobile_number');
+        $isMobileNumber = false;
+        if($mobileNumber){
+            $isMobileNumber = true;
+        }
 
         $isConsumer = auth()->guard('consumer')->check();
         $consumerNo = auth()->guard('consumer')->user()->consumer_number ?? NULL;
@@ -44,7 +50,11 @@ class MeterUploadController extends Controller
                     'created_at'
                 );
 
-            if ($username !== 'admin' && $isConsumer === false) {
+            if($isMobileNumber) {
+                $data->where('phone_number', $mobileNumber);
+            }
+
+            if ($username !== 'admin' && $isConsumer === false && $isMobileNumber === false) {
                 $data->where('grid_id', $username);
             }
 
@@ -61,7 +71,7 @@ class MeterUploadController extends Controller
             return datatables()->of($data)->make(true);
         }
 
-        if($isConsumer) {
+        if($isConsumer || $isMobileNumber) {
             return view('consumer.meter_uplods.index');
         }
 

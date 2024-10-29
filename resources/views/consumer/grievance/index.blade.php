@@ -55,7 +55,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ route('grievances.indexuser') }}',
+                    url: '{{ session('mobile_number') ? route('grievances.indexotp') : route('grievances.indexuser') }}',
                     data: function (d) {
                         d.priority = $('#priority_filter').val();
                     }

@@ -11,3 +11,10 @@ Route::middleware('auth:consumer')->group(function () {
     Route::put('withdraw/{grievance}', [GrievanceController::class, 'update'])->name('grievances.withdraw');
 });
 
+Route::middleware(['web'])->group(function () {
+    Route::get('grievanceotp/form', [GrievanceController::class, 'create'])->name('grievance.otp.form');
+    Route::post('grievancesotp', [GrievanceController::class, 'store'])->name('grievances.otp.store');
+    Route::get('grievancesotp', [GrievanceController::class, 'index'])->name('grievances.indexotp');
+    Route::get('grievancesotp/data/{grievance}', [GrievanceController::class, 'show'])->name('grievances.showotp');
+    Route::get('meter_uploads_otp', [MeterUploadController::class, 'index'])->name('meter_uploads.indexotp');
+});

@@ -11,7 +11,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="consumer_no" class="block text-sm font-medium text-gray-700">Consumer No</label>
-                                <input type="text" id="consumer_no" name="consumer_no" value="{{ Auth::guard('consumer')->user()->consumer_number }}" class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <input type="text" id="consumer_no" name="consumer_no" value="{{ Auth::guard('consumer')->check() ? Auth::guard('consumer')->user()->consumer_number : null }}" class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
                             <div>
                                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
@@ -19,14 +19,13 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            
                             <div>
                                 <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-                                <input type="text" id="phone" name="phone" value="{{ Auth::guard('consumer')->user()->mobile_number }}" required class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" onblur="validateMobileNumber()">
+                                <input type="text" id="phone" name="phone" value="{{  Auth::guard('consumer')->check() ? Auth::guard('consumer')->user()->mobile_number : session()->get('mobile_number') }}" required class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" onblur="validateMobileNumber()">
                             </div>
                             <div>
                                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                                <input type="email" id="email" name="email" value="{{ Auth::guard('consumer')->user()->email }}" class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" onblur="validateEmail()">
+                                <input type="email" id="email" name="email" value="{{  Auth::guard('consumer')->check() ? Auth::guard('consumer')->user()->email : null }}" class="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" onblur="validateEmail()">
                             </div>
                         </div>
                        

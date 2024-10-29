@@ -9,3 +9,5 @@ Route::get('/', function () {
 
 Route::get('grievance/form', [GrievanceController::class, 'create'])->name('grievance.form');
 Route::post('grievances', [GrievanceController::class, 'store'])->name('grievances.store');
+
+
