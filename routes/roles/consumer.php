@@ -16,5 +16,6 @@ Route::middleware(['web'])->group(function () {
     Route::post('grievancesotp', [GrievanceController::class, 'store'])->name('grievances.otp.store');
     Route::get('grievancesotp', [GrievanceController::class, 'index'])->name('grievances.indexotp');
     Route::get('grievancesotp/data/{grievance}', [GrievanceController::class, 'show'])->name('grievances.showotp');
+    Route::put('withdrawotp/{grievance}', [GrievanceController::class, 'update'])->name('grievances.withdrawotp');
     Route::get('meter_uploads_otp', [MeterUploadController::class, 'index'])->name('meter_uploads.indexotp');
 });

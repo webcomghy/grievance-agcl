@@ -278,7 +278,7 @@ class GrievanceController extends Controller
                 'description' => $validatedData['description'],
                 'assigned_to' => $request->assigned_to ?? 0,
                 'employee_id' => $request->employee_id ?? 0,
-                'created_by' => Auth::user()->id,
+                'created_by' => Auth::user() ? Auth::user()->id : session('mobile_number'),
             ]);
 
             if ($validatedData['status'] === 'Resolved' || $grievance->status === 'Closed' || $grievance->status === 'Withdrawn') {
