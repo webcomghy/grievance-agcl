@@ -29,7 +29,7 @@ class UserNotification extends Notification
             ->line($this->message)
             ->action('Visit Website', url('/'))
             ->line('Thank you for using our application!')
-            ->cc(['dowarah.dayananda35@gmail.com', 'chandan.kakati@agclgas.com', 'rupamesh.saikia@agclgas.com']); // Add your fixed CC email here
+            ->cc(['chandan.kakati@agclgas.com', 'rupamesh.saikia@agclgas.com']); // Add your fixed CC email here
     }
 
     public function toArray($notifiable)
