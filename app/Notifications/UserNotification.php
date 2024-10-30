@@ -24,12 +24,14 @@ class UserNotification extends Notification
 
     public function toMail($notifiable)
     {
+        $ccEmails = explode(',', env('CC_EMAILS', ''));
+
         return (new MailMessage)
             ->subject('Important Notification')
             ->line($this->message)
             ->action('Visit Website', url('/'))
             ->line('Thank you for using our application!')
-            ->cc(['chandan.kakati@agclgas.com', 'rupamesh.saikia@agclgas.com']); // Add your fixed CC email here
+             ->cc($ccEmails);
     }
 
     public function toArray($notifiable)
