@@ -3,6 +3,7 @@ FROM php:8.2-apache
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
+    cron \
     curl \
     libpng-dev \
     libonig-dev \
@@ -51,4 +52,4 @@ RUN a2enmod rewrite
 EXPOSE 443
 
 # Start Apache
-CMD ["apache2-foreground"]
+CMD service cron start && apache2-foreground
