@@ -296,7 +296,7 @@
             data.push([
                 '{{ $transaction->status }}',
                 '{{ $transaction->description }}',
-                '{{ ($transaction->status === "Resolved" || $transaction->status === "Closed") ? $transaction->createdBy->username : ($transaction->assignedTo->username ?? "") }}',
+               '{{ $transaction->status === "Resolved" || $transaction->status === "Closed" ? ($transaction->createdBy ? $transaction->createdBy->username : "") : ($transaction->assignedTo ? $transaction->assignedTo->username : "") }}',
                 '{{ $transaction->employee_id == 0 ? "" : $transaction->employee_id }}',
                 '{{ $transaction->created_at->format('M d, Y') }}'
             ]);

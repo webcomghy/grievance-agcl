@@ -9,5 +9,6 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('grievances:forward-unaddressed')->hourly();
+Schedule::command('grievances:auto-close')->hourly();
 Schedule::command('send:monthly-sms')->daily();
 
