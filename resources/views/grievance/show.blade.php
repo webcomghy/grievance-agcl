@@ -51,11 +51,11 @@
 
         @if($grievance->transactions->last()->assigned_to == auth()->user()->id || auth()->user()->hasRole('admin'))
             @if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
-                @can('can_close')
+                {{-- @can('can_close')
                     <button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
                         <i class="fas fa-close"></i>
                     </button>
-                @endcan
+                @endcan --}}
                 @can('can_resolve')
                     <button onclick="openResolveModal()"
                         class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">
@@ -76,11 +76,11 @@
         @endif
 
         @if($grievance->status !== 'Closed' && $grievance->status !== 'Resolved')
-            @can('can_close')
+            {{-- @can('can_close')
                 <button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
                     <i class="fas fa-close"></i>
                 </button>
-            @endcan
+            @endcan --}}
             @can('can_resolve')
                 <button onclick="openResolveModal()"
                     class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2">

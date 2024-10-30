@@ -43,7 +43,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <div class="flex items-center">
-                        <a href="{{ route('consumer.dashboard') }}" class="flex-shrink-0">
+                        <a href="#" class="flex-shrink-0">
                             <img src="{{ asset('logo.jpg') }}" alt="Logo" class="h-8 w-auto">
                         </a>
                         <div class="hidden md:block ml-10">

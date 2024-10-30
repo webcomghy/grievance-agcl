@@ -52,6 +52,12 @@
                         Withdraw Complaint
                     </button>
                 @endif
+
+                @if($grievance->status !== 'Closed')
+                    <button onclick="openCloseModal()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2">
+                        <i class="fas fa-close"></i>
+                    </button>
+                @endif
             </div>
         </div>
         
@@ -122,6 +128,7 @@
     </div>
 
     @include('consumer.grievance.partials.modals.withdraw')
+    @include('consumer.grievance.partials.modals.close')
 
     <script>
         function printGrievanceCard() {
@@ -143,11 +150,12 @@
                 data.push([
                     '{{ $transaction->status }}',
                     '{{ $transaction->description }}',
-                    '{{ ($transaction->status === "Resolved" || $transaction->status === "Closed") ? $transaction->createdBy->username : ($transaction->assignedTo->username ?? "") }}',
+                    '{{ $transaction->status === "Resolved" || $transaction->status === "Closed" ? ($transaction->createdBy ? $transaction->createdBy->username : "") : ($transaction->assignedTo ? $transaction->assignedTo->username : "") }}',
                     '{{ $transaction->employee_id == 0 ? "" : $transaction->employee_id }}',
                     '{{ $transaction->created_at->format('M d, Y') }}'
                 ]);
             @endforeach
+
     
            
             var wb = XLSX.utils.book_new();
@@ -186,6 +194,15 @@
         function closeWithdrawModal() {
             document.getElementById('withdrawModal').classList.add('hidden');
         }
+
+        function openCloseModal() {
+            document.getElementById('closeModal').classList.remove('hidden');
+        }
+
+        function closeCloseModal() {
+            document.getElementById('closeModal').classList.add('hidden');
+        }
+
     </script>
 
     
