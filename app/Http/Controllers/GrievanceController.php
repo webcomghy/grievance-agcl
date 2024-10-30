@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class GrievanceController extends Controller
@@ -20,11 +22,11 @@ class GrievanceController extends Controller
 
     public function index()
     {
-      
+
 
         $mobileNumber = session('mobile_number');
         $isMobileNumber = false;
-        if($mobileNumber){
+        if ($mobileNumber) {
             $isMobileNumber = true;
         }
 
@@ -37,7 +39,7 @@ class GrievanceController extends Controller
         $isCallCenter = Auth::user() ? Auth::user()->hasRole('call_center') : false;
         $isNodalOfficer = Auth::user() ? Auth::user()->hasRole('nodal_officer') : false;
 
-        
+
         if (request()->ajax()) {
             $grievances = Grievance::query()
                 ->select(
@@ -80,7 +82,7 @@ class GrievanceController extends Controller
         }
 
         if ($isConsumer || $isMobileNumber) {
-            
+
             return view('consumer.grievance.index');
         }
         return view('grievance.index');
@@ -93,7 +95,7 @@ class GrievanceController extends Controller
     {
 
         $mobileNumber = session('mobile_number');
-  
+
         $categories = Grievance::$categories;
 
         if (auth()->guard('consumer')->check() || $mobileNumber) {
@@ -191,7 +193,7 @@ class GrievanceController extends Controller
             // $subcategory_priority = Grievance::$subcategories_priority[$validatedData['subcategory']];
 
             // $validatedData['priority_score'] = $category_priority + $subcategory_priority;
-            
+
             $validatedData['priority_score'] = $category_priority;
             $validatedData['status'] = Grievance::$statuses[0];
 
@@ -211,7 +213,7 @@ class GrievanceController extends Controller
 
             if ($request->hasFile('file_upload')) {
                 $file = $request->file('file_upload');
-                $ticket_number = 'TKT-' . $encoded_ticket; 
+                $ticket_number = 'TKT-' . $encoded_ticket;
 
                 $directoryPath = public_path('uploads/' . $ticket_number);
                 if (!file_exists($directoryPath)) {
@@ -229,12 +231,16 @@ class GrievanceController extends Controller
             return redirect()->back()->with('error', 'Something went wrong. Please try again.');
         }
 
-        $message = "Grievance created successfully. Your ticket number is: " . $ticket_number;
+        $message = "A new grievance is raised with ticket number " . $ticket_number . " on " . date('d-m-Y');
         $gridAdmin->notify(new UserNotification($message));
+
 
         if (!empty($validatedData['email'])) {
             Notification::route('mail', $validatedData['email'])->notify(new UserNotification($message));
         }
+
+        $this->sendSms($gridAdmin->phone ?? null, $message);
+        $this->sendSms($validatedData['phone'] ?? null, $message);
 
         DB::commit();
 
@@ -248,7 +254,7 @@ class GrievanceController extends Controller
     {
         $mobileNumber = session('mobile_number');
         $isMobileNumber = false;
-        if($mobileNumber){
+        if ($mobileNumber) {
             $isMobileNumber = true;
         }
 
@@ -331,15 +337,15 @@ class GrievanceController extends Controller
                 $query->where('created_by', Auth::user()->id);
             })
                 ->select(
-                    'id', 
-                    'consumer_no', 
-                    'ca_no', 
-                    'ticket_number', 
-                    'category', 
-                    'name', 
-                    'phone', 
-                    'priority_score', 
-                    'status', 
+                    'id',
+                    'consumer_no',
+                    'ca_no',
+                    'ticket_number',
+                    'category',
+                    'name',
+                    'phone',
+                    'priority_score',
+                    'status',
                     'created_at'
                 )
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
@@ -374,15 +380,15 @@ class GrievanceController extends Controller
                     });
             })
                 ->select(
-                    'id', 
-                    'consumer_no', 
-                    'ca_no', 
-                    'ticket_number', 
-                    'category', 
-                    'name', 
-                    'phone', 
-                    'priority_score', 
-                    'status', 
+                    'id',
+                    'consumer_no',
+                    'ca_no',
+                    'ticket_number',
+                    'category',
+                    'name',
+                    'phone',
+                    'priority_score',
+                    'status',
                     'created_at'
                 )
                 ->orderByRaw("CASE WHEN status = 'Pending' THEN 0 ELSE 1 END")
@@ -489,6 +495,32 @@ class GrievanceController extends Controller
                 'success' => false,
                 'message' => 'Consumer not found',
             ]);
+        }
+    }
+
+    private function sendSms($phoneNumber, $message)
+    {
+        if ($phoneNumber) {
+            $url = "https://sms6.rmlconnect.net:8443/bulksms/bulksms";
+            $params = [
+                'username' => 'AssamTrans',
+                'password' => '}yA3bI[7',
+                'type' => '0',
+                'dlr' => '1',
+                'destination' => '91' . $phoneNumber,
+                'source' => 'AGCLBG',
+                'message' => $message . " . AGCL",
+                'entityid' => '1201159514504706254',
+                'tempid' => '1507167110580384721',
+            ];
+
+            $response = Http::withOptions(['verify' => false])->get($url, $params);
+
+            if ($response->successful()) {
+                Log::info("SMS sent successfully to {$phoneNumber}");
+            } else {
+                Log::error("Failed to send SMS to {$phoneNumber}. Response: " . $response->body());
+            }
         }
     }
 }
