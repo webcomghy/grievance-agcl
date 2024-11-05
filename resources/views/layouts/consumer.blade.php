@@ -188,6 +188,9 @@
                         </button>
                     </div>
                 @endif
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                        <h3 class="font-bold">Grievances will be automatically closed after 24 hours of resolution.</h3>
+                    </div>
                     {{ $slot }}
                 </div>
             </div>
