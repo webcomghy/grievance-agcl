@@ -341,9 +341,9 @@ class GrievanceController extends Controller
             DB::rollBack();
 
             $encryptedId = Crypt::encryptString($grievance->id);
-            dd($e);
-            return redirect()->route('grievances.show', $encryptedId)
-                ->with('error', 'Failed to update grievance: ');
+            
+            return redirect()->back()
+                ->with('error', 'Something went wrong. Please try again.');
         }
     }
 
