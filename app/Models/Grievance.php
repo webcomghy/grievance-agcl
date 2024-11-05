@@ -34,6 +34,8 @@ class Grievance extends Model
         'consumer_id',
         'is_grid_admin',
         'ticket_number',
+        'satisfaction',
+        'satisfaction_remark',
     ];
     
     public static $categories = [
@@ -113,6 +115,7 @@ class Grievance extends Model
         'Resolved',
         'Closed',
         'Withdrawn',
+        'Feedback',
     ];
 
     protected function priority(): Attribute

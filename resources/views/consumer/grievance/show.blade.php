@@ -58,6 +58,13 @@
                         <i class="fas fa-close"></i>
                     </button>
                 @endif
+                @if($grievance->status === 'Closed')
+                    @if(is_null($grievance->satisfaction))
+                        <button onclick="openFeedbackModal()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2">
+                            <i class="fas fa-comments"></i>
+                        </button>
+                    @endif
+                @endif
             </div>
         </div>
         
@@ -75,6 +82,7 @@
                             <p><strong>Name:</strong> {{ $grievance->name }}</p>
                             <p><strong>Phone:</strong> {{ $grievance->phone }}</p>
                             <p><strong>Email:</strong> {{ $grievance->email }}</p>
+                            
                         </div>
                         <div>
                             <p><strong>Status:</strong> 
@@ -95,6 +103,14 @@
                                     {{ $grievance->priority }}
                                 </span>
                             </p>
+                            <p><strong>Feedback:</strong> 
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {{ $grievance->satisfaction === 'Not Satisfied' ? 'bg-red-100 text-red-800' : 
+                                    'bg-green-100 text-green-800' }}">
+                                    {{ $grievance->satisfaction }}
+                                </span>
+                            </p>
+                            
                             <p><strong>Submitted on:</strong> {{ $grievance->created_at->format('M d, Y H:i') }}</p>
                         </div>
                     </div>
@@ -102,6 +118,13 @@
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">Description:</h3>
                         <p class="text-gray-600">{{ $grievance->description }}</p>
                     </div>
+
+                    @if(isset($grievance->satisfaction_remark))
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Feedback Remark:</h3>
+                            <p class="text-gray-600">{{ $grievance->satisfaction_remark }}</p>
+                        </div>
+                    @endif
 
                     @if(isset($grievance->file_path))
                     <div class="mt-4">
@@ -129,6 +152,7 @@
 
     @include('consumer.grievance.partials.modals.withdraw')
     @include('consumer.grievance.partials.modals.close')
+    @include('consumer.grievance.partials.modals.feedback')
 
     <script>
         function printGrievanceCard() {
@@ -201,6 +225,14 @@
 
         function closeCloseModal() {
             document.getElementById('closeModal').classList.add('hidden');
+        }
+
+        function openFeedbackModal() {
+            document.getElementById('feedbackModal').classList.remove('hidden');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').classList.add('hidden');
         }
 
     </script>

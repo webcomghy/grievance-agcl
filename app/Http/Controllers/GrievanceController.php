@@ -279,42 +279,57 @@ class GrievanceController extends Controller
     public function update(Request $request, Grievance $grievance)
     {
 
+        // dd($request->all());
         $validatedData = $request->validate([
             'status' => 'required|in:' . implode(',', Grievance::$statuses),
-            'description' => 'required|string',
+            'description' => 'nullable|string',
+            'satisfaction' => 'required_if:status,Feedback',
+            'satisfaction_remark' => 'required_if:status,Feedback',
             'file_upload' => 'nullable|file|max:2048|mimes:jpg,jpeg,png,pdf', // Validate file types
         ]);
 
         DB::beginTransaction();
         try {
-            $grievance->update([
-                'status' => $validatedData['status'],
-            ]);
 
-            $grievance->transactions()->create([
-                'status' => $validatedData['status'],
-                'description' => $validatedData['description'],
-                'assigned_to' => $request->assigned_to ?? 0,
-                'employee_id' => $request->employee_id ?? 0,
-                'created_by' => Auth::user() ? Auth::user()->id : session('mobile_number'),
-            ]);
+            if($validatedData['status'] !== 'Feedback'){     
+                $grievance->update([
+                    'status' => $validatedData['status'],
+                ]);
 
-            if ($validatedData['status'] === 'Resolved' || $grievance->status === 'Closed' || $grievance->status === 'Withdrawn') {
-                $grievance->update(['priority_score' => 0]);
-            }
-
-            if ($request->hasFile('file_upload')) {
-                $file = $request->file('file_upload');
-                $ticket_number = $grievance->ticket_number;
-                $directoryPath = public_path('uploads/' . $ticket_number);
-
-                if (!file_exists($directoryPath)) {
-                    mkdir($directoryPath, 0755, true);
+                $grievance->transactions()->create([
+                    'status' => $validatedData['status'],
+                    'description' => $validatedData['description'],
+                    'assigned_to' => $request->assigned_to ?? 0,
+                    'employee_id' => $request->employee_id ?? 0,
+                    'created_by' => Auth::user() ? Auth::user()->id : session('mobile_number'),
+                ]);
+    
+                if ($validatedData['status'] === 'Resolved' || $grievance->status === 'Closed' || $grievance->status === 'Withdrawn') {
+                    $grievance->update(['priority_score' => 0]);
+                }
+    
+                if ($request->hasFile('file_upload')) {
+                    $file = $request->file('file_upload');
+                    $ticket_number = $grievance->ticket_number;
+                    $directoryPath = public_path('uploads/' . $ticket_number);
+    
+                    if (!file_exists($directoryPath)) {
+                        mkdir($directoryPath, 0755, true);
+                    }
+    
+                    $filePath = $file->move($directoryPath, 'resolved_proof_' . $file->getClientOriginalName());
+                    $grievance->update(['resolved_file_path' => 'uploads/' . $ticket_number . '/' . 'resolved_proof_' . $file->getClientOriginalName()]);
                 }
 
-                $filePath = $file->move($directoryPath, 'resolved_proof_' . $file->getClientOriginalName());
-                $grievance->update(['resolved_file_path' => 'uploads/' . $ticket_number . '/' . 'resolved_proof_' . $file->getClientOriginalName()]);
+            } else{
+
+                // dd($validatedData);
+                $grievance->update([
+                    'satisfaction' => $validatedData['satisfaction'],
+                    'satisfaction_remark' => $validatedData['satisfaction_remark'],
+                ]);
             }
+
 
             DB::commit();
 
@@ -326,6 +341,7 @@ class GrievanceController extends Controller
             DB::rollBack();
 
             $encryptedId = Crypt::encryptString($grievance->id);
+            dd($e);
             return redirect()->route('grievances.show', $encryptedId)
                 ->with('error', 'Failed to update grievance: ');
         }
