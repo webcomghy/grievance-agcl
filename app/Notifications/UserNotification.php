@@ -30,7 +30,7 @@ class UserNotification extends Notification
             ->subject('Important Notification')
             ->line($this->message)
             ->action('Visit Website', url('/'))
-            ->line('Thank you for using our application!')
+            ->line('Thank you for contacting us!')
              ->cc($ccEmails);
     }
 
