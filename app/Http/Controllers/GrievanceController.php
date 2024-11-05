@@ -231,7 +231,7 @@ class GrievanceController extends Controller
             return redirect()->back()->with('error', 'Something went wrong. Please try again.');
         }
 
-        $message = "A new grievance is raised with ticket number " . $ticket_number . " on " . date('d-m-Y');
+        $message = "A new grievance is raised with ticket number " . $ticket_number . " on " . date('d-m-Y')." AGCL";
         $gridAdmin->notify(new UserNotification($message));
 
 
@@ -509,9 +509,9 @@ class GrievanceController extends Controller
                 'dlr' => '1',
                 'destination' => '91' . $phoneNumber,
                 'source' => 'AGCLBG',
-                'message' => $message . " . AGCL",
+                'message' => $message ,
                 'entityid' => '1201159514504706254',
-                'tempid' => '1507167110580384721',
+                'tempid' => '1207173018567351628',
             ];
 
             $response = Http::withOptions(['verify' => false])->get($url, $params);
